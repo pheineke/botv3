@@ -48,3 +48,5 @@ async def test(ctx):
 
 #BOT >>RUN
 bot.run(TOKEN)
+
+#Testkommi
