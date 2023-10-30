@@ -50,3 +50,4 @@ async def test(ctx):
 bot.run(TOKEN)
 
 #TestkommiakjhsDLKshjdlkasDH
+###sljdfölkjdfölkadjfgödsljg
