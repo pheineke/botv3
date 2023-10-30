@@ -55,7 +55,7 @@ async def unload(ctx, extension):
 
 @commands.is_owner()
 @bot.command(aliases=["r"])
-async def unload(ctx, extension):
+async def reload(ctx, extension):
     try:
         await bot.unload_extension(f'modules.{extension}')
         await bot.load_extension(f'modules.{extension}')
