@@ -25,22 +25,33 @@ intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
-bot = commands.Bot(command_prefix = "$",intents=intents)
+bot = commands.Bot(command_prefix = ".",intents=intents)
 
 #BOTEVENTS
 @bot.event
 async def on_ready():
-    print("Im Ready")
+    print(f'{"-" * 50}\nConnected Bot: {bot.user.name}\n{"-" * 50}')
+
 
 @commands.is_owner()
 @bot.command(aliases=["l"])
 async def load(ctx, extension):
     try:
-    
         await bot.load_extension(f'modules.{extension}')
         await ctx.send(f"{extension} loaded")
     except Exception as d:
         await ctx.send(f"{d}")
+
+
+@commands.is_owner()
+@bot.command(aliases=["u"])
+async def unload(ctx, extension):
+    try:
+        await bot.unload_extension(f'modules.{extension}')
+        await ctx.send(f'{extension} cog unloaded.')
+        print(f'{extension} unloaded.')
+    except Exception as e:
+        await ctx.send(f'Failed to unload {extension} cog: {e}')
 
 @bot.hybrid_command()
 async def test(ctx):
@@ -49,5 +60,3 @@ async def test(ctx):
 #BOT >>RUN
 bot.run(TOKEN)
 
-#TestkommiakjhsDLKshjdlkasDH
-###sljdfölkjdfölkadjfgödsljg
