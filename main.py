@@ -40,7 +40,7 @@ async def load(ctx, extension):
         await bot.load_extension(f'modules.{extension}')
         await ctx.send(f"{extension} loaded")
     except Exception as d:
-        await ctx.send(f"{d}")
+        await ctx.send(f'{d}')
 
 
 @commands.is_owner()
@@ -51,7 +51,19 @@ async def unload(ctx, extension):
         await ctx.send(f'{extension} cog unloaded.')
         print(f'{extension} unloaded.')
     except Exception as e:
-        await ctx.send(f'Failed to unload {extension} cog: {e}')
+        await ctx.send(f'{e}')
+
+@commands.is_owner()
+@bot.command(aliases=["r"])
+async def unload(ctx, extension):
+    try:
+        await bot.unload_extension(f'modules.{extension}')
+        await bot.load_extension(f'modules.{extension}')
+        await ctx.send(f'{extension} cog reloaded.')
+        print(f'{extension} reloaded.')
+    except Exception as e:
+        await ctx.send(f'{e}')
+
 
 @bot.hybrid_command()
 async def test(ctx):
