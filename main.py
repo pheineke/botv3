@@ -24,8 +24,9 @@ GUILD = os.getenv('DISCORD_GUILD')
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
+owners = [386254372646158338, 417073119254282240]
 
-bot = commands.Bot(command_prefix = ".",intents=intents)
+bot = commands.Bot(command_prefix = ".", owner_ids = set(owners), intents=intents)
 
 #BOTEVENTS
 @bot.event
@@ -65,7 +66,7 @@ async def reload(ctx, extension):
         await ctx.send(f'{e}')
 
 
-@bot.hybrid_command()
+@bot.hybrid_command(name='test', with_app_command=True)
 async def test(ctx):
     await ctx.send("This is a hybrid command!")
 
