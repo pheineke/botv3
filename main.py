@@ -87,22 +87,33 @@ async def unload(ctx, extension):
 @commands.is_owner()
 @bot.command(aliases=["r"])
 async def reload(ctx, extension):
-#####reload side
-
-    try:
-        await bot.unload_extension(f'modules.side.{extension}')
-        await bot.load_extension(f'modules.side.{extension}')
-        await ctx.send(f'{extension} cog reloaded.')
-        print(f'{extension} reloaded.')
-    except:
-#####reload main
+######reload mensa
+    if extension == "mensa":
         try:
-            await bot.unload_extension(f'modules.main.{extension}')
-            await bot.load_extension(f'modules.main.{extension}')
-            await ctx.send(f'{extension} cog reloaded.')
-            print(f'{extension} reloaded.')
+            await bot.unload_extension('modules.main.mensa.mensa')
+            await bot.load_extension('modules.main.mensa.mensa')
+            await ctx.send('mensa cog reloaded.')
+            print('mensa reloaded.')
         except Exception as e:
             await ctx.send(f'{e}')
+    else:
+#####reload side
+        try:
+            await bot.unload_extension(f'modules.side.{extension}')
+            await bot.load_extension(f'modules.side.{extension}')
+            await ctx.send(f'{extension} cog reloaded.')
+            print(f'{extension} reloaded.')
+        except:
+#####reload main
+            try:
+                await bot.unload_extension(f'modules.main.{extension}')
+                await bot.load_extension(f'modules.main.{extension}')
+                await ctx.send(f'{extension} cog reloaded.')
+                print(f'{extension} reloaded.')
+            except Exception as e:
+                await ctx.send(f'{e}')
+
+        
 
 
 @bot.hybrid_command(name='test', with_app_command=True)

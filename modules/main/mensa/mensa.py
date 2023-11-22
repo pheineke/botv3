@@ -75,7 +75,11 @@ class Mensa(commands.Cog):
     @commands.command()
     async def myhelp(self, ctx):
         load_dotenv("./.envlocal")
-        embed = discord.Embed(title="MensaBot Help", description=os.getenv('helpmessage'),color=0x9998ff)
+        embed = discord.Embed(title="MensaBot Help",color=0x9998ff)
+        embed.add_field(name="Auflistung Bot-Befehle (alle können in lowercase angegeben werden)", value="", inline=False)
+        embed.add_field(name="my.myhelp", value="Well du bist schon hier...",inline=False)
+        embed.add_field(name="my.mensatime", value=">> ohne weiteren Command gibt er euch eure Zeit zurück.\n>> **= HH:MM** oder **= HH Uhr** oder *= HH:MM Uhr* - geht alles.\n>> **= False** oder **= None**  - wird später bei xs.mensatime wichtig.\n>> **= anderen User pingen**, oder seinen Usertag eintragen.\n- Setzt den User auf den anderen User.\n>> **= const** oder **= constant** - Setzt den User auf konstant\n- (Dies ist noch ein Experimentelles Feature, es sollten alle nicht-constant User um 15:00 resettet werden.)\n>> **= nconst** oder **= notconstant** - das Gegenteil von **const**\n",inline=False)
+        embed.add_field(name="xs.mensatime", value=">> Gibt euch eine Liste zurück von Mensazeiten der User, die sich eingetragen haben.\n>> Insofern ihr bei my.mensatime = False eingegeben habt, werdet ihr in der xs Liste nicht aufgelistet.\n>> Ihr müsst aber um euch wieder einzutragen, einfach euch eine neue Uhrzeit setzen.",inline=False)
         await ctx.send(embed = embed)
     
     
