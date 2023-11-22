@@ -20,7 +20,7 @@ def userread(user):
                 return "nicht vorhanden."
         else:
                 if userdata == 'false':
-                        return 'False'
+                        return "nicht vorhanden."
                 
                 userdatalen = len(userdata)
                 hour, minute = userdata[:userdatalen//2], userdata[userdatalen//2:]
@@ -91,12 +91,12 @@ def userdelete(user):
 
 def setuserconst(user):
         user = user.lower()
-        userdata = jsh.openjsonfile('userdata.json','userconstants')
+        userdata = jsh.openjsonfile('userconstants','userdata.json')
         userdata[user]= ""
-        jsh.savefile(userdata, 'userdata.json','userconstants')
+        jsh.savefile(userdata,'userconstants', 'userdata.json')
 
 def deluserconst(user):
-        userconstantsdelete = jsh.openjsonfile('userdata.json','userconstants')
+        userconstantsdelete = jsh.openjsonfile('userconstants','userdata.json')
         user = user.lower()
 
         try:
@@ -104,7 +104,7 @@ def deluserconst(user):
         except:
                 return "Diesen User gibt es nicht."
 
-        jsh.savefile(userconstantsdelete,'userconstants', 'userconstants')
+        jsh.savefile(userconstantsdelete,'userconstants', 'userdata.json')
 
 def userreset():
     localuserconstants = jsh.openjsonfile('userconstants','userdata.json')

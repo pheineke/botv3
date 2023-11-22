@@ -17,49 +17,53 @@ class Mensa(commands.Cog):
 
 
     @commands.command()
-    async def mensatime(self, ctx, equal, arg):
+    async def mensatime(self, ctx, equal=None, arg=None):
+        authormention = ctx.author.mention
         author = ctx.author.name
         arg = arg.replace(".","").replace("-","").replace(":","")
         if equal == "=":
-            try:
-                datetime.strptime(arg, "%H%M")
-            except:
+            if len(arg) == 2:
                 try:
-                    datetime.strptime(arg, "%H")
-                except:
-                    
-                    if arg == "jetzt":
-                        ut.userwrite(author, str(datetime.now().strftime("%H%M")))
-                    elif arg == 'false' or arg == 'none':
-                        ut.userwrite(author, 'false')
-                        await ctx.send(f"{author} Usertime wurde disabled.")
-                    elif arg == 'true':
-                        await ctx.send(f"{author} Um deine Usertime zu enablen setze deine Mensatime auf eine neue Uhrzeit.")
-                    elif arg == 'constant' or arg == 'const':
-                        ut.setuserconst(author)
-                        await ctx.send(f"{author} Deine Usertime wurde als konstant vermerkt.")
-                    elif arg == 'notconstant' or arg == 'nconst':
-                        ut.deluserconst(author)
-                        await ctx.send(f"{author} Deine Usertime wurde als nicht-konstant eingetragen.") 
-                    elif arg == 'del' or arg == 'delete':
-                        await ctx.send(f"{author} {ut.userdelete()}") 
-                    elif '<@' in arg and '>' in arg:
-                        try:
-                            arg in ctx.guild.members()
-                        except:
-                            await ctx.send(f"{arg} ist kein gültiger User")
-                        finally:
-                            await ctx.send(f"{author} Die Zeit von {author} wurde {ut.userwriteuser(author, arg)}")
-                    else:
-                        raise ValueError("Incorrect data format, should be hh:mm or similar")
-                finally:
                     arg += "00"
-                    ut.userwrite(author, arg)
-
-            finally:
+                except:
+                    await ctx.send("Das ist kein gültiges Argument.")
+                finally:
+                    try:
+                        datetime.strptime(arg, "%H%M")
+                    except:
+                        await ctx.send("Das ist kein gültiges Argument.")
+                    finally:
+                        ut.userwrite(author, arg)
+                        await ctx.send(f"{authormention} Deine Zeit ({arg[:2]}:{arg[2:]} Uhr) wurde eingetragen.")
+            elif len(arg) == 4 and datetime.strptime(arg, "%H%M"):
                 ut.userwrite(author, arg)
-        else:
-            await ctx.send("Das ist kein gültiges Argument.")
+                await ctx.send(f"{authormention} Deine Zeit ({arg[:2]}:{arg[2:]} Uhr) wurde eingetragen.")
+            elif arg == "jetzt":
+                ut.userwrite(author, str(datetime.now().strftime("%H%M")))
+            elif arg == 'false' or arg == 'none':
+                ut.userwrite(author, 'false')
+                await ctx.send(f"{authormention} Usertime wurde disabled.")
+            elif arg == 'true':
+                await ctx.send(f"{authormention} Um deine Usertime zu enablen setze deine Mensatime auf eine neue Uhrzeit.")
+            elif arg == 'constant' or arg == 'const':
+                ut.setuserconst(author)
+                await ctx.send(f"{authormention} Deine Usertime wurde als konstant vermerkt.")
+            elif arg == 'notconstant' or arg == 'nconst':
+                ut.deluserconst(author)
+                await ctx.send(f"{authormention} Deine Usertime wurde als nicht-konstant eingetragen.") 
+            elif arg == 'del' or arg == 'delete':
+                await ctx.send(f"{authormention} {ut.userdelete()}") 
+            elif '<@' in arg and '>' in arg:
+                try:
+                    arg in ctx.guild.members()
+                except:
+                    await ctx.send(f"{arg} ist kein gültiger User")
+                finally:
+                    await ctx.send(f"Die Zeit von {authormention} wurde {ut.userwriteuser(author, arg)}")
+            else:
+                await ctx.send("Das ist kein gültiges Argument.")
+        elif equal is None and arg is None:
+            await ctx.send(f"{authormention} Deine Mensazeit ist {ut.userread(author)}")
 
 
     @commands.Cog.listener()

@@ -33,7 +33,6 @@ async def on_ready():
 
 #####Alle main Module laden in ./modules/main/
     modulliste = os.listdir("./modules/main/")
-    print(modulliste)
     try:
         for modul in modulliste:
             if os.path.isfile(modul):
