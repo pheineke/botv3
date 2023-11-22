@@ -11,7 +11,7 @@ class Z3(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command
+    @commands.command()
     async def z3_import(self, ctx, program):
         try:
             ctx.send(program.replace("```python", "").replace("```", ""))
