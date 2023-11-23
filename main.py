@@ -113,7 +113,22 @@ async def reload(ctx, extension):
             except Exception as e:
                 await ctx.send(f'{e}')
 
-        
+
+
+@bot.command()
+@commands.is_owner()
+async def gitpull(ctx):
+    # Speichere den aktuellen Pfad
+    current_path = os.getcwd() + "/"
+
+    print(current_path)
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+    os.system('git pull')
+
+    os.chdir(current_path)
+
+    os.execv(sys.executable, ['python', 'main.py'])      
 
 
 @bot.hybrid_command(name='test', with_app_command=True)
