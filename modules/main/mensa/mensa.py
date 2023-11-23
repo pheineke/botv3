@@ -27,7 +27,7 @@ class Mensa(commands.Cog):
             print(equal)
             print(type(equal))
             if equal is not None and arg is not None:
-                arg = arg.replace(".","").replace("-","").replace(":","")
+                arg = arg.replace(".","").replace("-","").replace(":","").lower()
                 if len(arg) == 2 and len(equal) == 1 and equal == "=":
                     try:
                         arg += "00"
