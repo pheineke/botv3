@@ -27,7 +27,7 @@ class Mensa(commands.Cog):
             print(equal)
             print(type(equal))
             if equal is not None and arg is not None:
-                arg = arg.replace(".","").replace("-","").replace(":","").lower()
+                arg = arg.replace(".","").replace("-","").replace(":","")
                 if len(arg) == 2 and len(equal) == 1 and equal == "=":
                     try:
                         arg += "00"
@@ -41,7 +41,7 @@ class Mensa(commands.Cog):
                         finally:
                             ut.userwrite(author, arg)
                             await ctx.send(f"{authormention} Deine Zeit ({arg[:2]}:{arg[2:]} Uhr) wurde eingetragen.")
-                elif len(arg) == 4 and datetime.strptime(arg, "%H%M"):
+                elif datetime.strptime(arg, "%H%M"):
                     ut.userwrite(author, arg)
                     await ctx.send(f"{authormention} Deine Zeit ({arg[:2]}:{arg[2:]} Uhr) wurde eingetragen.")
                 elif arg == "jetzt":
