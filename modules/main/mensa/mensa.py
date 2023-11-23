@@ -66,12 +66,10 @@ class Mensa(commands.Cog):
                 else:
                     try:
                         datetime.strptime(arg, "%H%M")
-                    except:
-                        await ctx.send("Das ist kein gültiges Argument.")
-                    finally:
                         ut.userwrite(author, arg)
                         await ctx.send(f"{authormention} Deine Zeit ({arg[:2]}:{arg[2:]} Uhr) wurde eingetragen.")
-                
+                    except:
+                        await ctx.send("Das ist kein gültiges Argument.")
             elif equal is None and arg is None:
                 await ctx.send(f"{authormention} Deine Mensazeit ist {ut.userread(author)}")
 
