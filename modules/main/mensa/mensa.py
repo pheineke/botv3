@@ -43,7 +43,7 @@ class Mensa(commands.Cog):
                             await ctx.send(f"{authormention} Deine Zeit ({arg[:2]}:{arg[2:]} Uhr) wurde eingetragen.")
                 elif arg == "jetzt":
                     ut.userwrite(author, str(datetime.now().strftime("%H%M")))
-                elif arg == 'false' or arg == 'none':
+                elif arg == 'false' or arg == 'none' or arg is None:
                     ut.userwrite(author, 'false')
                     await ctx.send(f"{authormention} Usertime wurde disabled.")
                 elif arg == 'true':
