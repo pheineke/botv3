@@ -24,7 +24,7 @@ intents.members = True
 intents.message_content = True
 owners = [386254372646158338, 417073119254282240]
 
-bot = commands.Bot(command_prefix = "my.", owner_ids = set(owners), intents=intents)
+bot = commands.Bot(command_prefix = ["my.", "xs."], owner_ids = set(owners), intents=intents)
 
 #BOTEVENTS
 @bot.event

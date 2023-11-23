@@ -18,58 +18,61 @@ class Mensa(commands.Cog):
 
     @commands.command()
     async def mensatime(self, ctx, equal=None, arg=None):
-        authormention = ctx.author.mention
-        author = ctx.author.name
-        arg = arg.replace(".","").replace("-","").replace(":","")
-        if equal == "=":
-            if len(arg) == 2:
-                try:
-                    arg += "00"
-                except:
-                    await ctx.send("Das ist kein gültiges Argument.")
-                finally:
+        if ctx.prefix == "my.":
+            authormention = ctx.author.mention
+            author = ctx.author.name
+
+            print(arg)
+            print(type(arg))
+            print(equal)
+            print(type(equal))
+            if equal is not None and arg is not None:
+                arg = arg.replace(".","").replace("-","").replace(":","")
+                if len(arg) == 2 and len(equal) == 1 and equal == "=":
                     try:
-                        datetime.strptime(arg, "%H%M")
+                        arg += "00"
                     except:
                         await ctx.send("Das ist kein gültiges Argument.")
                     finally:
-                        ut.userwrite(author, arg)
-                        await ctx.send(f"{authormention} Deine Zeit ({arg[:2]}:{arg[2:]} Uhr) wurde eingetragen.")
-            elif len(arg) == 4 and datetime.strptime(arg, "%H%M"):
-                ut.userwrite(author, arg)
-                await ctx.send(f"{authormention} Deine Zeit ({arg[:2]}:{arg[2:]} Uhr) wurde eingetragen.")
-            elif arg == "jetzt":
-                ut.userwrite(author, str(datetime.now().strftime("%H%M")))
-            elif arg == 'false' or arg == 'none':
-                ut.userwrite(author, 'false')
-                await ctx.send(f"{authormention} Usertime wurde disabled.")
-            elif arg == 'true':
-                await ctx.send(f"{authormention} Um deine Usertime zu enablen setze deine Mensatime auf eine neue Uhrzeit.")
-            elif arg == 'constant' or arg == 'const':
-                ut.setuserconst(author)
-                await ctx.send(f"{authormention} Deine Usertime wurde als konstant vermerkt.")
-            elif arg == 'notconstant' or arg == 'nconst':
-                ut.deluserconst(author)
-                await ctx.send(f"{authormention} Deine Usertime wurde als nicht-konstant eingetragen.") 
-            elif arg == 'del' or arg == 'delete':
-                await ctx.send(f"{authormention} {ut.userdelete()}") 
-            elif '<@' in arg and '>' in arg:
-                try:
-                    arg in ctx.guild.members()
-                except:
-                    await ctx.send(f"{arg} ist kein gültiger User")
-                finally:
-                    await ctx.send(f"Die Zeit von {authormention} wurde {ut.userwriteuser(author, arg)}")
-            else:
-                await ctx.send("Das ist kein gültiges Argument.")
-        elif equal is None and arg is None:
-            await ctx.send(f"{authormention} Deine Mensazeit ist {ut.userread(author)}")
+                        try:
+                            datetime.strptime(arg, "%H%M")
+                        except:
+                            await ctx.send("Das ist kein gültiges Argument.")
+                        finally:
+                            ut.userwrite(author, arg)
+                            await ctx.send(f"{authormention} Deine Zeit ({arg[:2]}:{arg[2:]} Uhr) wurde eingetragen.")
+                elif len(arg) == 4 and datetime.strptime(arg, "%H%M"):
+                    ut.userwrite(author, arg)
+                    await ctx.send(f"{authormention} Deine Zeit ({arg[:2]}:{arg[2:]} Uhr) wurde eingetragen.")
+                elif arg == "jetzt":
+                    ut.userwrite(author, str(datetime.now().strftime("%H%M")))
+                elif arg == 'false' or arg == 'none':
+                    ut.userwrite(author, 'false')
+                    await ctx.send(f"{authormention} Usertime wurde disabled.")
+                elif arg == 'true':
+                    await ctx.send(f"{authormention} Um deine Usertime zu enablen setze deine Mensatime auf eine neue Uhrzeit.")
+                elif arg == 'constant' or arg == 'const':
+                    ut.setuserconst(author)
+                    await ctx.send(f"{authormention} Deine Usertime wurde als konstant vermerkt.")
+                elif arg == 'notconstant' or arg == 'nconst':
+                    ut.deluserconst(author)
+                    await ctx.send(f"{authormention} Deine Usertime wurde als nicht-konstant eingetragen.") 
+                elif arg == 'del' or arg == 'delete':
+                    await ctx.send(f"{authormention} {ut.userdelete()}") 
+                elif '<@' in arg and '>' in arg:
+                    try:
+                        arg in ctx.guild.members()
+                    except:
+                        await ctx.send(f"{arg} ist kein gültiger User")
+                    finally:
+                        await ctx.send(f"Die Zeit von {authormention} wurde {ut.userwriteuser(author, arg)}")
+                else:
+                    await ctx.send("Das ist kein gültiges Argument.")
+            elif equal is None and arg is None:
+                await ctx.send(f"{authormention} Deine Mensazeit ist {ut.userread(author)}")
 
-
-    @commands.Cog.listener()
-    async def xsmensatime(self, message):
-        if not message.author.bot and message.content.lower() == "xs.mensatime":
-            await message.channel.send(f"{message.author} Folgende Mensazeiten sind eingetragen:\n```\n{ut.userreadall()}\n```")
+        elif ctx.prefix == "xs.":
+            await ctx.send(f"{ctx.author.mention} Folgende Mensazeiten sind eingetragen:\n```\n{ut.userreadall()}\n```")
 
 
     @commands.command()
