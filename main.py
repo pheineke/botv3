@@ -124,7 +124,7 @@ async def gitpull(ctx):
     print(current_path)
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-    os.system('git pull')
+    await ctx.send(os.system('git pull'))
 
     os.chdir(current_path)
 
