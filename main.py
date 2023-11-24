@@ -128,7 +128,7 @@ async def gitpull(ctx):
 
     os.chdir(current_path)
 
-    os.execv(sys.executable, ['python', 'main.py'])      
+    os.execv(sys.executable, ['python3', 'main.py'])      
 
 
 @bot.hybrid_command(name='test', with_app_command=True)
