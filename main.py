@@ -114,6 +114,13 @@ async def reload(ctx, extension):
                 await ctx.send(f'{e}')
 
 
+'''Bot kann heruntergefahren werden.'''
+@bot.command()
+@commands.is_owner()
+async def shutdown(ctx):
+    await ctx.send('Shutting down...')
+    print('Shutting down...')
+    await bot.close()
 
 @bot.command()
 @commands.is_owner()
