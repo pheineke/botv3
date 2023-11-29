@@ -34,13 +34,8 @@ async def on_ready():
 #####Alle main Module laden in ./modules/main/
     modulliste = os.listdir("./modules/main/")
     try:
-        for modul in modulliste:
-            if os.path.isfile(modul):
-                modul = modul.replace(".py","")
-                await bot.load_extension(f'modules.main.{modul}')
-                print(modul)
-#####Mensa in ./modules/main/mensa/ laden
         await bot.load_extension('modules.main.mensa.mensa')
+        await bot.load_extension('modules.main.latex')
 
         print("Main modules loaded.")
     except Exception as d:
