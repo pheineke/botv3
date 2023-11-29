@@ -14,9 +14,9 @@ class Latex(commands.Cog):
     async def latex_converter(self,message):
         string = message.content.lower()
         if bool(re.search(r"\\[a-zA-Z]+", string)):
-            
+            string = "\\"+ string
             try:
-                preview(fr'$${"\\"+string}$$', viewer='file', filename='latexequation.png', euler=False, dvioptions=['-D','300'])
+                preview(fr'$${string}$$', viewer='file', filename='latexequation.png', euler=False, dvioptions=['-D','300'])
                 file = discord.File("./latexequation.png")
                 await message.channel.send(file=file)
             except Exception as e:
