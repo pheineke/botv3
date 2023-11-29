@@ -19,7 +19,7 @@ class Latex(commands.Cog):
                 preview(fr'$${string}$$', viewer='file', filename='latexequation.png', euler=False, dvioptions=['-D','300'])
                 file = discord.File("./latexequation.png")
                 await message.channel.send(file=file)
-            except(Exception e):
+            except Exception as e:
                 print("Konnte nicht konvertieren.")
                 print(e)
 
