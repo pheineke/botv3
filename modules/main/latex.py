@@ -1,4 +1,5 @@
 from sympy import *
+import matplotlib.pyplot as plt
 
 import os
 import re
@@ -16,7 +17,18 @@ class Latex(commands.Cog):
         if bool(re.search(r"\\[a-zA-Z]+", string)):
             
             try:
-                preview(fr'$${string}$$', viewer='file', filename='latexequation.png', euler=False, dvioptions=['-D','300'])
+                fig = plt.figure(figsize=(3, 0.5))  # Dimensions of figsize are in inches
+                text = fig.text(
+                    x=0.5,  # x-coordinate to place the text
+                    y=0.5,  # y-coordinate to place the text
+                    s=string,
+                    horizontalalignment="center",
+                    verticalalignment="center",
+                    fontsize=16,
+                )
+
+                fig.savefig("latexequation.png")
+
                 file = discord.File("./latexequation.png")
                 await message.channel.send(file=file)
             except Exception as e:
