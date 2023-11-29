@@ -25,6 +25,8 @@ class Latex(commands.Cog):
             for item in datas:
                 if item[0] == 255 and item[1] == 255 and item[2] == 255:
                     newData.append((255, 255, 255, 0))
+                elif item[0] != item[1] or item[1] != item[2]:
+                    newData.append((0, 0, 0, item[3]))
                 else:
                     newData.append(item)
 
