@@ -54,7 +54,7 @@ class Latex(commands.Cog):
         latex_converter(message.content)
         imagebgtransparent()
 
-        file = discord.File
+        file = discord.File("./lateximg.img")
         await message.channel.send(file=file)
 
         os.remove("./lateximg.png")
