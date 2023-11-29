@@ -30,7 +30,6 @@ class Latex(commands.Cog):
                         fontsize=24,
                     )
                     fig.savefig("lateximg.png")
-                    imagebgtransparent("lateximg.png")
 
                 except Exception as e:
                     print("Konnte nicht konvertieren.")
