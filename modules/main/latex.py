@@ -17,19 +17,19 @@ class Latex(commands.Cog):
     @commands.Cog.listener("on_message")
     async def latex_converter(self,message):
         def imagebgtransparent(image):
-        img = Image.open(image)
-        img = img.convert("RGBA")
-        datas = img.getdata()
+            img = Image.open(image)
+            img = img.convert("RGBA")
+            datas = img.getdata()
 
-        newData = []
-        for item in datas:
-            if item[0] == 255 and item[1] == 255 and item[2] == 255:
-                newData.append((255, 255, 255, 0))
-            else:
-                newData.append(item)
+            newData = []
+            for item in datas:
+                if item[0] == 255 and item[1] == 255 and item[2] == 255:
+                    newData.append((255, 255, 255, 0))
+                else:
+                    newData.append(item)
 
-        img.putdata(newData)
-        img.save(image, "PNG")
+            img.putdata(newData)
+            img.save(image, "PNG")
 
 
         string = message.content
