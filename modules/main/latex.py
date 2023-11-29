@@ -53,7 +53,7 @@ class Latex(commands.Cog):
 
         latex_converter(message.content)
         file = discord.File("./lateximg.png")
-        await message.channel.send(file=file)
+        await message.channel.send(file)
         os.remove("./lateximg.png")
 
 async def setup(bot):
