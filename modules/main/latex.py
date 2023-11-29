@@ -27,7 +27,7 @@ class Latex(commands.Cog):
                         s=string,
                         horizontalalignment="center",
                         verticalalignment="center",
-                        fontsize=24,
+                        fontsize=20,
                     )
                     fig.savefig("lateximg.png")
                     imagebgtransparent()
