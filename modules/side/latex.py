@@ -22,6 +22,7 @@ class Latex(commands.Cog):
             except Exception as e:
                 print("Konnte nicht konvertieren.")
                 print(e)
+                print(string)
 
 async def setup(bot):
     await bot.add_cog(Latex(bot))
