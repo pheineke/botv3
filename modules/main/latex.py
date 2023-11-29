@@ -30,6 +30,7 @@ class Latex(commands.Cog):
                         fontsize=24,
                     )
                     fig.savefig("lateximg.png")
+                    imagebgtransparent()
 
                 except Exception as e:
                     print("Konnte nicht konvertieren.")
@@ -49,14 +50,10 @@ class Latex(commands.Cog):
             img.putdata(newData)
             img.save("lateximg.png", "PNG")
 
-            return True
-
 
         latex_converter(message.content)
-        if imagebgtransparent():
-            file = discord.File("./lateximg.png")
-            await message.channel.send(file=file)
-
+        file = discord.File("./lateximg.png")
+        await message.channel.send(file=file)
         os.remove("./lateximg.png")
 
 async def setup(bot):
