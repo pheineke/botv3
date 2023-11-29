@@ -12,7 +12,7 @@ class Latex(commands.Cog):
 
     @commands.Cog.listener("on_message")
     async def latex_converter(self,message):
-        string = message.content.lower()
+        string = message.content
         if bool(re.search(r"\\[a-zA-Z]+", string)):
             
             try:
