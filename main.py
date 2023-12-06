@@ -50,13 +50,8 @@ async def load(ctx, extension):
     try:
         await bot.load_extension(f'modules.side.{extension}')
         await ctx.send(f"{extension} loaded")
-    except:
-#####load main
-        try:
-            await bot.load_extension(f'modules.main.{extension}')
-            await ctx.send(f"{extension} loaded")
-        except Exception as d:
-            await ctx.send(f'{d}')
+    except Exception as d:
+        await ctx.send(f'{d}')
 
 
 
