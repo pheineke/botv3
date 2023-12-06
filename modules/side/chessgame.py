@@ -22,6 +22,8 @@ class Chess(commands.Cog):
         await acceptm.add_reaction("✅")
         await asyncio.sleep(30)
 
+        print(acceptm.reactions)
+
         if user in acceptm.reactions.users():
             await ctx.send("Es geht los")
 
