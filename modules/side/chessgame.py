@@ -22,9 +22,10 @@ class Chess(commands.Cog):
         await acceptm.add_reaction("✅")
         await asyncio.sleep(30)
 
-        print(acceptm.reactions)
+        print()
 
-        if user in acceptm.reactions.users():
+
+        if user in acceptm.reactions.user:
             await ctx.send("Es geht los")
 
         moves[ctx.author] = {}
