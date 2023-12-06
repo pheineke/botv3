@@ -1,7 +1,7 @@
 import asyncio
 
 from sympy import pretty_print
-import modules.side.chessgame as chessgame
+import chess
 import os
 import discord
 from discord.ext import commands
@@ -10,7 +10,7 @@ import time
 import json
 
 moves = {}
-board = chessgame.Board()
+board = chess.Board()
 
 class Chess(commands.Cog):
     def __init__(self, bot):
