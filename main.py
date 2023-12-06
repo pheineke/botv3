@@ -121,7 +121,10 @@ async def gitpull(ctx):
     print(current_path)
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
-    await ctx.send(os.system('git pull'))
+    if os.popen('python3 --version').read() == "Python 3.6.8":
+        os.system('export PATH=~/.localpython/bin:$PATH')
+
+    await ctx.send(f"```{os.popen('git pull').read()}```")
 
     os.chdir(current_path)
 
