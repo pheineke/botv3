@@ -1,3 +1,6 @@
+import asyncio
+
+from sympy import pretty_print
 import chess
 import os
 import discord
@@ -15,29 +18,24 @@ class Chess(commands.Cog):
 
     @commands.command()
     async def playchess(self, ctx, user):
-        players = []
-        def check(reaction, user):
-                players.append(user)
-
-
         acceptm = await ctx.send(str(user) + " akzeptierst du das Match?")
-        
         await acceptm.add_reaction("✅")
+        await asyncio.sleep(30)
+
+        if user in acceptm.reactions.users():
+            await ctx.send("Es geht los")
 
         moves[ctx.author] = {}
         moves[user] = {}
 
-        time.sleep(5)
-        check(acceptm.reactions, user)
-
-        if (user in players):
-            await ctx.send("Es geht los")
-            
+        pretty_print(moves)
             
     @commands.command()
     async def move(self, ctx, move):
+        counter = 0
         if chess.Move.from_uci(move) in board.legal_moves:
             board.push(move)
+            moves[ctx.author] = counter
 
     @commands.command()
     async def board(self, ctx):
