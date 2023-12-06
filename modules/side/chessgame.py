@@ -1,7 +1,7 @@
 import asyncio
 
 from sympy import pretty_print
-import chess
+import modules.side.chessgame as chessgame
 import os
 import discord
 from discord.ext import commands
@@ -10,7 +10,7 @@ import time
 import json
 
 moves = {}
-board = chess.Board()
+board = chessgame.Board()
 
 class Chess(commands.Cog):
     def __init__(self, bot):
@@ -33,7 +33,7 @@ class Chess(commands.Cog):
     @commands.command()
     async def move(self, ctx, move):
         counter = 0
-        if chess.Move.from_uci(move) in board.legal_moves:
+        if chessgame.Move.from_uci(move) in board.legal_moves:
             board.push(move)
             moves[ctx.author] = counter
 
