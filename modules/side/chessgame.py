@@ -33,7 +33,7 @@ class Chess(commands.Cog):
     @commands.command()
     async def move(self, ctx, move):
         counter = 0
-        if chessgame.Move.from_uci(move) in board.legal_moves:
+        if chess.Move.from_uci(move) in board.legal_moves:
             board.push(move)
             moves[ctx.author] = counter
 
