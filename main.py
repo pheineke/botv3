@@ -37,7 +37,7 @@ async def on_ready():
     try:
         await bot.load_extension('modules.main.mensa.mensa')
         await bot.load_extension('modules.main.latex')
-        await bot.load_extension('modules.main.minecraftserver')
+        #await bot.load_extension('modules.main.minecraftserver')
 
 
         print("Main modules loaded.")
