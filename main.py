@@ -131,7 +131,17 @@ async def gitpull(ctx):
 
     os.chdir(current_path)
 
-    os.execv(sys.executable, ['python3', 'main.py'])      
+    os.execv(sys.executable, ['python3', 'main.py'])
+
+
+
+@bot.command(aliases=["f"])
+async def freeze(ctx):
+    loaded_cogs = [cog for cog in bot.cogs.keys()]
+    if loaded_cogs:
+        await ctx.send(f'Loaded cogs: {", ".join(loaded_cogs)}')
+    else:
+        await ctx.send('No cogs loaded.')
 
 
 @bot.hybrid_command(name='test', with_app_command=True)
