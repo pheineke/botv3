@@ -22,7 +22,6 @@ GUILD = os.getenv('DISCORD_GUILD')
 intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
-owners = [386254372646158338, 417073119254282240]
 
 bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners), intents=intents)
 
@@ -36,6 +35,8 @@ async def on_ready():
     try:
         await bot.load_extension('modules.main.mensa.mensa')
         await bot.load_extension('modules.main.latex')
+        await bot.load_extension('modules.main.minecraftserver')
+
 
         print("Main modules loaded.")
     except Exception as d:
