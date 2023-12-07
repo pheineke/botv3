@@ -23,6 +23,8 @@ intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
+owners = [417073119254282240, 386254372646158338]
+
 bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners), intents=intents)
 
 #BOTEVENTS
