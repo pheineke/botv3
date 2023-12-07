@@ -21,11 +21,17 @@ class Chess(commands.Cog):
         await acceptm.add_reaction("✅")
         await asyncio.sleep(30)
 
-        if user in acceptm.reactions.user:
+
+
+        def check(reaction, user1):
+            return user1 == user and str(reaction.emoji) is "✅"
+        reaction, user1 = await self.wait_for('reaction_add', timeout=60.0, check=check)
+
+        if user == user1:
             await ctx.send("Es geht los")
 
         moves[ctx.author] = {}
-        moves[user] = {}
+        moves[user] = {}    
 
         print(moves)
             
