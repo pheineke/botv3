@@ -1,6 +1,5 @@
 import asyncio
 
-from sympy import pretty_print
 import chess
 import os
 import discord
@@ -22,16 +21,13 @@ class Chess(commands.Cog):
         await acceptm.add_reaction("✅")
         await asyncio.sleep(30)
 
-        print()
-
-
         if user in acceptm.reactions.user:
             await ctx.send("Es geht los")
 
         moves[ctx.author] = {}
         moves[user] = {}
 
-        pretty_print(moves)
+        print(moves)
             
     @commands.command()
     async def move(self, ctx, move):
