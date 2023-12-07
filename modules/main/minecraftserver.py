@@ -8,7 +8,7 @@ class Minecraftserver(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command
+    @commands.command()
     @commands.is_owner()
     async def startmcserver(self, ctx):
         await ctx.send(f"```{os.popen('sh ~/Minecraft/serverDez2023/start.sh').read()}```")
