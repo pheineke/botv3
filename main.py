@@ -163,7 +163,7 @@ async def test(ctx):
 
 async def grinchfy():
     await bot.wait_until_ready()
-    guild = bot.get_guild(GUILD)  # Hier die Server-ID einfügen
+    guild = bot.guilds[0]  # Hier die Server-ID einfügen
 
     while not bot.is_closed():
         # Zufälligen Benutzer auswählen
