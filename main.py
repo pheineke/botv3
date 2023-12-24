@@ -2,6 +2,7 @@
 
 import asyncio
 import os
+import random
 import sys
 import subprocess
 import discord
@@ -24,6 +25,7 @@ intents.members = True
 intents.message_content = True
 
 owners = [417073119254282240, 386254372646158338]
+grinchrole = 1188587621753036820
 
 bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners), intents=intents)
 
@@ -31,6 +33,8 @@ bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners),
 @bot.event
 async def on_ready():
     print(f'{"-" * 50}\nConnected Bot: {bot.user.name}\n{"-" * 50}')
+
+    grinchfy()
 
 #####Alle main Module laden in ./modules/main/
     modulliste = os.listdir("./modules/main/")
@@ -43,6 +47,7 @@ async def on_ready():
         print("Main modules loaded.")
     except Exception as d:
         print(d)
+    
 #####
 
 
@@ -147,6 +152,39 @@ async def freeze(ctx):
 @bot.hybrid_command(name='test', with_app_command=True)
 async def test(ctx):
     await ctx.send("This is a hybrid command!")
+
+
+
+
+
+########################################
+    
+
+async def grinchfy():
+    await bot.wait_until_ready()
+    guild = bot.get_guild(GUILD)  # Hier die Server-ID einfügen
+
+    while not bot.is_closed():
+        # Zufälligen Benutzer auswählen
+        member = random.choice(guild.members)
+
+        role_id = grinchrole
+        role = guild.get_role(role_id)
+
+        # Zuvor zugewiesene Rolle von einem anderen Benutzer entfernen
+        for m in guild.members:
+            if role in m.roles:
+                await m.remove_roles(role)
+                print(f'Rolle {role.name} wurde von {m.name} entfernt.')
+
+        # Rolle dem ausgewählten Benutzer zuweisen
+        await member.add_roles(role)
+        print(f'Rolle {role.name} wurde an {member.name} vergeben.')
+
+        # Warte 12 Stunden, bevor die nächste Rolle vergeben wird
+        await asyncio.sleep(12 * 60 * 60)
+
+
 
 #BOT >>RUN
 bot.run(TOKEN)
