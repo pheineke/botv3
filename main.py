@@ -158,35 +158,6 @@ async def test(ctx):
 
 
 
-########################################
-    
-
-async def grinchfy():
-    await bot.wait_until_ready()
-    guild = bot.guilds[0]  # Hier die Server-ID einfügen
-
-    while not bot.is_closed():
-        # Zufälligen Benutzer auswählen
-        member = random.choice(guild.members)
-
-        role_id = grinchrole
-        role = guild.get_role(role_id)
-
-        # Zuvor zugewiesene Rolle von einem anderen Benutzer entfernen
-        for m in guild.members:
-            if role in m.roles:
-                await m.remove_roles(role)
-                print(f'Rolle {role.name} wurde von {m.name} entfernt.')
-
-        # Rolle dem ausgewählten Benutzer zuweisen
-        await member.add_roles(role)
-        print(f'Rolle {role.name} wurde an {member.name} vergeben.')
-
-        # Warte 12 Stunden, bevor die nächste Rolle vergeben wird
-        await asyncio.sleep(12 * 60 * 60)
-
-
-
 #BOT >>RUN
 bot.run(TOKEN)
 #
