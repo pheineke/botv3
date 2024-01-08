@@ -42,14 +42,15 @@ async def on_ready():
         modulpaths = []
 
         for x in modulliste:
-            if ".py" in x:
-                modulpaths.append(f"modules.main.{x[:-3]}")
-            else:
-                path2 = os.listdir(path + f"{x}/")
-                for y in path2:
-                    y = y.removesuffix(".py")
-                    if y == x:
-                        modulpaths.append(f"modules.main.{x}.{y}")
+            if "!" not in x:
+                if ".py" in x:
+                    modulpaths.append(f"modules.main.{x[:-3]}")
+                else:
+                    path2 = os.listdir(path + f"{x}/")
+                    for y in path2:
+                        y = y.removesuffix(".py")
+                        if y == x:
+                            modulpaths.append(f"modules.main.{x}.{y}")
 
         return modulpaths
 
