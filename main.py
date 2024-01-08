@@ -36,16 +36,33 @@ async def on_ready():
     print(f'{"-" * 50}\nConnected Bot: {bot.user.name}\n{"-" * 50}')
 
 #####Alle main Module laden in ./modules/main/
-    modulliste = os.listdir("./modules/main/")
-    try:
-        await bot.load_extension('modules.main.mensa.mensa')
-        await bot.load_extension('modules.main.latex')
-        #await bot.load_extension('modules.main.minecraftserver')
+    def getmainmodules():
+        path = "./modules/main/"
+        modulliste = os.listdir(path)
+        modulpaths = []
 
+        for x in modulliste:
+            if ".py" in x:
+                modulpaths.append(f"modules.main.{x.removesuffix(".py")}")
+            else:
+                path2 = os.listdir(path + f"{x}/")
+                for y in path2:
+                    y = y.removesuffix(".py")
+                    if y == x:
+                        modulpaths.append(f"modules.main.{x}.{y}")
 
-        print("Main modules loaded.")
-    except Exception as d:
-        print(d)
+        return modulpaths
+
+    
+    for module in getmainmodules():
+        
+        try:
+            print(module)
+            await bot.load_extension(module)
+        except Exception as d:
+            print(d)
+    print("Main modules loaded.")
+    
     
 #####
 
