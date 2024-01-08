@@ -35,8 +35,6 @@ bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners),
 async def on_ready():
     print(f'{"-" * 50}\nConnected Bot: {bot.user.name}\n{"-" * 50}')
 
-    await grinchfy()
-
 #####Alle main Module laden in ./modules/main/
     modulliste = os.listdir("./modules/main/")
     try:
