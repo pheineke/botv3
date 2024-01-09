@@ -53,7 +53,6 @@ async def on_ready():
                             modulpaths.append(f"modules.main.{x}.{y}")
 
         return modulpaths
-
     
     for module in getmainmodules():
         
@@ -64,6 +63,8 @@ async def on_ready():
             print(d)
     print("Main modules loaded.")
     
+
+
     
 #####
 
