@@ -1,5 +1,5 @@
 #usertime.py
-import modules.main.mensa.jsonhandler as jsh
+import jsonhandler as jsh
 
 from string import printable
 import time

@@ -6,7 +6,7 @@ from discord.ext import commands
 
 from datetime import datetime
 
-import modules.main.mensa.usertime as ut
+import usertime as ut
 from dotenv import load_dotenv
 
 
