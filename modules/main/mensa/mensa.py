@@ -95,7 +95,35 @@ class Mensa(commands.Cog):
             if currenttime == "15:00":
                 ut.userreset()
             await asyncio.sleep(30)
+
+
+    #############################################################################################
+            
+    async def check_for_webhook(self, ctx, hookname):
+        # Überprüfe, ob in diesem Channel bereits ein Webhook existiert
+        existing_webhooks = await ctx.channel.webhooks()
+        webhook = None
+
+        for existing in existing_webhooks:
+            if existing.name == hookname:
+                webhook = existing
+                print("Es exisitiert ein Webhook")
+                break
+
+        # Wenn kein Webhook gefunden wurde, erstelle einen neuen
+        if webhook is None:
+            webhook = await ctx.channel.create_webhook(name=hookname)
+            print("Es exisitiert kein Webhook -> Wurde ein Neuer erstellt.")
+        return webhook
     
+    @commands.Cog.listener("on_reaction_add")
+    async def on_reaction_add(self,reaction, user):
+        if user.bot:
+            return
+        if str(reaction.emoji) == "<:plus1:1171776509195845652>":
+            hookname = self.client.user.name
+            webhook = await self.check_for_webhook(reaction.message, hookname)
+            await webhook.send(content=reaction.message.content, avatar_url=user.avatar, username=user.name)
     
 async def setup(bot):
     await bot.add_cog(Mensa(bot))
