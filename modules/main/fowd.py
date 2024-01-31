@@ -98,3 +98,6 @@ class MensaAPI(commands.Cog):
 
         except Exception as e:
             await ctx.send(f"Fehler beim Abrufen der Mahlzeiten: {str(e)}")
+
+async def setup(bot):
+    await bot.add_cog(MensaAPI(bot))
