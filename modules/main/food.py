@@ -29,7 +29,7 @@ class MensaAPI(commands.Cog):
         if message.author.bot:
             return
         if message.content.lower() == "my.food":
-            await self.mensa(self, message.channel)
+            await MensaAPI.mensa(self, message.channel)
         elif "my.mensatime = " in message.content.lower():
             await message.add_reaction(':plus1:1171776509195845652')
 
