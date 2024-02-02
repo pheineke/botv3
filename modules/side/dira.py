@@ -39,7 +39,7 @@ class DIRA(commands.Cog):
 
             return generate_subformula(max_length)
         
-        await ctx.send(generate_random_boolean_formula(), "ööö")
+        await ctx.send(generate_random_boolean_formula())
 
 
 
