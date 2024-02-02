@@ -15,7 +15,7 @@ class DIRA(commands.Cog):
     negations = ['','¬']
     max_length = 5
 
-    @commands.command()
+    @commands.command(brief="Bool Formula Generator. Add + for '∧','∨' and ++ for '∧','∨','→','↔','⊕','⊼','⊽'")
     async def boolgen(self, ctx, extends=None):
         if extends is None:
             operators = ['∧','∨']
