@@ -15,9 +15,7 @@ class DIRA(commands.Cog):
     max_length = 5
 
     @commands.command()
-    async def boolgen(self, ctx, operators=None):
-        if operators is None:
-            operators = ['∧', '∨', '→', '↔']
+    async def boolgen(self, ctx):
         def generate_random_boolean_formula():
             if max_length < 1:
                 raise ValueError("Maximale Länge muss mindestens 1 sein.")
@@ -40,7 +38,7 @@ class DIRA(commands.Cog):
 
             return generate_subformula(max_length)
         
-        await ctx.send(generate_random_boolean_formula())
+        await ctx.send(generate_random_boolean_formula(), "ööö")
 
 
 
