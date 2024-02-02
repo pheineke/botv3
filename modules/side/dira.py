@@ -48,6 +48,7 @@ class DIRA(commands.Cog):
         
         await ctx.send(generate_random_boolean_formula())
 
+    '''
     @commands.command()
     async def boolrules(self, ctx):
         operator_ordering = [
@@ -76,6 +77,7 @@ class DIRA(commands.Cog):
 
 
         await ctx.send(f"```{table}```")
+    '''
 
 async def setup(bot):
     await bot.add_cog(DIRA(bot))
