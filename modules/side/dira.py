@@ -11,7 +11,7 @@ class DIRA(commands.Cog):
     global variables, operators, negations, max_length
     # Beispielaufruf
     variables = ['A', 'B', 'C', 'D','E']
-    operators = ['∧', '∨']
+    operators = ['∧', '∨', '→', '↔']
     negations = ['','¬']
     max_length = 5
 
