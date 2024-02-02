@@ -16,7 +16,7 @@ class DIRA(commands.Cog):
     max_length = 5
 
     @commands.command()
-    async def boolgen(self, ctx, operators=None):
+    async def boolgen(self, ctx, operators=operators):
         def generate_random_boolean_formula():
             if max_length < 1:
                 raise ValueError("Maximale Länge muss mindestens 1 sein.")
