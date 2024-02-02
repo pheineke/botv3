@@ -15,6 +15,7 @@ class DIRA(commands.Cog):
     negations = ['','¬']
     max_length = 5
 
+    @commands.command()
     async def boolgen(self, ctx):
         def generate_random_boolean_formula():
             if max_length < 1:
