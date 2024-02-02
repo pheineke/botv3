@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-
+from prettytable import PrettyTable
 import random
 
 class DIRA(commands.Cog):
@@ -48,7 +48,34 @@ class DIRA(commands.Cog):
         
         await ctx.send(generate_random_boolean_formula())
 
+    @commands.command()
+    async def boolrules(self, ctx):
+        operator_ordering = [
+                            {"1":"¬"},
+                            {"2":"∧"},
+                            {"3":"⊕"},
+                            {"4":"∨"},
+                            {"5":"→"},
+                            {"6":"↔"}
+                                ]
 
+        rules = [{"(a → b)":"(¬a ∨ b)"},
+                 {"(a ↔ b)":"((a → b) ∧ (b → a))"},
+                 {"(a ⊕ b)":"¬(a ↔ b)"},
+                 {"(a ∧ b)":"¬(a ∧ b)"},
+                 {"(a ∨ b)":"¬(a ∨ b)"},
+                 {"(α⇒β|γ)":"((α → β) ∧ (¬α → γ))"},
+                 {"1":"(a ∨ ¬a)"},
+                 {"0":"(a ∧ ¬a)"}]
+        
+        
+        table = PrettyTable(["Original", "Converted"])
+        for formula_dict in rules:
+            for original, converted in formula_dict.items():
+                table.add_row([original, converted])
+
+
+        await ctx.send(f"```{table}```")
 
 async def setup(bot):
     await bot.add_cog(DIRA(bot))
