@@ -8,7 +8,7 @@ import asyncio
 import os
 
 #####
-import modules.main.mensa.usertimehandler as ut
+import usertimehandler as ut
 
 print(os.getcwd())
 

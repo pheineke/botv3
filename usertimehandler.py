@@ -2,7 +2,7 @@ from string import printable
 import time
 from table2ascii import table2ascii as t2a, PresetStyle
 
-import modules.main.mensa.jsonhandler as jsh
+import jsonhandler as jsh
 
 class ut():
     jsh = jsh()
