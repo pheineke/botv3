@@ -64,7 +64,6 @@ async def on_ready():
         except Exception as d:
             print(d)
     print("Main modules loaded.")
-    await bot.load_extension("mensa")
     
 
 

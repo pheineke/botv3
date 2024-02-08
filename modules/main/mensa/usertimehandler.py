@@ -2,10 +2,9 @@ from string import printable
 import time
 from table2ascii import table2ascii as t2a, PresetStyle
 
-import jsonhandler as jsh
+import modules.main.mensa.jsonhandler as jsh
 
 class ut():
-    jsh = jsh()
     
     def mapuser(user, string):
         usermap = jsh.openjsonfile('usermapping','userdata.json')

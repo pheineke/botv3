@@ -5,7 +5,6 @@ from table2ascii import table2ascii as t2a, PresetStyle
 from lib import jsonhandler as jsh
 
 class ut():
-    jsh = jsh()
     
     def mapuser(user, string):
         usermap = jsh.openjsonfile('usermapping','userdata.json')
