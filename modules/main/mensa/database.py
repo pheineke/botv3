@@ -75,12 +75,12 @@ class Manage_database:
             else:
                 user_times_dict[username].append(time_recorded)
 
-        finallist = t2a(
+        '''finallist = t2a(
                     header=["User", "Zeit"],
                     body=user_times_dict,
-                    style=t2a.PresetStyle.thin_compact)
+                    style=t2a.PresetStyle.thin_compact)'''
         
-        return finallist
+        return user_times_dict
     
     def remove_user(self, username):
         cursor = self.conn.cursor()
