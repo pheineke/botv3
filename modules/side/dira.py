@@ -48,36 +48,37 @@ class DIRA(commands.Cog):
         
         await ctx.send(generate_random_boolean_formula())
 
-    '''
+    def radixgen0(self, base=None, length=None):
+        biggerbase = ["A","B","C","D","E","F"]
+        if base is None:
+            base = random.randint(2,16)
+        if length is None:
+            length = random.randint(1,8)
+        
+        a = [x for x in range(0,length)]
+        if base > 10:
+            finallist = [x if x < 10 else biggerbase[(x%10)] for x in a ]
+        else: finallist = a
+
+        return finallist
+
     @commands.command()
-    async def boolrules(self, ctx):
-        operator_ordering = [
-                            {"1":"¬"},
-                            {"2":"∧"},
-                            {"3":"⊕"},
-                            {"4":"∨"},
-                            {"5":"→"},
-                            {"6":"↔"}
-                                ]
+    async def radixgen(self, ctx, base=None, length=None):
+        finallist = self.radixgen0(base, length)
+        await ctx.send(f"<{finallist}>{base}")
 
-        rules = [{"(a → b)":"(¬a ∨ b)"},
-                 {"(a ↔ b)":"((a → b) ∧ (b → a))"},
-                 {"(a ⊕ b)":"¬(a ↔ b)"},
-                 {"(a ∧ b)":"¬(a ∧ b)"},
-                 {"(a ∨ b)":"¬(a ∨ b)"},
-                 {"(α⇒β|γ)":"((α → β) ∧ (¬α → γ))"},
-                 {"1":"(a ∨ ¬a)"},
-                 {"0":"(a ∧ ¬a)"}]
-        
-        
-        table = PrettyTable(["Original", "Converted"])
-        for formula_dict in rules:
-            for original, converted in formula_dict.items():
-                table.add_row([original, converted])
+    @commands.command()
+    async def subradixgen(self, ctx, base=None, length=None):
+        radix0 = self.radixgen0(base, length)
+        radix1 = self.radixgen0(base, length)
+        await ctx.send(f"{radix0} - {radix1}")
 
+    @commands.command()
+    async def addradixgen(self, ctx, base=None, length=None):
+        radix0 = self.radixgen0(base, length)
+        radix1 = self.radixgen0(base, length)
+        await ctx.send(f"{radix0} + {radix1}")
 
-        await ctx.send(f"```{table}```")
-    '''
 
 async def setup(bot):
     await bot.add_cog(DIRA(bot))
