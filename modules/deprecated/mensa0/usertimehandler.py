@@ -115,3 +115,6 @@ class ut():
             if key in localuserconstants:
                 data2[key] = value
         jsh.savefile(data2, 'usercache','userdata.json')
+
+
+print("usertimehandler hier")

@@ -36,11 +36,12 @@ class Hallo(commands.Cog):
             elif 12 <= hour < 18:
                 return "n Mittag"
             elif 18 <= hour < 24:
-                return "Abend"
+                return "n Abend"
             else:
-                return "n Nacht"
+                return " Nacht"
             
-        if message.content == "Guten _" and not message.author.bot:
+        if message.content == "Guten_" and not message.author.bot:
+            await message.delete()
             user = message.author
             current_time = datetime.now()
 
