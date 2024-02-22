@@ -83,9 +83,21 @@ class Manage_database:
         return user_times_dict
     
     def remove_user(self, username):
-        cursor = self.conn.cursor()
-        cursor.execute("DELETE FROM users WHERE username=?", (username,))
-        self.conn.commit()
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute("SELECT id FROM users WHERE username=?", (username,))
+            user_id = cursor.fetchone()
+            if user_id:
+                user_id = user_id[0]
+                cursor.execute("DELETE FROM user_times WHERE user_id=?", (user_id,))
+                cursor.execute("DELETE FROM users WHERE id=?", (user_id,))
+                self.conn.commit()
+                print("Benutzer erfolgreich gelöscht.")
+            else:
+                print("Benutzer nicht gefunden.")
+        except Exception as e:
+            print("Fehler beim Löschen des Benutzers:", e)
+
 
     def striptime(self, time_recorded):
         
