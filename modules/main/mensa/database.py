@@ -111,14 +111,17 @@ class Manage_database:
 
 
     def striptime(self, time_recorded):
-        
+        if ":" not in time_recorded and "." not in time_recorded:
+                time_recorded = f"{int(time_recorded):<04d}"
+                time_recorded = time_recorded[:2] + ":" + time_recorded[2:]
         for x in time_recorded:
             if x == ":" or x == ".":
                 index = time_recorded.index(x)
                 time_recorded0 = f"{int(time_recorded[:index]):02}"
                 time_recorded1 = f"{int(time_recorded[index+1:]):02}"
+                time_recorded = f"{time_recorded0}:{time_recorded1}"
         
-        time_recorded = f"{time_recorded0}:{time_recorded1}"
+        
         return time_recorded
 
     def validate_time_format(self, time_recorded):
