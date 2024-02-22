@@ -72,10 +72,19 @@ class Manage_database:
         user_times_dict = {}
         for row in rows:
             username, time_recorded = row
-            if username not in user_times_dict:
-                user_times_dict[username] = [time_recorded] if time_recorded else []
-            else:
-                user_times_dict[username].append(time_recorded)
+            if time_recorded is not None:  # Nur Benutzer mit zugewiesenen Zeiten berücksichtigen
+                if username not in user_times_dict:
+                    user_times_dict[username] = [time_recorded]
+                else:
+                    user_times_dict[username].append(time_recorded)
+
+        '''finallist = t2a(
+                    header=["User", "Zeit"],
+                    body=user_times_dict,
+                    style=t2a.PresetStyle.thin_compact)'''
+
+        return user_times_dict
+
 
         '''finallist = t2a(
                     header=["User", "Zeit"],
