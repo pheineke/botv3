@@ -77,7 +77,7 @@ class DIRA(commands.Cog):
 
         lessonvars = bddvars[0:varchoice]
 
-        startnode = random.choice(node)
+        startnode = random.choice(lessonvars)
         for node in lessonvars:
             if node != startnode:
                 bdd.node(node)
