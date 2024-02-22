@@ -61,7 +61,9 @@ class Manage_database:
         cursor = self.conn.cursor()
         cursor.execute("SELECT time_recorded FROM user_times WHERE user_id=?", (user_id,))
         times = cursor.fetchall()
-        return [time[0] for time in times]
+        user_times = [time[0] for time in times if time[0] is not None]
+        return user_times
+
     
     def get_all_users_with_times(self):
         cursor = self.conn.cursor()
