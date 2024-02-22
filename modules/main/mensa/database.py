@@ -88,15 +88,14 @@ class Manage_database:
         self.conn.commit()
 
     def striptime(self, time_recorded):
-        if len(time_recorded) < 3:
-            time_recorded = f'{time_recorded:02}'
-            time_recorded +=":00"
-        else:
-            try:
-                time_recorded = time_recorded.replace(".", ":")
-            except:
-                pass
         
+        for x in time_recorded:
+            if x == ":" or x == ".":
+                index = time_recorded.index(x)
+                time_recorded0 = f"{int(time_recorded[:index]):02}"
+                time_recorded1 = f"{int(time_recorded[index+1:]):02}"
+        
+        time_recorded = f"{time_recorded0}:{time_recorded1}"
         return time_recorded
 
     def validate_time_format(self, time_recorded):

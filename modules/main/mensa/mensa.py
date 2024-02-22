@@ -22,6 +22,7 @@ class Mensa(commands.Cog):
             else:
                 if equal == "=":
                     if arg in ["none", "NONE", "false", "False"]:
+                        print("hier")
                         try:
                             self.user_time_db.remove_user(username)
                             await ctx.message.add_reaction('✅')
@@ -29,9 +30,8 @@ class Mensa(commands.Cog):
                             await ctx.send("Kein User eingetragen.")
                     elif arg in ["jetzt", "now", "rn"]:
                         try:
-                            now = datetime.now().strftime("%H:%M:")
-                            if self.user_time_db.validate_time_format(now):
-                                self.user_time_db.save_user_time(username, now)
+                            now = datetime.now().strftime("%H:%M")
+                            self.user_time_db.save_user_time(username, str(now))
                             await ctx.message.add_reaction('✅')
                         except:
                             await ctx.send("Kein gültiger Befehl")
