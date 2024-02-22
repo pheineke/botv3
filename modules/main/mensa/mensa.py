@@ -1,4 +1,5 @@
 from discord.ext import commands
+from datetime import datetime
 
 import modules.main.mensa.database as database
 
@@ -26,6 +27,14 @@ class Mensa(commands.Cog):
                             await ctx.message.add_reaction('✅')
                         except:
                             await ctx.send("Kein User eingetragen.")
+                    elif arg in ["jetzt", "now", "rn"]:
+                        try:
+                            now = datetime.now().strftime("%H:%M:")
+                            if self.user_time_db.validate_time_format(now):
+                                self.user_time_db.save_user_time(username, now)
+                            await ctx.message.add_reaction('✅')
+                        except:
+                            await ctx.send("Kein gültiger Befehl")
                     else:
                         try:
                             arg = self.user_time_db.striptime(arg)
