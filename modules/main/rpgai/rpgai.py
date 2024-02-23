@@ -102,7 +102,7 @@ class RPGLoader(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def aitargetchannel(self, ctx, channelid=None):
+    async def aitargetchannel(self, channelid=None):
         self.aitargetchannel(channelid)
         await self.channel.send("ChannelID set")
 
