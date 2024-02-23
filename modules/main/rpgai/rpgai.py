@@ -92,8 +92,6 @@ class RPGLoader(commands.Cog):
         self.path = os.getcwd()
 
         self.load_usernames()
-
-
     
     @commands.is_owner()
     @commands.command()
@@ -134,8 +132,9 @@ class RPGLoader(commands.Cog):
             self.game = MedievalGame('rpgai')
             self.game.loadGame(gameStateName)
             if gameStateName is None:
-                gameStateName = "new Game"
-            await ctx.send(f"Loaded {gameStateName}")
+                await ctx.send(f"Loaded new Game")
+            else:
+                await ctx.send(f"Loaded {gameStateName}")
         except Exception as e:
             await self.channel.send("Error ", e)
 
