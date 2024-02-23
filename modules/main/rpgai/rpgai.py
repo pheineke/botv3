@@ -82,14 +82,14 @@ class MedievalGame:
 
 
 class RPGLoader(commands.Cog):
-    async def __init__(self, client):
+    def __init__(self, client):
         self.client = client
         self.game = None
         self.channel_id = 1200993669478621226
         self.channel = self.client.get_channel(self.channel_id)
         self.users = {}
 
-        await self.load_usernames()
+        self.load_usernames()
         self.aitargetchannel()
 
 
@@ -149,7 +149,7 @@ class RPGLoader(commands.Cog):
 
         await self.channel.send(game.chat())
 
-    async def load_usernames(self):
+    def load_usernames(self):
         try:
             with open("players.json", 'r') as file0:
                 self.users = json.load(file0)
