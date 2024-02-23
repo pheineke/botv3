@@ -16,8 +16,9 @@ from discord.ext import commands
 class MedievalGame:
     def __init__(self, model) -> None:
         self.model = model
-        self.allModelPath = "./modules/main/rpgai/modelFiles/"
-        self.gameStateDir = "./modules/main/rpgai/gameStates/"
+        self.botpath = os.getcwd()
+        self.allModelPath = self.botpath + "/modules/main/rpgai/modelFiles/"
+        self.gameStateDir = self.botpath + "/modules/main/rpgai/gameStates/"
 
         self.gameStateName = ""
         self.gameStatePath = self.gameStateDir + self.gameStateName
@@ -88,6 +89,7 @@ class RPGLoader(commands.Cog):
         self.channel_id = 1200993669478621226
         self.channel = self.client.get_channel(self.channel_id)
         self.users = {}
+        self.path = os.getcwd()
 
         self.load_usernames()
 
@@ -105,7 +107,7 @@ class RPGLoader(commands.Cog):
 
     @commands.command()
     async def listgames(self, ctx):
-        directory_path = "./modules/main/rpgai/gameStates/"
+        directory_path = self.path + "/modules/main/rpgai/gameStates/"
         try:
             # Überprüfe, ob das Verzeichnis existiert
             if not os.path.exists(directory_path):
@@ -118,7 +120,7 @@ class RPGLoader(commands.Cog):
 
     @commands.command(brief="GameState herunterladen")
     async def downloadgame(self, ctx, gameStateName):
-        file_path = f'./modules/main/rpgai/gameStates/{gameStateName}.txt'
+        file_path = f'{self.path}/modules/main/rpgai/gameStates/{gameStateName}.txt'
         try:
             with open(file_path, 'rb') as file:
                 file_contents = discord.File(file, filename=f'{gameStateName}.txt')
