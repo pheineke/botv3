@@ -82,14 +82,14 @@ class MedievalGame:
 
 
 class RPGLoader(commands.Cog):
-    def __init__(self, client):
+    async def __init__(self, client):
         self.client = client
         self.game = None
         self.channel_id = 1200993669478621226
         self.channel = self.client.get_channel(self.channel_id)
         self.users = {}
 
-        self.load_usernames()
+        await self.load_usernames()
         self.aitargetchannel()
 
 
