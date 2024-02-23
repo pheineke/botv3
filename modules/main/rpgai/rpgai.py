@@ -42,14 +42,16 @@ class MedievalGame:
 
         self.gameStatePath = os.path.join(self.gameStateDir, gameStateName)
 
-        if not os.path.exists(self.gameStatePath):
-            raise FileNotFoundError(f"Game state file '{self.gameStatePath}' not found")
-
         try:
             with open(self.gameStatePath, 'r') as file0:
                 self.gameStateContent = json.load(file0)
+        except FileNotFoundError:
+            # Wenn die Datei nicht gefunden wird, eine leere Liste als gameStateContent setzen
+            self.gameStateContent = []
         except Exception as e:
-            raise IOError(f"Error loading game state file: {e}")
+            # Falls es irgendeinen anderen Fehler gibt, eine Fehlermeldung ausgeben
+            raise IOError(f"Fehler beim Laden des Spielstands: {e}")
+
 
         
     def saveGame(self):
