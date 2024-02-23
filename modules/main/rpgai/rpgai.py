@@ -143,7 +143,7 @@ class RPGLoader(commands.Cog):
 
 
     @commands.command()
-    async def savegame(self, ctx, gameStateName):
+    async def savegame(self, gameStateName):
         game = self.game
         game.loadGame(gameStateName)
 
@@ -158,7 +158,7 @@ class RPGLoader(commands.Cog):
             self.users = {}
 
     @commands.command(brief="Falls du noch keinen Plan hast")
-    async def tutorial(self, ctx):
+    async def tutorial(self):
         await self.channel.send('''
 Hi du hast das Tutorial aufgerufen!\n
 Als allererstes musst du dich zusammen mit einem Owner oder Admin vergewissern, dass dieser Channel über den Bot als Outputchannel für das Game gesetzt wurde.
