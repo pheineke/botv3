@@ -90,25 +90,21 @@ class RPGLoader(commands.Cog):
         self.users = {}
 
         self.load_usernames()
-        self.aitargetchannel()
 
 
-    def aitargetchannel(self, channelid=None):
+    
+    @commands.is_owner()
+    @commands.command()
+    async def aitargetchannel(self, ctx, channelid=None):
         if channelid is None:
             self.channel = self.client.get_channel(self.channel_id)
         else:
             self.channel = self.client.get_channel(channelid)
-
-
-    @commands.command()
-    @commands.is_owner()
-    async def aitargetchannel(self, channelid=None):
-        self.aitargetchannel(channelid)
         await self.channel.send("ChannelID set")
 
 
     @commands.command()
-    async def listgames(self):
+    async def listgames(self, ctx):
         directory_path = "./modules/main/rpgai/gameStates/"
         try:
             # Überprüfe, ob das Verzeichnis existiert
@@ -143,7 +139,7 @@ class RPGLoader(commands.Cog):
 
 
     @commands.command()
-    async def savegame(self, gameStateName):
+    async def savegame(self, ctx, gameStateName):
         game = self.game
         game.loadGame(gameStateName)
 
@@ -158,7 +154,7 @@ class RPGLoader(commands.Cog):
             self.users = {}
 
     @commands.command(brief="Falls du noch keinen Plan hast")
-    async def tutorial(self):
+    async def tutorial(self, ctx):
         await self.channel.send('''
 Hi du hast das Tutorial aufgerufen!\n
 Als allererstes musst du dich zusammen mit einem Owner oder Admin vergewissern, dass dieser Channel über den Bot als Outputchannel für das Game gesetzt wurde.
