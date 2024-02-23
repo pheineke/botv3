@@ -108,7 +108,7 @@ class RPGLoader(commands.Cog):
 
 
     @commands.command()
-    async def listgames(self, ctx):
+    async def listgames(self):
         directory_path = "./modules/main/rpgai/gameStates/"
         try:
             # Überprüfe, ob das Verzeichnis existiert
