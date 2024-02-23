@@ -174,7 +174,7 @@ Du kannst in der Welt spielen in dem du `~chat` oder `~c` aufrufst und dahinter 
 
 #######################################################
 
-    @commands.command(brief="Hier kannst du deinen Adventurer Namen anpassen!")
+    @commands.command(aliases=["setuser", "setname"], brief="Hier kannst du deinen Adventurer Namen anpassen!")
     async def setusername(self, ctx, username):
         try:
             with open("players.json", 'r') as file0:
@@ -200,7 +200,7 @@ Du kannst in der Welt spielen in dem du `~chat` oder `~c` aufrufst und dahinter 
             await self.channel.send(f"Fehler beim Speichern: {e}")
 
 
-    @commands.command(brief="Habe ich einen Adventurer Namen?")
+    @commands.command(aliases=["getuser", "getname"],brief="Habe ich einen Adventurer Namen?")
     async def getusername(self, ctx):
         try:
             with open("players.json", 'r') as file0:
@@ -219,7 +219,7 @@ Du kannst in der Welt spielen in dem du `~chat` oder `~c` aufrufst und dahinter 
 
     ############################################################################
 
-    @commands.command(aliases=["c"])
+    @commands.command(aliases=["c"], brief="Mit diesem Befehl und einem Text dahinter interagierst du mit der Spielwelt")
     async def chat(self, ctx, *, message):
         if ctx.author.name in self.users:
             ingameuser = self.users[ctx.author.name]
