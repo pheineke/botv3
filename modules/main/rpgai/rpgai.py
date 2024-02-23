@@ -33,29 +33,24 @@ class MedievalGame:
         print(self.gameStatePath)
         print(self.gameStateContent)
 
-
-    
     #################
 
     def loadGame(self, gameStateName=None):
         time = datetime.now().strftime("%H-%M_%d-%m-%Y")
         if gameStateName is None:
             gameStateName = f"gameState-{time}-num{random.randint(0,999)}.txt"
-        else:
-            pass
 
-        self.gameStatePath = self.gameStateDir + gameStateName
+        self.gameStatePath = os.path.join(self.gameStateDir, gameStateName)
+
+        if not os.path.exists(self.gameStatePath):
+            raise FileNotFoundError(f"Game state file '{self.gameStatePath}' not found")
 
         try:
             with open(self.gameStatePath, 'r') as file0:
-                file = list(json.load(file0))
-                self.gameStateContent = file
+                self.gameStateContent = json.load(file0)
         except Exception as e:
-                with open(self.gameStatePath, 'w') as file0:
-                    json.dump(self.gameStateContent, file0)
-                with open(self.gameStatePath, 'r') as file0:
-                    file = list(json.load(file0))
-                    self.gameStateContent = file
+            raise IOError(f"Error loading game state file: {e}")
+
         
     def saveGame(self):
         with open(self.gameStatePath, 'w') as file0:
@@ -126,17 +121,20 @@ class RPGLoader(commands.Cog):
         except Exception as e:
             await self.channel.send("Error: ", e)
 
-    @commands.command(aliases=["startgame"])
+    @commands.command()
     async def loadgame(self, ctx, gameStateName=None):
         try:
             self.game = MedievalGame('rpgai')
             self.game.loadGame(gameStateName)
             if gameStateName is None:
-                await ctx.send(f"Loaded new Game")
+                await ctx.send("Loaded new Game")
             else:
                 await ctx.send(f"Loaded {gameStateName}")
+        except FileNotFoundError:
+            await ctx.send("Error: File not found")
         except Exception as e:
-            await self.channel.send("Error ", e)
+            await ctx.send(f"Error: {e}")
+
 
 
     @commands.command()
