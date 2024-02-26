@@ -28,7 +28,7 @@ intents.message_content = True
 owners = [417073119254282240, 386254372646158338]
 grinchrole = 1188587621753036820
 
-bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners), intents=intents)
+bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners), intents=intents, help_command=None)
 
 #BOTEVENTS
 @bot.event
@@ -70,6 +70,21 @@ async def on_ready():
     
 #####
 
+@bot.command()
+async def help(ctx):
+    command_info = ""  # Declare command_info outside the loop
+    for cog in bot.cogs.values():
+        if isinstance(cog, commands.Cog):
+            commands_list = cog.get_commands()
+            if commands_list:
+                cog_name = cog.qualified_name if cog.qualified_name else "No Category"
+                for command in commands_list:
+                    short_description = command.brief or "Keine kurze Beschreibung verfügbar."
+                    command_info += f"`{command.name}` - {short_description}\n"  # Accumulate command_info properly
+    if command_info:  # Check if command_info is not empty before sending
+        await ctx.send(command_info)
+    else:
+        await ctx.send("No commands found.")
 
 @commands.is_owner()
 @bot.command(aliases=["l"])
