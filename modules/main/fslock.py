@@ -22,7 +22,7 @@ class Fslock(commands.Cog):
         current_date = datetime.now().strftime('%Y-%m-%d')
         current_time = datetime.now().strftime('%H:%M')
         value = fslockjson["opendoor"]
-        with open('data.txt', 'a') as file:
+        with open('lock-log.txt', 'a') as file:
             file.write(f"{current_date},{current_time},{value}\n")
 
     @commands.command()
