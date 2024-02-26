@@ -30,7 +30,7 @@ class Fslock(commands.Cog):
         #datum0 = "2024-02-26"
         #datum1 = "2024-02-26"
         # Laden der Daten aus der Datei
-        data = np.loadtxt('data.txt', delimiter=',',dtype=str)
+        data = np.loadtxt('lock-log.txt', delimiter=',',dtype=str)
 
         values = [row[2] == 'True' for row in data]
         dates = [datetime.strptime(row[0] + ' ' + row[1], '%Y-%m-%d %H:%M') for row in data]
