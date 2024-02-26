@@ -32,7 +32,7 @@ class Fslock(commands.Cog):
         # Laden der Daten aus der Datei
         data = np.loadtxt('data.txt', delimiter=',',dtype=str)
 
-        values = [row[2] != 'True' for row in data]
+        values = [row[2] == 'False' for row in data]
         dates = [datetime.strptime(row[0] + ' ' + row[1], '%Y-%m-%d %H:%M') for row in data]
         date_values = [[dates[i], values[i]] for i in range(len(dates))]
 
