@@ -60,7 +60,8 @@ class Fslock(commands.Cog):
         plt.tight_layout()
         plt.savefig("plot-door.png")
 
-        await ctx.send(file=discord.File('plot-door.png'))
+        await ctx.send(file=lambda: discord.File('plot-door.png'))
+        os.remove(f"{os.getcwd()}/plot-door.png")
 
 
 
