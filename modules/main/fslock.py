@@ -32,7 +32,7 @@ class Fslock(commands.Cog):
         # Laden der Daten aus der Datei
         data = np.loadtxt('data.txt', delimiter=',',dtype=str)
 
-        values = [row[2] == 'False' for row in data]
+        values = [row[2] == 'True' for row in data]
         dates = [datetime.strptime(row[0] + ' ' + row[1], '%Y-%m-%d %H:%M') for row in data]
         date_values = [[dates[i], values[i]] for i in range(len(dates))]
 
@@ -54,14 +54,15 @@ class Fslock(commands.Cog):
         plt.xlabel('Date and Time')
         plt.ylabel('Value')
         plt.title('FS-Info Öffnungsverlauf')
-        plt.yticks([0, 1], ['CLOSED', 'OPEN'])
+        plt.yticks([0, 1], ['OPEN', 'CLOSED'])
         plt.grid(True)
         plt.xticks(rotation=45)
+        plt.gca().invert_yaxis()  # Umkehren der y-Achse
         plt.tight_layout()
         plt.savefig("plot-door.png")
 
-        await ctx.send(file=lambda: discord.File('plot-door.png'))
-        os.remove(f"{os.getcwd()}/plot-door.png")
+
+        await ctx.send(file=discord.File('plot-door.png'))
 
 
 
