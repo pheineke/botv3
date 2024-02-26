@@ -54,7 +54,7 @@ class Fslock(commands.Cog):
         plt.xlabel('Date and Time')
         plt.ylabel('Value')
         plt.title('FS-Info Öffnungsverlauf')
-        plt.yticks([0, 1], ['CLOSED', 'OPEN'])
+        plt.yticks([0, 1], ['OPEN', 'CLOSED'])
         plt.grid(True)
         plt.xticks(rotation=45)
         plt.tight_layout()
