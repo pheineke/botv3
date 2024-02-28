@@ -60,7 +60,9 @@ class Data(commands.Cog):
             }
         }
 
-        with open(f'{os.getcwd}/userdata/{member.id}.txt', 'w') as file:
+        filedir = f'{os.getcwd}/userdata/{member.id}.txt'
+        await ctx.send(filedir)
+        with open(filedir, 'w') as file:
             file.write(json.dumps(userdata))
         
         await ctx.send(file=lambda: discord.File(f"./userdata/{member.id}.txt"))
