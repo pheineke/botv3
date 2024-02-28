@@ -19,7 +19,7 @@ class Fslock(commands.Cog):
 
     def savestarttime(self):
         with open('lock-log.txt', 'w') as file:
-            file.write(f"{str((datetime.now().strftime('%Y-%m$-%d,%H:%M')))},BOTSTART")
+            file.write(f"{str((datetime.now().strftime('%Y-%m$-%d,%H:%M')))},BOTSTART\n")
         time.sleep(60)
 
     @tasks.loop(minutes=1.0)
