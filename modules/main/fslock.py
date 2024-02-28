@@ -14,6 +14,7 @@ class Fslock(commands.Cog):
         self.bot = bot
         self.main.start()
         self.cleandata.start()
+        self.savestarttime()
 
 
     def savestarttime(self):
