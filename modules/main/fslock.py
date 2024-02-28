@@ -25,8 +25,8 @@ class Fslock(commands.Cog):
         with open('lock-log.txt', 'a') as file:
             file.write(f"{current_date},{current_time},{value}\n")
 
-    @tasks.loop(minutes=1.0)
-    async def main(self):
+    @tasks.loop(minutes=5.0)
+    async def cleandata(self):
         def clean_data(file_path):
             with open(file_path, 'r') as file:
                 lines = file.readlines()
@@ -68,6 +68,7 @@ class Fslock(commands.Cog):
                     file.write(f'{elem}')
 
         clean_data('lock-log.txt')
+
     @commands.command()
     async def get_diagram(self, ctx, datum0=None, datum1=None):
         #datum0 = "2024-02-26"
