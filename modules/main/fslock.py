@@ -13,13 +13,12 @@ class Fslock(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.main.start()
-        self.bot_starttime = datetime.now().strftime('%Y-%m$-%d,%H:%M')
         self.savestarttime()
 
 
     def savestarttime(self):
         with open('lock-log.txt', 'w') as file:
-            file.write(f'{self.bot_starttime},BOTSTART')
+            file.write(f'{datetime.now().strftime('%Y-%m$-%d,%H:%M')},BOTSTART')
     
 
     @tasks.loop(minutes=1.0)
