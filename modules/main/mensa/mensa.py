@@ -1,4 +1,4 @@
-from discord.ext import commands
+from discord.ext import commands, tasks
 from datetime import datetime
 
 import modules.main.mensa.database as database
@@ -6,7 +6,10 @@ import modules.main.mensa.database as database
 class Mensa(commands.Cog):
     def __init__(self,bot) -> None:
         self.bot = bot
+        self.bot.loop.create_task(self.cyclereset())
         self.user_time_db = database.Manage_database("users.db")
+
+    time = datetime.time(hour=15, minute=00)
 
     @commands.command()
     async def mensatime(self, ctx, equal=None, arg=None):
@@ -28,6 +31,18 @@ class Mensa(commands.Cog):
                             await ctx.message.add_reaction('✅')
                         except:
                             await ctx.send("Kein User eingetragen.")
+                    elif arg in ["const", "constant"]:
+                        try:
+                            self.user_time_db.set_user_time_constant(username)
+                            await ctx.message.add_reaction('✅')
+                        except:
+                            await ctx.send("Kein User eingetragen")
+                    elif arg in ["nconst", "nconstant", "notconstant"]:
+                        try:
+                            self.user_time_db.set_user_time_nconstant(username)
+                            await ctx.message.add_reaction('✅')
+                        except:
+                            await ctx.send("Kein User eingetragen")
                     elif arg in ["jetzt", "now", "rn"]:
                         try:
                             now = datetime.now().strftime("%H:%M")
@@ -48,7 +63,11 @@ class Mensa(commands.Cog):
                         
         if ctx.prefix == "xs.":
             await ctx.send(f"{ctx.author.mention} Folgende Mensazeiten sind eingetragen:\n```\n{self.user_time_db.get_all_users_with_times()}\n```")
-        
+    
+    @tasks.loop(time=time)
+    async def cyclereset(self):
+        self.user_time_db.remove_nconstants()
 
+        
 async def setup(bot):
     await bot.add_cog(Mensa(bot))

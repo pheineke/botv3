@@ -26,6 +26,7 @@ class Manage_database:
         cursor.execute('''CREATE TABLE IF NOT EXISTS user_times (
                             user_id INTEGER,
                             time_recorded TEXT,
+                            is_constant INTEGER,
                             FOREIGN KEY (user_id) REFERENCES users(id)
                         )''')
         self.conn.commit()
@@ -54,6 +55,30 @@ class Manage_database:
             cursor.execute("UPDATE user_times SET time_recorded=? WHERE user_id=?", (time_recorded, user_id))
         else:
             cursor.execute("INSERT INTO user_times (user_id, time_recorded) VALUES (?, ?)", (user_id, time_recorded))
+        self.conn.commit()
+
+    def set_user_time_constant(self, username):
+        user_id = self.add_or_get_user(username)
+        cursor = self.conn.cursor()
+
+        cursor.execute("SELECT user_id FROM user_times WHERE user_id=?", (user_id,))
+        existing_user = cursor.fetchone()
+        if existing_user:
+            cursor.execute("UPDATE user_times SET is_constant=? WHERE user_id=?", (1, user_id))
+        else:
+            return 0
+        self.conn.commit()
+
+    def set_user_time_nconstant(self, username):
+        user_id = self.add_or_get_user(username)
+        cursor = self.conn.cursor()
+
+        cursor.execute("SELECT user_id FROM user_times WHERE user_id=?", (user_id,))
+        existing_user = cursor.fetchone()
+        if existing_user:
+            cursor.execute("UPDATE user_times SET is_constant=? WHERE user_id=?", (0, user_id))
+        else:
+            return 0
         self.conn.commit()
 
     def get_user_times(self, username):
@@ -108,6 +133,19 @@ class Manage_database:
                 print("Benutzer nicht gefunden.")
         except Exception as e:
             print("Fehler beim Löschen des Benutzers:", e)
+
+    def remove_nconstants(self):
+        try:
+            cursor = self.conn.cursor()
+            cursor.execute("SELECT id FROM users WHERE is_constant=0")
+            user_ids = cursor.fetchall()
+            for user in user_ids:
+                cursor.execute("DELETE FROM user_times WHERE user_id=?", (user,))
+                cursor.execute("DELETE FROM users WHERE id=?", (user,))
+            
+            self.conn.commit()
+        except Exception as e:
+            print("ERROR {e}")
 
 
     def striptime(self, time_recorded):

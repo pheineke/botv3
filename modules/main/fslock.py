@@ -37,9 +37,8 @@ class Fslock(commands.Cog):
             dates = [datetime.strptime(row[0] + ' ' + row[1], '%Y-%m-%d %H:%M') for row in data]
             date_values = [[dates[i], values[i]] for i in range(len(dates))]
 
-            if not(datum0 and datum1):
-                filtered_entries = date_values
-            elif datum0 and not datum1:
+            print(f"{datum0}{datum1}")
+            if datum0 and (not datum1):
                 filtered_entries = [entry for entry in date_values if datum0 in str(entry[0])]
             elif datum0 and datum1:
                 filtered_entries = [entry for entry in date_values if datum0 in str(entry[0]) or datum1 in str(entry[0])]
