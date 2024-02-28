@@ -190,7 +190,7 @@ async def modulespull(ctx):
         await bot.unload_extension(f"modules.main.{cog}")
     for module in os.listdir("./modules/main/"):
         print(module)
-        if ".py" in module and not("!" in module):
+        if ".py" in module and not("!" in module) and not("fowd" in module):
             try:
                 module = module[:-3]
                 await bot.load_extension(f"modules.main.{module}")
