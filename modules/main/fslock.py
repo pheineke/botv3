@@ -88,10 +88,10 @@ class Fslock(commands.Cog):
             for row in data:
                 if row[2] == 'True':
                     values.append(True)
-                    startvalues.append(False)
+                    startvalues.append("")
                 if row[2] == 'False':
                     values.append(False)
-                    startvalues.append(False)
+                    startvalues.append("")
                 else:
                     startvalues.append('BOTSTART')
 
