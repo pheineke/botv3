@@ -17,7 +17,8 @@ class Data(commands.Cog):
         await ctx.send(f"Status: {member.desktop_status}")
         await ctx.send("Rollen:")
         for role in member.roles:
-            await ctx.send(role.name)
+            if role.name != '@everyone':
+                await ctx.send(role.name)
 
 async def setup(bot):
     await bot.add_cog(Data(bot))
