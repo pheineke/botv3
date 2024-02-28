@@ -194,8 +194,6 @@ async def modulespull(ctx):
                 if (module in loaded_cogs and "fowd" not in module):
                     await bot.unload_extension(f'modules.main.{module}')
                     await bot.load_extension(f'modules.main.{module}')
-                else:
-                    await bot.load_extension(f'modules.main.{module}')
             except:
                 pass
 
