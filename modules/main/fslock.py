@@ -113,7 +113,7 @@ class Fslock(commands.Cog):
             print(f"{plot_dates} {plot_values}")
             # Erstellen des Diagramms
             plt.figure(figsize=(20, 3))
-            plt.plot(plot_dates, plot_values, marker='o', linestyle='-', color='b')
+            plt.plot(plot_dates, plot_values, marker='o', linestyle=None, color='b')
             plt.xlabel('Date and Time')
             plt.ylabel('Value')
             plt.title(title)
