@@ -89,13 +89,7 @@ async def help(ctx):
 @commands.is_owner()
 @bot.command(aliases=["l"])
 async def load(ctx, extension):
-#####load side
-    try:
-        await bot.load_extension(f'modules.side.{extension}')
-        await ctx.send(f"{extension} loaded")
-    except Exception as d:
-        await ctx.send(f'{d}')
-
+    await bot.load_extension(f"modules.{extension}")
 
 
 @commands.is_owner()
@@ -121,7 +115,7 @@ async def unload(ctx, extension):
 @bot.command(aliases=["r"])
 async def reload(ctx, extension):
     await bot.unload_extension(f"modules.{extension}")
-    await bot.reload_extension(f"modules.{extension}")
+    await bot.load_extension(f"modules.{extension}")
 
 
 '''Bot kann heruntergefahren werden.'''
