@@ -192,8 +192,10 @@ async def modulespull(ctx):
         if ".py" in module and not('!' in module):
             try:
                 module = module[:-3]
-                if (module in loaded_cogs and "fowd" not in module):
+                if module in loaded_cogs:
                     await bot.unload_extension(f'modules.main.{module}')
+                    await bot.load_extension(f'modules.main.{module}')
+                else:
                     await bot.load_extension(f'modules.main.{module}')
             except:
                 pass
