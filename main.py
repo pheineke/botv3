@@ -189,7 +189,7 @@ async def modulespull(ctx):
 
     for module in os.listdir("./modules/main/"):
         if ".py" in module and not('!' in module):
-            module = module.replace('.py','')
+            module = module[:-3]
             if (module in loaded_cogs):
                 await bot.unload_extension(f'modules.main.{module}')
                 await bot.load_extension(f'modules.main.{module}')
