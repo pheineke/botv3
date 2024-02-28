@@ -14,7 +14,7 @@ class Fslock(commands.Cog):
         self.bot = bot
         self.main.start()
 
-    @tasks.loop(minutes=5.0)
+    @tasks.loop(minutes=1.0)
     async def main(self):
         fslocksite = requests.get("https://www.fachschaft.informatik.uni-kl.de/opendoor.json")
         fslocksite = fslocksite.content.decode('utf8').replace("'", '"')
