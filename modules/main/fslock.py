@@ -87,7 +87,6 @@ class Fslock(commands.Cog):
             dates = [datetime.strptime(row[0] + ' ' + row[1], '%Y-%m-%d %H:%M') for row in data]
             date_values = [[dates[i], values[i]] for i in range(len(dates))]
 
-            print(f"{datum0}{datum1}")
             if datum0 and (not datum1):
                 filtered_entries = [entry for entry in date_values if datum0 in str(entry[0])]
                 title = f'FS-Info Öffnungsverlauf von {datum0}'
