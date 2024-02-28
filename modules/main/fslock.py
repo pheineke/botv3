@@ -87,11 +87,11 @@ class Fslock(commands.Cog):
             startvalues = []
             for row in data:
                 if row[2] == 'True':
-                    values.append("1")
+                    values.append(1)
                 if row[2] == 'False':
-                    values.append("0")
+                    values.append(0)
                 else:
-                    values.append("2")
+                    values.append(2)
 
             
             dates = [datetime.strptime(row[0] + ' ' + row[1], '%Y-%m-%d %H:%M') for row in data]
@@ -109,10 +109,10 @@ class Fslock(commands.Cog):
 
 
             plot_dates = [str(x[0]) for x in filtered_entries]
-            plot_values = [x[1] for x in filtered_entries]
+            plot_values = [str(x[1]) for x in filtered_entries]
             # Erstellen des Diagramms
             plt.figure(figsize=(20, 3))
-            plt.plot(plot_dates, plot_values, marker='o', linestyle='-', color='b')
+            plt.plot(plot_dates, values, marker='o', linestyle='-', color='b')
             plt.xlabel('Date and Time')
             plt.ylabel('Value')
             plt.title(title)
