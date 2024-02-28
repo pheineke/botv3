@@ -102,10 +102,10 @@ class Fslock(commands.Cog):
                 filtered_entries = [entry for entry in date_values if datum0 in str(entry[0]) or datum1 in str(entry[0])]
                 title = f'FS-Info Öffnungsverlauf von {datum0} bis {datum1}'
             else:
-                filtered_entries = [x[0] for x in date_values]
+                filtered_entries = date_values
                 title = f'FS-Info Öffnungsverlauf gesamt'
 
-            plot_dates = [np.datetime64(ts) for ts in filtered_entries]
+            plot_dates = [np.datetime64(ts[0]) for ts in filtered_entries]
             plot_values = [x[1] for x in filtered_entries]
             print(f"{plot_dates} {plot_values}")
             # Erstellen des Diagramms
