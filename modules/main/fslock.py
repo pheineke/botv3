@@ -87,11 +87,11 @@ class Fslock(commands.Cog):
             startvalues = []
             for row in data:
                 if row[2] == 'True':
-                    values.append(1)
-                if row[2] == 'False':
-                    values.append(0)
-                else:
                     values.append(2)
+                if row[2] == 'False':
+                    values.append(1)
+                else:
+                    values.append(0)
 
             
             dates = [datetime.strptime(row[0] + ' ' + row[1], '%Y-%m-%d %H:%M') for row in data]
