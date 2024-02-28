@@ -185,17 +185,9 @@ async def modulespull(ctx):
     await ctx.send(f"```{os.popen('git pull').read()}```")
     os.chdir(current_path)
 
-    loaded_cogs = [cog for cog in bot.cogs.keys()]
-    for cog in loaded_cogs:
-        await bot.unload_extension(f"modules.main.{cog}")
     for module in os.listdir("./modules/main/"):
         print(module)
-        if ".py" in module and not("!" in module) and not("fowd" in module):
-            try:
-                module = module[:-3]
-                await bot.load_extension(f"modules.main.{module}")
-            except:
-                pass
+
 
 @bot.command(aliases=["f"])
 async def freeze(ctx):
