@@ -10,13 +10,6 @@ class Data(commands.Cog):
 
     @commands.command()
     async def getuserinfo(self, ctx, member: discord.Member = None):
-        if not os.path.isdir("./userdata"):
-            os.makedirs("./userdata")
-
-
-
-
-        filedir = f'{os.getcwd}/userdata/{member.id}.txt'
         await ctx.send("Hallo")
 
         
