@@ -188,6 +188,7 @@ async def modulespull(ctx):
     loaded_cogs = [cog for cog in bot.cogs.keys()]
 
     for module in os.listdir("./modules/main/"):
+        print(module)
         if ".py" in module and not('!' in module):
             try:
                 module = module[:-3]
