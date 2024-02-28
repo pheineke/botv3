@@ -83,7 +83,19 @@ class Fslock(commands.Cog):
         try:
             data = np.loadtxt('lock-log.txt', delimiter=',',dtype=str)
 
-            values = [row[2] == 'True' for row in data]
+            values = []
+            startvalues = []
+            for row in data:
+                if row[2] == 'True':
+                    values.append(True)
+                    startvalues.append(False)
+                if row[2] == 'False':
+                    values.append(False)
+                    startvalues.append(False)
+                else:
+                    startvalues.append('BOTSTART')
+
+            
             dates = [datetime.strptime(row[0] + ' ' + row[1], '%Y-%m-%d %H:%M') for row in data]
             date_values = [[dates[i], values[i]] for i in range(len(dates))]
 
@@ -102,11 +114,11 @@ class Fslock(commands.Cog):
             plot_values = [str(x[1]) for x in filtered_entries]
             # Erstellen des Diagramms
             plt.figure(figsize=(20, 3))
-            plt.plot(plot_dates, plot_values, marker='o', linestyle='-', color='b')
+            plt.plot(plot_dates, plot_values, startvalues, marker='o', linestyle='-', color='b')
             plt.xlabel('Date and Time')
             plt.ylabel('Value')
             plt.title(title)
-            plt.yticks([0, 1], ['OPEN', 'CLOSED'])
+            plt.yticks([0, 1, 2], ['BOTSTART','OPEN', 'CLOSED'])
             plt.grid(True)
             plt.xticks(rotation=45)
             plt.gca().invert_yaxis()  # Umkehren der y-Achse
