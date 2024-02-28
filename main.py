@@ -186,17 +186,14 @@ async def modulespull(ctx):
     os.chdir(current_path)
 
     loaded_cogs = [cog for cog in bot.cogs.keys()]
-
+    for cog in loaded_cogs:
+        await bot.unnload_extension(f"modules.main.{cog}")
     for module in os.listdir("./modules/main/"):
         print(module)
         if ".py" in module and not("!" in module):
             try:
                 module = module[:-3]
-                if module in loaded_cogs:
-                    await bot.unload_extension(f"modules.main.{module}")
-                    await bot.load_extension(f"modules.main.{module}")
-                else:
-                    await bot.load_extension(f"modules.main.{module}")
+                await bot.load_extension(f"modules.main.{module}")
             except:
                 pass
 
