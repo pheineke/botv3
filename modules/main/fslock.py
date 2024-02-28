@@ -110,14 +110,13 @@ class Fslock(commands.Cog):
 
             plot_dates = [str(x[0]) for x in filtered_entries]
             plot_values = [str(x[1]) for x in filtered_entries]
-            plot_start = [str(x) for x in startvalues]
             # Erstellen des Diagramms
             plt.figure(figsize=(20, 3))
-            plt.plot(plot_dates, plot_values, plot_start, marker='o', linestyle='-', color='b')
+            plt.plot(plot_dates, plot_values, marker='o', linestyle='-', color='b')
             plt.xlabel('Date and Time')
             plt.ylabel('Value')
             plt.title(title)
-            plt.yticks(["0", "1", "2"], ['BOTSTART','OPEN', 'CLOSED'])
+            plt.yticks([0, 1, 2], ['BOTSTART','OPEN', 'CLOSED'])
             plt.grid(True)
             plt.xticks(rotation=45)
             plt.gca().invert_yaxis()  # Umkehren der y-Achse
