@@ -5,6 +5,7 @@ class Data(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.command()
     async def getuserinfo(self, ctx):
         member = ctx.author
         await ctx.send(f"Benutzername: {member.name}")

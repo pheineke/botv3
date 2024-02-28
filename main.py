@@ -173,7 +173,17 @@ async def gitpull(ctx):
 
     os.execv(sys.executable, ['python3', 'main.py'])
 
+@bot.command()
+@commands.is_owner()
+async def modulespull(ctx):
+    # Speichere den aktuellen Pfad
+    current_path = os.getcwd() + "/"
 
+    print(current_path)
+    os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+    await ctx.send(f"```{os.popen('git pull').read()}```")
+    os.chdir(current_path)
 
 @bot.command(aliases=["f"])
 async def freeze(ctx):
