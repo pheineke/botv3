@@ -113,7 +113,12 @@ class Fslock(commands.Cog):
             print(f"{plot_dates} {plot_values}")
             # Erstellen des Diagramms
             plt.figure(figsize=(20, 3))
-            plt.bar(plot_dates, plot_values, width=0.01, color='b')
+            
+            for i in range(len(plot_dates) - 1):
+                width = (plot_dates[i + 1] - plot_dates[i]).total_seconds() / (60 * 60 * 24)  # Breite basierend auf Zeitdifferenz in Tagen
+                plt.bar(plot_dates[i], plot_values[i], width=width, color='b')
+
+
             plt.xlabel('Date and Time')
             plt.ylabel('Value')
             plt.title(title)
