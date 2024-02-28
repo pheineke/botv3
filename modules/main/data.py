@@ -54,7 +54,6 @@ class Data(commands.Cog):
                 "status": member.status,
                 "system": member.system,
                 "timed_out_until": str(member.timed_out_until),
-                "web_status": member.web_status
             }
         }
 
