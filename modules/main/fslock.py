@@ -112,9 +112,10 @@ class Fslock(commands.Cog):
 
             plot_dates = [str(x[0]) for x in filtered_entries]
             plot_values = [str(x[1]) for x in filtered_entries]
+            plot_start = [str(x) for x in startvalues]
             # Erstellen des Diagramms
             plt.figure(figsize=(20, 3))
-            plt.plot(plot_dates, plot_values, startvalues, marker='o', linestyle='-', color='b')
+            plt.plot(plot_dates, plot_values, plot_start, marker='o', linestyle='-', color='b')
             plt.xlabel('Date and Time')
             plt.ylabel('Value')
             plt.title(title)
