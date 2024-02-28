@@ -125,7 +125,7 @@ class Fslock(commands.Cog):
             plt.yticks([0, 1, 2], ['OPEN', 'CLOSED','BOTSTART'])
             plt.grid(True)
             plt.xticks(rotation=45)
-            plt.gca().invert_yaxis()  # Umkehren der y-Achse
+            #plt.gca().invert_yaxis()  # Umkehren der y-Achse
             plt.tight_layout()
             plt.savefig("plot-door.png")
 
