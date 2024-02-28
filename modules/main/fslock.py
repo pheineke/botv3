@@ -84,15 +84,13 @@ class Fslock(commands.Cog):
             data = np.loadtxt('lock-log.txt', delimiter=',',dtype=str)
 
             values = []
-            startvalues = []
             for row in data:
                 if row[2] == 'True':
                     values.append(2)
-                if row[2] == 'False':
+                elif row[2] == 'False':
                     values.append(1)
                 else:
                     values.append(0)
-
             
             dates = [datetime.strptime(row[0] + ' ' + row[1], '%Y-%m-%d %H:%M') for row in data]
             date_values = [[dates[i], values[i]] for i in range(len(dates))]
@@ -107,18 +105,12 @@ class Fslock(commands.Cog):
                 filtered_entries = date_values
                 title = f'FS-Info Öffnungsverlauf gesamt'
 
-
             plot_dates = [np.datetime64(ts[0]) for ts in filtered_entries]
             plot_values = [x[1] for x in filtered_entries]
             print(f"{plot_dates} {plot_values}")
             # Erstellen des Diagramms
             plt.figure(figsize=(20, 3))
-            
-            for i in range(len(plot_dates) - 1):
-                width = (plot_dates[i + 1] - plot_dates[i]).total_seconds() / (60 * 60 * 24)  # Breite basierend auf Zeitdifferenz in Tagen
-                plt.bar(plot_dates[i], plot_values[i], width=width, color='b')
-
-
+            plt.plot(plot_dates, plot_values, marker='o', linestyle='-', color='b')
             plt.xlabel('Date and Time')
             plt.ylabel('Value')
             plt.title(title)
@@ -134,7 +126,6 @@ class Fslock(commands.Cog):
 
         except Exception as e:
             await ctx.send(f"No Data\n```{e}```")
-
 
 
 async def setup(bot):
