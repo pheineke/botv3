@@ -117,7 +117,7 @@ class Fslock(commands.Cog):
             plt.xlabel('Date and Time')
             plt.ylabel('Value')
             plt.title(title)
-            plt.yticks([0, 1, 2], ['BOTSTART','OPEN', 'CLOSED'])
+            plt.yticks(["0", "1", "2"], ['BOTSTART','OPEN', 'CLOSED'])
             plt.grid(True)
             plt.xticks(rotation=45)
             plt.gca().invert_yaxis()  # Umkehren der y-Achse
