@@ -85,7 +85,7 @@ class Fslock(commands.Cog):
             data = np.loadtxt('lock-log.txt', delimiter=',',dtype=str)
 
             values = [(row[2] in ['True','BOTSTART']) for row in data]
-            dates = [datetime.strptime(row[0] + ' ' + row[1], '%Y-%m-%d %H:%M') for row in data]
+            dates = [datetime.strptime(row[0] + ' ' + row[1], '%Y-%m-%d,%H:%M') for row in data]
             date_values = [[dates[i], values[i]] for i in range(len(dates))]
 
             print(f"{datum0}{datum1}")
