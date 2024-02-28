@@ -109,7 +109,7 @@ class Fslock(commands.Cog):
 
 
             plot_dates = [str(x[0]) for x in filtered_entries]
-            plot_values = [str(x[1]) for x in filtered_entries]
+            plot_values = [x[1] for x in filtered_entries]
             # Erstellen des Diagramms
             plt.figure(figsize=(20, 3))
             plt.plot(plot_dates, plot_values, marker='o', linestyle='-', color='b')
