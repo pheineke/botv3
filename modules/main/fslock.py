@@ -13,6 +13,14 @@ class Fslock(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.main.start()
+        self.bot_starttime = datetime.now().strftime('%Y-%m$-%d,%H:%M')
+        self.savestarttime()
+
+        
+    async def savestarttime(self):
+        with open('lock-log.txt', 'a') as file:
+            file.write(f'{self.bot_starttime},BOTSTART')
+    
 
     @tasks.loop(minutes=1.0)
     async def main(self):
@@ -77,7 +85,7 @@ class Fslock(commands.Cog):
         try:
             data = np.loadtxt('lock-log.txt', delimiter=',',dtype=str)
 
-            values = [row[2] == 'True' for row in data]
+            values = [row[2] in ['True','BOTSTART'] for row in data]
             dates = [datetime.strptime(row[0] + ' ' + row[1], '%Y-%m-%d %H:%M') for row in data]
             date_values = [[dates[i], values[i]] for i in range(len(dates))]
 
