@@ -58,7 +58,7 @@ class Data(commands.Cog):
 
         filedir = f"./userdata/{member.id}.txt"
         with open(filedir, 'w') as file:
-            file.write(f"{json.dumps(userdata)}")
+            file.write(f"{userdata}")
         
         await ctx.send(file=discord.File(filedir))
         
