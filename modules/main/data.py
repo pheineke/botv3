@@ -9,11 +9,10 @@ class Data(commands.Cog):
 
 
     @commands.command()
-    async def getuserinfo(self, ctx):
+    async def getuserinfo(self, ctx, member: discord.Member):
         if not os.path.isdir("./userdata"):
             os.makedirs("./userdata")
 
-        member = ctx.author
         userdata = {
             "member": {
                 "accent_color": member.accent_color,
