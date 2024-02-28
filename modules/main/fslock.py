@@ -18,7 +18,7 @@ class Fslock(commands.Cog):
 
 
     def savestarttime(self):
-        with open('lock-log.txt', 'a') as file:
+        with open('lock-log.txt', 'w') as file:
             file.write(f'{self.bot_starttime},BOTSTART')
     
 
