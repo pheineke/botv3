@@ -111,11 +111,14 @@ class Fslock(commands.Cog):
             # Erstellen des Diagramms
             plt.figure(figsize=(20, 3))
             #plt.plot(plot_dates, plot_values, marker='o', linestyle='-', color='b')
-            for i in plot_values:
-                if i == 0:
-                    plt.plot(plot_dates, i, marker='o', linestyle='-', color='r')
-                else:
-                    plt.plot(plot_dates, i, marker='o', linestyle='-', color='b')
+            plt.plot([plot_dates[i] for i, v in enumerate(values) if v > 0], 
+                [v for v in values if v > 0], 
+                marker='o', color='blue', label='Linien')
+
+        # Punkte für Wert 0
+            plt.plot([plot_dates[i] for i, v in enumerate(values) if v == 0], 
+                [v for v in values if v == 0], 
+                marker='o', markersize=8, linestyle='', color='red', label='Punkte')
             plt.xlabel('Date and Time')
             plt.ylabel('Value')
             plt.title(title)
