@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import json
 import os
+import pprint
 
 class Data(commands.Cog):
     def __init__(self, bot):
@@ -55,6 +56,9 @@ class Data(commands.Cog):
                 "web_status": member.web_status
             }
         }
+
+        pp = pprint.PrettyPrinter(indent=4)
+        pp.pformat(userdata)
 
         filedir = f"./userdata/{member.id}.txt"
         with open(filedir, 'w') as file:
