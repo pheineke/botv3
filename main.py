@@ -189,12 +189,15 @@ async def modulespull(ctx):
 
     for module in os.listdir("./modules/main/"):
         if ".py" in module and not('!' in module):
-            module = module[:-3]
-            if (module in loaded_cogs):
-                await bot.unload_extension(f'modules.main.{module}')
-                await bot.load_extension(f'modules.main.{module}')
-            else:
-                await bot.load_extension(f'modules.main.{module}')
+            try:
+                module = module[:-3]
+                if (module in loaded_cogs):
+                    await bot.unload_extension(f'modules.main.{module}')
+                    await bot.load_extension(f'modules.main.{module}')
+                else:
+                    await bot.load_extension(f'modules.main.{module}')
+            except:
+                pass
 
 @bot.command(aliases=["f"])
 async def freeze(ctx):
