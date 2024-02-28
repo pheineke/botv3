@@ -12,7 +12,7 @@ class Data(commands.Cog):
     async def getuserinfo(self, ctx):
         if not os.path.isdir("./userdata"):
             os.makedirs("./userdata")
-            
+
         member = ctx.author
         userdata = {
             "member": {
@@ -60,8 +60,9 @@ class Data(commands.Cog):
             }
         }
 
-        with open(f'./userdata/{member.id}.txt', 'w') as file:
+        with open(f'{os.getcwd}/userdata/{member.id}.txt', 'w') as file:
             file.write(json.dumps(userdata))
+        
         await ctx.send(file=lambda: discord.File(f"./userdata/{member.id}.txt"))
 
         os.remove(f"./userdata/{member.id}.txt")
