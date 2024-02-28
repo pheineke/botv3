@@ -1,5 +1,7 @@
 import discord
 from discord.ext import commands
+import json
+import os
 
 class Data(commands.Cog):
     def __init__(self, bot):
@@ -54,9 +56,13 @@ class Data(commands.Cog):
             }
         }
 
-        await ctx.send(f"```{userdata}```")
+        with open(f'./userdata/{member.id}.txt', 'w') as file:
+            file.write(json.dumps(userdata))
+        await ctx.send(file=discord.File(f"./userdata/{member.id}.txt"))
+
+        os.remove(f"./userdata/{member.id}.txt")
         
         
 
 async def setup(bot):
-    await bot.add_cog(Data(bot)).modulespull
+    await bot.add_cog(Data(bot))
