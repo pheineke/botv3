@@ -187,7 +187,7 @@ async def modulespull(ctx):
 
     loaded_cogs = [cog for cog in bot.cogs.keys()]
     for cog in loaded_cogs:
-        await bot.unnload_extension(f"modules.main.{cog}")
+        await bot.unload_extension(f"modules.main.{cog}")
     for module in os.listdir("./modules/main/"):
         print(module)
         if ".py" in module and not("!" in module):
