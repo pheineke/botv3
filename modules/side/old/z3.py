@@ -1,4 +1,4 @@
-from z3 import *
+from modules.side.old.z3 import *
 
 
 import os
