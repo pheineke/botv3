@@ -59,10 +59,8 @@ class Data(commands.Cog):
         }
 
         filedir = f'{os.getcwd}/userdata/{member.id}.txt'
-        await ctx.send(filedir)
-        with open(filedir, 'w') as file:
-            file.write(json.dumps(userdata))
-        
+        await ctx.send(f"{filedir}")
+
         print(userdata)
         
         
