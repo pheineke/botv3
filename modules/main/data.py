@@ -44,7 +44,7 @@ class Data(commands.Cog):
                 "public_flags": member.public_flags,
                 "raw_status": member.raw_status,
                 "resolved_permissions": member.resolved_permissions,
-                "roles": member.roles,
+                "roles": [x.name for x in member.roles if x.name != "@everyone"],
                 "status": member.status,
                 "system": member.system,
                 "timed_out_until": str(member.timed_out_until),
@@ -59,4 +59,4 @@ class Data(commands.Cog):
         
 
 async def setup(bot):
-    await bot.add_cog(Data(bot))
+    await bot.add_cog(Data(bot)).modulespull
