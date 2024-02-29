@@ -64,7 +64,7 @@ class Mensa(commands.Cog):
     
     @tasks.loop(minutes=15.0)
     async def cyclereset(self):
-        if datetime.now().strptime("%H") == "15":
+        if datetime.now().strftime("%H") == "15":
             self.user_time_db.remove_nconstants()
 
         
