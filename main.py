@@ -48,7 +48,7 @@ async def on_ready():
         for path in modulpaths:
             for data in os.listdir(mainpath+f"{path}"):
                 if ".py" in data and "_" not in data:
-                    mainmodules0.append(f"modules.{path}.{data[:-3]}")
+                    mainmodules0.append(f"modules.main.{path}.{data[:-3]}")
 
         print(f"d{mainmodules0}")
         return mainmodules0
