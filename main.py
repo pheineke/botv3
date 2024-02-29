@@ -37,27 +37,20 @@ async def on_ready():
 
 #####Alle main Module laden in ./modules/main/
     def getmainmodules():
-        path = "./modules/main/"
-        modulliste = os.listdir(path)
-        modulpaths = []
+        mainpath = "./modules/main/"
+        modulliste = [x for x in os.listdir(path) if "_" not in x]
+        
+        mainmodules0 = [("modules.main."+x[:-3]) for x in modulliste if ".py" in x]
+        modulpaths = [x for x in modulliste if ".py" not in x]
+        
+        for path in modulpaths:
+            for data in os.listdir(mainpath+f"{path}"):
+                if ".py" in data and "_" not in data:
+                    mainmodules0.append(f"modules.{path}.{data[:-3]}")
 
-        for x in modulliste:
-            if "!" not in x:
-                if ".py" in x:
-                    modulpaths.append(f"modules.main.{x[:-3]}")
-                else:
-                    path2 = os.listdir(path + f"{x}/")
-                    for y in path2:
-                        
-                        y = y.removesuffix(".py")
-                        
-                        if y == x:
-                            modulpaths.append(f"modules.main.{x}.{y}")
-
-        return modulpaths
+        return mainmodules0
     
     for module in getmainmodules():
-        
         try:
             print(module)
             await bot.load_extension(module)
