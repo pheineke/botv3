@@ -38,7 +38,7 @@ async def on_ready():
 #####Alle main Module laden in ./modules/main/
     def getmainmodules():
         mainpath = "./modules/main/"
-        modulliste = [x for x in os.listdir(path) if "_" not in x]
+        modulliste = [x for x in os.listdir(mainpath) if "_" not in x]
         
         mainmodules0 = [("modules.main."+x[:-3]) for x in modulliste if ".py" in x]
         modulpaths = [x for x in modulliste if ".py" not in x]
