@@ -1,7 +1,6 @@
 import sqlite3
 from datetime import datetime
 
-import table2ascii as t2a
 
 class Manage_database:
     def __init__(self, database_name):

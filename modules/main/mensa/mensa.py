@@ -6,8 +6,8 @@ import modules.main.mensa.database as database
 class Mensa(commands.Cog):
     def __init__(self,bot) -> None:
         self.bot = bot
-        self.bot.loop.create_task(self.cyclereset())
         self.user_time_db = database.Manage_database("users.db")
+        self.cyclereset.start()self.cyclereset.start()
 
     time = datetime.time(hour=15, minute=00)
 
@@ -65,7 +65,7 @@ class Mensa(commands.Cog):
             await ctx.send(f"{ctx.author.mention} Folgende Mensazeiten sind eingetragen:\n```\n{self.user_time_db.get_all_users_with_times()}\n```")
     
     @tasks.loop(time=time)
-    async def cyclereset(self):
+    def cyclereset(self):
         self.user_time_db.remove_nconstants()
 
         
