@@ -63,7 +63,7 @@ class Mensa(commands.Cog):
             await ctx.send(f"{ctx.author.mention} Folgende Mensazeiten sind eingetragen:\n```\n{self.user_time_db.get_all_users_with_times()}\n```")
     
     @tasks.loop(minutes=15.0)
-    def cyclereset(self):
+    async def cyclereset(self):
         if datetime.now().strptime("%H") == "15":
             self.user_time_db.remove_nconstants()
 
