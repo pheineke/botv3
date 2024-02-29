@@ -43,15 +43,16 @@ async def on_ready():
         mainmodules0 = [("modules.main."+x[:-3]) for x in modulliste if ".py" in x and not("!" in x)]
         modulpaths = [x for x in modulliste if ".py" not in x]
 
-        #print(f"a{modulliste}\nb{mainmodules0}\nc{modulpaths}\n")
+        print(f"a{modulliste}\nb{mainmodules0}\nc{modulpaths}\n")
         
         for path in modulpaths:
             for data in os.listdir(mainpath+f"{path}"):
                 data = data[:-3]
+                print(f"{path} und {data}")
                 if ".py" in data and "_" not in data and data == path:
                     mainmodules0.append(f"modules.main.{path}.{data}")
 
-        #print(f"d{mainmodules0}")
+        print(f"d{mainmodules0}")
         return mainmodules0
     
     for module in getmainmodules():
