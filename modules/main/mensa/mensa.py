@@ -62,8 +62,9 @@ class Mensa(commands.Cog):
                         
         if ctx.prefix == "xs.":
             x = self.user_time_db.get_all_users_with_times()
+            a = {key: x[key] for key in sorted(x)}
             y = ""
-            for key,value in x.items():
+            for key,value in a.items():
                 y += f"{key:15} |  {value}\n".replace("'","").replace("[","").replace("]","")
 
             await ctx.send(f"{ctx.author.mention} Folgende Mensazeiten sind eingetragen:\n```\n{y}\n```")
