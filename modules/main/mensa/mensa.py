@@ -7,7 +7,7 @@ class Mensa(commands.Cog):
     def __init__(self,bot) -> None:
         self.bot = bot
         self.user_time_db = database.Manage_database("users.db")
-        self.cyclereset.start()self.cyclereset.start()
+        self.cyclereset.start()
 
     time = datetime.time(hour=15, minute=00)
 
