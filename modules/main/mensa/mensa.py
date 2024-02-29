@@ -9,7 +9,7 @@ class Mensa(commands.Cog):
         self.user_time_db = database.Manage_database("users.db")
         self.cyclereset.start()
 
-    time = datetime(year= datetime.now().year, hour=15, minute=00)
+    time = datetime(hour=15, minute=00)
 
     @commands.command()
     async def mensatime(self, ctx, equal=None, arg=None):
@@ -64,9 +64,10 @@ class Mensa(commands.Cog):
         if ctx.prefix == "xs.":
             await ctx.send(f"{ctx.author.mention} Folgende Mensazeiten sind eingetragen:\n```\n{self.user_time_db.get_all_users_with_times()}\n```")
     
-    @tasks.loop(time=time)
+    @tasks.loop(minutes=15.0)
     def cyclereset(self):
-        self.user_time_db.remove_nconstants()
+        if datetime.now().strptime("%H") == "15":
+            self.user_time_db.remove_nconstants()
 
         
 async def setup(bot):
