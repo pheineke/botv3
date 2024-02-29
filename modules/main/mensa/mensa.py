@@ -9,7 +9,7 @@ class Mensa(commands.Cog):
         self.user_time_db = database.Manage_database("users.db")
         self.cyclereset.start()
 
-    time = datetime(hour=15, minute=00)
+    time = datetime(year= datetime.now().year, hour=15, minute=00)
 
     @commands.command()
     async def mensatime(self, ctx, equal=None, arg=None):
