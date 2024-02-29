@@ -9,5 +9,5 @@ userdata.json
 users.db
 data.txt
 plot-door.png
-
+lock-log.txt
 userdata/*
