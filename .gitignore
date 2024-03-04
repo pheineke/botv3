@@ -9,6 +9,7 @@ userdata.json
 data.txt
 plot-door.png
 lock-log.txt
+users.db
 userdata/*
 out.csv
 old_users.db
