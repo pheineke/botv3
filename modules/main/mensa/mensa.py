@@ -74,8 +74,8 @@ class Mensa(commands.Cog):
         ctxprefix = ctx.prefix
 
         db_control, response = self.db_controller(ctxprefix=ctxprefix, authormention=authormention, authorname=authorname, equal=equal, arg=arg)
-        if ctxprefix == "my.":
-            await ctx.message.add_reaction(':plus1:1171776509195845652')
+        '''if ctxprefix == "my.":
+            await ctx.message.add_reaction(':plus1:1171776509195845652')'''
         match db_control, response:
             case "0", response:
                 await ctx.send(response)
