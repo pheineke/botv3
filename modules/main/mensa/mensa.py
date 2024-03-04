@@ -113,9 +113,7 @@ class Mensa(commands.Cog):
         if message.author.bot:
             return
         if message.content.lower() == "my.fowd":
-            await Mensa.mensa(self, message.channel)
-        elif "my.mensatime = " in message.content.lower():
-            
+            await Mensa.mensa(self, messagechannel)
 
 
     @commands.Cog.listener("on_reaction_add")
