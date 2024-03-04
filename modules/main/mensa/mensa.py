@@ -12,7 +12,7 @@ class Mensa(commands.Cog):
         self.user_time_db = database.Manage_database("users.db")
         self.cyclereset.start()
 
-    def db_controller(self, ctxprefix, authormention, authorname, arg=None, equal=None):
+    async def db_controller(self, ctxprefix, authormention, authorname, equal=None, arg=None):
         if ctxprefix == "my.":
             if arg is None and equal is None:
                 try:
@@ -29,13 +29,13 @@ class Mensa(commands.Cog):
                             return ("2", None) #2
                         except:
                             return ("3", "Kein User eingetragen.") #3
-                    elif arg in ["const", "constant"]:
+                    elif arg in ["const", "constant", "1"]:
                         try:
                             self.user_time_db.set_user_time_constant(authorname)
                             return ("2", None) #2
                         except:
                             return ("3", "Kein User eingetragen.") #3
-                    elif arg in ["nconst", "nconstant", "notconstant"]:
+                    elif arg in ["nconst", "nconstant", "notconstant", "0"]:
                         try:
                             self.user_time_db.set_user_time_nconstant(authorname)
                             return ("2", None) #2
@@ -73,22 +73,27 @@ class Mensa(commands.Cog):
         authormention = ctx.author.mention
         ctxprefix = ctx.prefix
 
-        db_control, response = self.db_controller(ctxprefix=ctxprefix, authormention=authormention, authorname=authorname, equal=equal, arg=arg)
-        '''if ctxprefix == "my.":
-            await ctx.message.add_reaction(':plus1:1171776509195845652')'''
-        match db_control, response:
-            case "0", response:
-                await ctx.send(response)
-            case "1", response:
-                await ctx.send(response)
-            case "2", None:
-                await ctx.message.add_reaction('✅')
-            case "3", None:
-                await ctx.send("Keine Usertime")
-            case "4", response:
-                await ctx.send(f"{authormention} Folgende Mensazeiten sind eingetragen:\n```\n{response}\n```")
-        
+        db_control, response = await self.db_controller(ctxprefix=ctxprefix, authormention=authormention, authorname=authorname, equal=equal, arg=arg)
+        if ctxprefix == "my.":
+            await ctx.message.add_reaction(':plus1:1171776509195845652')
 
+        match db_control:
+            case "0":
+                await ctx.message.add_reaction('❌')
+            case "1":
+                await ctx.send(response)
+            case "2":
+                await ctx.message.add_reaction('✅')
+            case "3":
+                await ctx.send("Keine Usertime")
+            case "4":
+                await ctx.send(f"{authormention} Folgende Mensazeiten sind eingetragen:\n```\n{response}\n```")
+            case _:
+                await ctx.message.add_reaction('⚠')
+        
+    @commands.command()
+    async def mensamutter(self,ctx):
+        await ctx.send("Deine Mom")
 
     async def check_for_webhook(self, ctx, hookname):
         # Überprüfe, ob in diesem Channel bereits ein Webhook existiert
@@ -107,23 +112,28 @@ class Mensa(commands.Cog):
             print("Es exisitiert kein Webhook -> Wurde ein Neuer erstellt.")
         return webhook
 
-    @commands.command
-    async def fowd(self, ctx, message):
-        messagechannel = ctx.message.channel
-        if message.author.bot:
-            return
-        if message.content.lower() == "my.fowd":
-            await Mensa.mensa(self, messagechannel)
-
-
     @commands.Cog.listener("on_reaction_add")
     async def on_reaction_add(self,reaction, user):
+        username = user.name
+        usermention = user.mention
         if user.bot:
             return
         if str(reaction.emoji) == "<:plus1:1171776509195845652>":
-            hookname = self.client.user.name
+            hookname = self.bot.user.name
             webhook = await self.check_for_webhook(reaction.message, hookname)
-            await webhook.send(content=reaction.message.content, avatar_url=user.avatar, username=user.name)
+            msgcontent = reaction.message.content
+
+            await webhook.send(content=reaction.message.content, avatar_url=user.avatar, username=username)
+            
+            if "my.mensatime" in msgcontent and "=" in msgcontent:
+                msgcontentarray = msgcontent.split('=')
+                await self.db_controller("my.", usermention, username, '=', msgcontentarray[1])
+                await reaction.message.add_reaction('🔄')
+            elif msgcontent == "my.mensatime":
+                await self.db_controller("my.", authormention=usermention, authorname=username, equal=None, arg=None)
+                await reaction.message.add_reaction('🔄')
+            else:
+                pass
 
 
 
