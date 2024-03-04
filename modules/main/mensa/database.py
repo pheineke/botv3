@@ -144,7 +144,7 @@ class Manage_database:
             
             self.conn.commit()
         except Exception as e:
-            print("ERROR {e}")
+            print(f"ERROR {e}")
 
 
     def striptime(self, time_recorded):
