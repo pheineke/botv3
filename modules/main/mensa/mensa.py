@@ -65,6 +65,7 @@ class Mensa(commands.Cog):
             a = {key: x[key] for key in sorted(x)}
             y = ""
             for key,value in a.items():
+                print(key,value)
                 y += f"{key:15} |  {value}\n".replace("'","").replace("[","").replace("]","")
 
             await ctx.send(f"{ctx.author.mention} Folgende Mensazeiten sind eingetragen:\n```\n{y}\n```")
