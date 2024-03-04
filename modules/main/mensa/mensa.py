@@ -123,12 +123,14 @@ class Mensa(commands.Cog):
             webhook = await self.check_for_webhook(reaction.message, hookname)
             msgcontent = reaction.message.content
 
-            await webhook.send(content=reaction.message.content, avatar_url=user.avatar, username=username)
+            webhookmsg = await webhook.send(content=reaction.message.content, avatar_url=user.avatar, username=username)
+            
             
             if "my.mensatime" in msgcontent and "=" in msgcontent:
                 msgcontentarray = msgcontent.split('=')
                 await self.db_controller("my.", usermention, username, '=', msgcontentarray[1])
                 await reaction.message.add_reaction('🔄')
+                await webhookmsg.add_reaction('✅')
             elif msgcontent == "my.mensatime":
                 await self.db_controller("my.", authormention=usermention, authorname=username, equal=None, arg=None)
                 await reaction.message.add_reaction('🔄')
