@@ -36,7 +36,7 @@ class Fslock(commands.Cog):
     @tasks.loop(minutes=5.0)
     async def cleandata(self):
         def clean_data(file_path):
-            with open(file_path, 'r') as file:
+            with open(file_path, 'r+') as file:
                 lines = file.readlines()
 
             cleaned_lines = []
