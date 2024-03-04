@@ -75,8 +75,8 @@ class Mensa(commands.Cog):
             self.user_time_db.remove_nconstants()
 
     @commands.is_owner()
-    @commands.command()
-    async def reset(self):
+    @commands.command(brief="reset-db")
+    async def reset(self,ctx):
         self.user_time_db.remove_nconstants()
         
 async def setup(bot):
