@@ -71,7 +71,7 @@ class Fslock(commands.Cog):
                 else:
                     clean0.append(lines[index0])
 
-            with open(file_path, 'w') as file:
+            with open(file_path, 'a') as file:
                 for elem in clean0:
                     file.write(f'{elem}')
 
