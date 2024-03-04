@@ -136,15 +136,17 @@ class Manage_database:
     def remove_nconstants(self):
         try:
             cursor = self.conn.cursor()
-            cursor.execute("SELECT id FROM user_times WHERE is_constant=0")
+            cursor.execute("SELECT user_id FROM user_times WHERE is_constant=0")
             user_ids = cursor.fetchall()
-            for user in user_ids:
-                cursor.execute("DELETE FROM user_times WHERE user_id=?", (user,))
-                cursor.execute("DELETE FROM users WHERE id=?", (user,))
-            
+            for user_id in user_ids:
+                cursor.execute("DELETE FROM user_times WHERE user_id=?", (user_id[0],))
+                cursor.execute("DELETE FROM users WHERE id=?", (user_id[0],))
             self.conn.commit()
+            print("Non-constant users removed successfully.")
         except Exception as e:
-            print(f"ERROR {e}")
+            print("Error removing non-constant users:", e)
+
+
 
 
     def striptime(self, time_recorded):
