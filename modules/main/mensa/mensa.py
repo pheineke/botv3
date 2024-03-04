@@ -74,7 +74,8 @@ class Mensa(commands.Cog):
         ctxprefix = ctx.prefix
 
         db_control, response = self.db_controller(ctxprefix=ctxprefix, authormention=authormention, authorname=authorname, equal=equal, arg=arg)
-
+        if ctxprefix == "my.":
+            await ctx.message.add_reaction(':plus1:1171776509195845652')
         match db_control, response:
             case "0", response:
                 await ctx.send(response)
@@ -106,14 +107,15 @@ class Mensa(commands.Cog):
             print("Es exisitiert kein Webhook -> Wurde ein Neuer erstellt.")
         return webhook
 
-    @commands.Cog.listener("on_message")
-    async def fowd(self, message):
+    @commands.command
+    async def fowd(self, ctx, message):
+        messagechannel = ctx.message.channel
         if message.author.bot:
             return
         if message.content.lower() == "my.fowd":
             await Mensa.mensa(self, message.channel)
         elif "my.mensatime = " in message.content.lower():
-            await message.add_reaction(':plus1:1171776509195845652')
+            
 
 
     @commands.Cog.listener("on_reaction_add")
