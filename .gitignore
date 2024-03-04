@@ -4,6 +4,7 @@ __pycache__/
 */__pycache__/
 .DS_Store
 modules/__pycache__/
+logs/
 usercache.json
 userdata.json
 data.txt

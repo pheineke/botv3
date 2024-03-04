@@ -30,6 +30,7 @@ bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners),
 #BOTEVENTS
 @bot.event
 async def on_ready():
+    await create_logdir()
     print(f'{"-" * 50}\nConnected Bot: {bot.user.name}\n{"-" * 50}')
 
 #####Alle main Module laden in ./modules/main/
@@ -61,7 +62,13 @@ async def on_ready():
     print("Main modules loaded.")
     
 
-
+async def create_logdir():
+    if not os.path.exists(os.getcwd() + "/logs"):
+    # Erstelle den Ordner, wenn er nicht vorhanden ist
+        os.makedirs(os.getcwd() + "/logs")
+        print("Der 'logs' Ordner wurde erstellt.")
+    else:
+        print("Der 'logs' Ordner existiert bereits.")
     
 #####
 

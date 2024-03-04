@@ -1,3 +1,4 @@
+import os
 import discord
 from discord.ext import commands, tasks
 from datetime import datetime
@@ -11,6 +12,7 @@ class Mensa(commands.Cog):
         self.bot = bot
         self.user_time_db = database.Manage_database("users.db")
         self.cyclereset.start()
+        self.logdir = os.getcwd() + "/logs"
 
     async def db_controller(self, ctxprefix, authormention, authorname, equal=None, arg=None):
         if ctxprefix == "my.":
@@ -69,27 +71,35 @@ class Mensa(commands.Cog):
 
     @commands.command()
     async def mensatime(self, ctx, equal=None, arg=None):
-        authorname = ctx.author.name
-        authormention = ctx.author.mention
-        ctxprefix = ctx.prefix
+        try:
+            authorname = ctx.author.name
+            authormention = ctx.author.mention
+            ctxprefix = ctx.prefix
 
-        db_control, response = await self.db_controller(ctxprefix=ctxprefix, authormention=authormention, authorname=authorname, equal=equal, arg=arg)
-        if ctxprefix == "my.":
-            await ctx.message.add_reaction(':plus1:1171776509195845652')
+            db_control, response = await self.db_controller(ctxprefix=ctxprefix, authormention=authormention, authorname=authorname, equal=equal, arg=arg)
+            if ctxprefix == "my.":
+                await ctx.message.add_reaction(':plus1:1171776509195845652')
 
-        match db_control:
-            case "0":
-                await ctx.message.add_reaction('❌')
-            case "1":
-                await ctx.send(response)
-            case "2":
-                await ctx.message.add_reaction('✅')
-            case "3":
-                await ctx.send("Keine Usertime")
-            case "4":
-                await ctx.send(f"{authormention} Folgende Mensazeiten sind eingetragen:\n```\n{response}\n```")
-            case _:
-                await ctx.message.add_reaction('⚠')
+            match db_control:
+                case "0":
+                    await ctx.message.add_reaction('❌')
+                case "1":
+                    await ctx.send(response)
+                case "2":
+                    await ctx.message.add_reaction('✅')
+                case "3":
+                    await ctx.send("Keine Usertime")
+                case "4":
+                    await ctx.send(f"{authormention} Folgende Mensazeiten sind eingetragen:\n```\n{response}\n```")
+                case _:
+                    await ctx.message.add_reaction('⚠')
+        except Exception as e:
+            current_date = datetime.now().strftime("%y-%m-%d")
+            current_time = datetime.now().strftime("%H:%M")
+            print(os.getcwd())
+            with open(f"{self.logdir}/{current_date}.log", "w") as file:
+                file.write(f"[{current_time}]\n{e}\n\n")
+            await ctx.message.add_reaction('🟥')
         
     @commands.command()
     async def mensamutter(self,ctx):
@@ -125,23 +135,31 @@ class Mensa(commands.Cog):
 
             webhookmsg = await webhook.send(content=reaction.message.content, avatar_url=user.avatar, username=username, wait=True)
             
-            
-            if "my.mensatime" in msgcontent and "=" in msgcontent:
-                msgcontentarray = msgcontent.split('=')
-                await self.db_controller("my.", usermention, username, '=', msgcontentarray[1])
-                await reaction.message.add_reaction('🔄')
-                await webhookmsg.add_reaction('✅')
-            elif msgcontent == "my.mensatime":
-                await self.db_controller("my.", authormention=usermention, authorname=username, equal=None, arg=None)
-                await reaction.message.add_reaction('🔄')
-            else:
-                pass
+            try:
+                if "my.mensatime" in msgcontent and "=" in msgcontent:
+                    msgcontentarray = msgcontent.split('=')
+                    await self.db_controller("my.", usermention, username, '=', msgcontentarray[1])
+                    #await reaction.message.add_reaction('🔄')
+                    await webhookmsg.add_reaction('✅')
+                elif msgcontent == "my.mensatime":
+                    await self.db_controller("my.", authormention=usermention, authorname=username, equal=None, arg=None)
+                    #await reaction.message.add_reaction('🔄')
+                else:
+                    pass
+
+            except Exception as e:
+                current_date = datetime.now().strftime("%y-%m-%d")
+                current_time = datetime.now().strftime("%H:%M")
+                with open(f"{self.logdir}/logs/{current_date}.log", "w") as file:
+                    file.write(f"[{current_time}]\n{e}\n\n")
+                await reaction.message.add_reaction('🟥')
 
 
 
     @commands.cooldown(1, 20, commands.BucketType.user)
     @commands.command(alias = "Mensa",brief="Zeigt zukünftige Mahlzeiten in der Mensa an")
     async def mensa(self, ctx, pics = 0, date: str ="0"):
+        print(os.getcwd())
         base_url = "https://www.mensa-kl.de/api.php"
         params = {"format": "json", "date": date}
 
@@ -192,7 +210,11 @@ class Mensa(commands.Cog):
                 await ctx.send("Es wurden keine Mahlzeiten gefunden.")
 
         except Exception as e:
-            await ctx.send(f"Fehler beim Abrufen der Mahlzeiten: {str(e)}")
+            current_date = datetime.now().strftime("%y-%m-%d")
+            current_time = datetime.now().strftime("%H:%M")
+            with open(f"{self.logdir}/{current_date}.log", "w") as file:
+                file.write(f"[{current_time}]\n{e}\n\n")
+            await ctx.message.add_reaction('🟥')
 
 
     @tasks.loop(minutes=15.0)
@@ -203,7 +225,14 @@ class Mensa(commands.Cog):
     @commands.is_owner()
     @commands.command(brief="reset-db")
     async def reset(self,ctx):
-        self.user_time_db.remove_nconstants()
+        try:
+            self.user_time_db.remove_nconstants()
+        except Exception as e:
+            current_date = datetime.now().strftime("%y-%m-%d")
+            current_time = datetime.now().strftime("%H:%M")
+            with open(f"{self.logdir}/{current_date}.log", "w") as file:
+                file.write(f"[{current_time}]\n{e}\n\n")
+            await ctx.message.add_reaction('🟥')
         
 async def setup(bot):
     await bot.add_cog(Mensa(bot))
