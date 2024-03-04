@@ -19,7 +19,7 @@ class Fslock(commands.Cog):
 
 
     def savestarttime(self):
-        with open('lock-log.txt', 'w') as file:
+        with open('lock-log.txt', 'a') as file:
             file.write(f"{str((datetime.now().strftime('%Y-%m-%d,%H:%M')))},BOTSTART\n")
 
     @tasks.loop(minutes=1.0)
@@ -71,7 +71,7 @@ class Fslock(commands.Cog):
                 else:
                     clean0.append(lines[index0])
 
-            with open(file_path, 'a') as file:
+            with open(file_path, 'w') as file:
                 for elem in clean0:
                     file.write(f'{elem}')
 
