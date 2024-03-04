@@ -19,6 +19,7 @@ class Fslock(commands.Cog):
 
 
     def savestarttime(self):
+        #'a' Wichtig sonst überschreibt er die Datei
         with open('lock-log.txt', 'a') as file:
             file.write(f"{str((datetime.now().strftime('%Y-%m-%d,%H:%M')))},BOTSTART\n")
 
