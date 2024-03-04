@@ -66,7 +66,7 @@ class Mensa(commands.Cog):
             y = ""
             for key,value in a.items():
                 print(key,value[0])
-                y += f"{key} | {value[0]}\n"
+                y += f"{value[0]} | {key}\n"
 
             await ctx.send(f"{ctx.author.mention} Folgende Mensazeiten sind eingetragen:\n```\n{y}\n```")
     
