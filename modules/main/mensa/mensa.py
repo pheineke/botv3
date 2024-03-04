@@ -123,7 +123,7 @@ class Mensa(commands.Cog):
             webhook = await self.check_for_webhook(reaction.message, hookname)
             msgcontent = reaction.message.content
 
-            webhookmsg = await webhook.send(content=reaction.message.content, avatar_url=user.avatar, username=username)
+            webhookmsg = await webhook.send(content=reaction.message.content, avatar_url=user.avatar, username=username, wait=True)
             
             
             if "my.mensatime" in msgcontent and "=" in msgcontent:
