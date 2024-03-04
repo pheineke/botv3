@@ -74,6 +74,10 @@ class Mensa(commands.Cog):
         if datetime.now().strftime("%H") == "15":
             self.user_time_db.remove_nconstants()
 
+    @commands.is_owner()
+    @commands.command()
+    async def reset(self):
+        self.user_time_db.remove_nconstants()
         
 async def setup(bot):
     await bot.add_cog(Mensa(bot))

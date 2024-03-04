@@ -1,10 +1,7 @@
 # bot.py
 
-import asyncio
 import os
-import random
 import sys
-import subprocess
 import discord
 from discord.ext import commands
 from discord.ext import tasks
