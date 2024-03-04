@@ -36,45 +36,44 @@ class Fslock(commands.Cog):
     @tasks.loop(minutes=5.0)
     async def cleandata(self):
         def clean_data(file_path):
-            # Lese die Daten aus der Datei
-            with open(file_path, 'r+') as file:
+            with open(file_path, 'r') as file:
                 lines = file.readlines()
 
-                cleaned_lines = []
-                for line in lines:
-                    lineval = line.strip().split(',')[2]
-                    cleaned_lines.append(lineval)
+            cleaned_lines = []
+            clean0 = []
+            for line in lines:
+                lineval = line.strip().split(',')[2]
+                cleaned_lines.append(lineval)
+                
+            def find_equal_intervals(lst):
+                equal_intervals = []
+                start_index = 0
+                current_element = None
+                
+                for i, element in enumerate(lst):
+                    if element != current_element:
+                        if i > start_index:
+                            equal_intervals.append((start_index, i - 1, current_element))
+                        start_index = i
+                        current_element = element
 
-                def find_equal_intervals(lst):
-                    equal_intervals = []
-                    start_index = 0
-                    current_element = None
+                # Füge das letzte Intervall hinzu, falls es gleich ist
+                if lst and lst[-1] == current_element:
+                    equal_intervals.append((start_index, len(lst) - 1, current_element))
 
-                    for i, element in enumerate(lst):
-                        if element != current_element:
-                            if i > start_index:
-                                equal_intervals.append((start_index, i - 1, current_element))
-                            start_index = i
-                            current_element = element
+                return equal_intervals
+            intervals = find_equal_intervals(cleaned_lines)
 
-                    # Füge das letzte Intervall hinzu, falls es gleich ist
-                    if lst and lst[-1] == current_element:
-                        equal_intervals.append((start_index, len(lst) - 1, current_element))
+            for index0, index1, val in intervals:
+                if index0 != index1:
+                    clean0.append(lines[index0])
+                    clean0.append(lines[index1])
+                else:
+                    clean0.append(lines[index0])
 
-                    return equal_intervals
-
-                intervals = find_equal_intervals(cleaned_lines)
-
-                # Bereinige die Daten und schreibe sie zurück in die Datei
-                file.seek(0)
-                file.truncate()  # Leere die Datei, um sie neu zu schreiben
-
-                for index0, index1, val in intervals:
-                    if index0 != index1:
-                        file.write(lines[index0])
-                        file.write(lines[index1])
-                    else:
-                        file.write(lines[index0])
+            with open(file_path, 'w') as file:
+                for elem in clean0:
+                    file.write(f'{elem}')
 
         clean_data('lock-log.txt')
 
