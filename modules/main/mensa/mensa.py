@@ -66,7 +66,7 @@ class Mensa(commands.Cog):
             a = {key: x[key] for key in sorted(x)}
             y = ""
             for key,value in a.items():
-                y += f"{key:15} |  {value}\n".replace("'","").replace("[","").replace("]","")
+                y += f"{value} | {key:15}\n"
             return ("4", y) #4
 
     @commands.command()
