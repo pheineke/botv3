@@ -20,8 +20,11 @@ class Schulden(commands.Cog):
     @commands.command()
     async def getschulden(self, ctx):
         user0 = ctx.author.name
-        eigene_schulden = self.schulden_db.schulden_anzeigen(schuldner=user0)
-        fremd_schulden = self.schulden_db.schulden_anzeigen(glaeubiger=user0)
+        eig = self.schulden_db.schulden_anzeigen(schuldner=user0)
+        fremd = self.schulden_db.schulden_anzeigen(glaeubiger=user0)
+        
+        eigene_schulden = eig if eig != "Keine Schulden gefunden." else None
+        fremd_schulden = fremd if fremd != "Keine Schulden gefunden." else None
 
         await ctx.send(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```")
 
