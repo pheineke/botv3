@@ -5,6 +5,7 @@ import sys
 import discord
 from discord.ext import commands
 from discord.ext import tasks
+from discord import app_commands
 
 from dotenv import load_dotenv
 from datetime import datetime
@@ -23,10 +24,8 @@ intents.members = True
 intents.message_content = True
 
 owners = [417073119254282240, 386254372646158338]
-grinchrole = 1188587621753036820
 
 bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners), intents=intents, help_command=None)
-
 #BOTEVENTS
 @bot.event
 async def on_ready():
@@ -91,7 +90,12 @@ async def help(ctx):
 @commands.is_owner()
 @bot.command(aliases=["l"])
 async def load(ctx, extension):
-    await bot.load_extension(f"modules.{extension}")
+    try:
+        await bot.load_extension(f"modules.{extension}")
+        await ctx.message.add_reaction('✅')
+    except Exception as e:
+        print(e)
+        await ctx.message.add_reaction('❌')
 
 
 @commands.is_owner()
@@ -171,9 +175,9 @@ async def freeze(ctx):
         await ctx.send('No cogs loaded.')
 
 
-@bot.hybrid_command(name='test', with_app_command=True)
+'''@bot.hybrid_command(name='test', with_app_command=True)
 async def test(ctx):
-    await ctx.send("This is a hybrid command!")
+    await ctx.send("This is a hybrid command!")'''
 
 
 
