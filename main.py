@@ -18,11 +18,6 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
-'''intents = discord.Intents.default()
-intents.all()
-intents.members = True
-intents.message_content = True'''
-
 owners = [417073119254282240, 386254372646158338]
 
 bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners), intents=discord.Intents.all(), help_command=None)
@@ -180,7 +175,10 @@ async def test(ctx):
     await ctx.send("This is a hybrid command!")'''
 
 
-
+@bot.command(name="sync") 
+async def sync(ctx):
+    synced = await bot.tree.sync()
+    print(f"Synced {len(synced)} command(s).")
 
 
 #BOT >>RUN
