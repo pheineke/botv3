@@ -18,14 +18,14 @@ load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 GUILD = os.getenv('DISCORD_GUILD')
 
-intents = discord.Intents.default()
+'''intents = discord.Intents.default()
 intents.all()
 intents.members = True
-intents.message_content = True
+intents.message_content = True'''
 
 owners = [417073119254282240, 386254372646158338]
 
-bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners), intents=intents, help_command=None)
+bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners), intents=discord.Intents.all(), help_command=None)
 #BOTEVENTS
 @bot.event
 async def on_ready():
