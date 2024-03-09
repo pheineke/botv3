@@ -178,7 +178,8 @@ async def test(ctx):
 @bot.command(name="sync") 
 async def sync(ctx):
     synced = await bot.tree.sync()
-    print(f"Synced {len(synced)} command(s).")
+    x = (f"Synced {len(synced)} command(s).")
+    await ctx.send(x)
 
 
 #BOT >>RUN
