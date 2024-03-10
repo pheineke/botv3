@@ -219,7 +219,9 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
     @commands.Cog.listener()
     async def on_message(self,message):
         if isinstance(message.channel, discord.channel.DMChannel) or message.channel.id == self.channel_id:
-            if not any(element in message.content for element in self.get_commands()):
+            for command in self.get_commands():
+                print(f"{type(command)} {command}")
+            if not any(str(element) in message.content for element in self.get_commands()):
                 if message.author.name in self.users:
                     ingameuser = self.users[message.author.name]
                     await self.channel.send(self.game.chat(ingameuser, message))
