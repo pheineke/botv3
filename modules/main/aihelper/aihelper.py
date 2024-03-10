@@ -83,3 +83,6 @@ Current instruction to respond to: {text}
             return f"""### Instruction:
 {text}
 ### Response:"""
+
+async def setup(bot):
+    await bot.add_cog(Aihelper(bot))

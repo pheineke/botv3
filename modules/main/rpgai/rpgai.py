@@ -84,21 +84,11 @@ class RPGLoader(commands.Cog):
         self.client = client
         self.game = None
         self.channel_id = 1200993669478621226
-        self.channel = self.client.get_channel(self.channel_id)
+        self.channel = self.client.get_channel(1200993669478621226)
         self.users = {}
         self.path = os.getcwd()
 
         self.load_usernames()
-    
-    @commands.is_owner()
-    @commands.command(brief="[RPGAI]")
-    async def aitargetchannel(self, ctx, channelid=None):
-        if channelid is None:
-            self.channel = self.client.get_channel(self.channel_id)
-        else:
-            self.channel = self.client.get_channel(channelid)
-        await self.channel.send("ChannelID set")
-
 
     @commands.command(brief="[RPGAI]")
     async def listgames(self, ctx):
@@ -218,15 +208,25 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
 
     ############################################################################
 
-    @commands.command(aliases=["c"], brief="Mit diesem Befehl und einem Text dahinter interagierst du mit der Spielwelt")
+    '''@commands.command(aliases=["c"], brief="Mit diesem Befehl und einem Text dahinter interagierst du mit der Spielwelt")
     async def chat(self, ctx, *, message):
         if ctx.author.name in self.users:
             ingameuser = self.users[ctx.author.name]
             await self.channel.send(self.game.chat(ingameuser, message))
         else:
-            await self.channel.send("No Ingame Name!")
+            await self.channel.send("No Ingame Name!")'''
 
-            
+    @commands.Cog.listener()
+    async def on_message(self,message):
+        if isinstance(message.channel, discord.channel.DMChannel) or message.channel.id == self.channel_id:
+            print(f"{type(RPGLoader.get_commands())} {[type(x) for x in RPGLoader.get_commands()]}")
+            if not any(element in message.content for element in RPGLoader.get_commands()):
+                if message.author.name in self.users:
+                    ingameuser = self.users[message.author.name]
+                    await self.channel.send(self.game.chat(ingameuser, message))
+                else:
+                    await self.channel.send("No Ingame Name!")
+                
 
 async def setup(client):
     await client.add_cog(RPGLoader(client))
