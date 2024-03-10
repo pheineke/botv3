@@ -43,14 +43,14 @@ class Schulden(commands.Cog):
         self.schulden_db.aktualisieren()
         try:
             user1 = await commands.MemberConverter().convert(ctx, user1)
-            if user1 == ctx.author or user1.id == ctx.author.id or str(ctx.author.name) == str(user1.name):
+            if user1 == ctx.author or user1.id == ctx.author.id or str(ctx.author.name) == str(user1.name) or ctx.author.bot or user1.bot:
                 await ctx.send("haha sehr witzig")
             else:
                 try:
                     if betrag is None:
                         await ctx.send("nö kein geld")
                     else:
-                        betrag=float(str(betrag).replace(",","."))
+                        betrag=round(float(str(betrag).replace(",",".")),2)
                         if betrag < 0.0:
                             await ctx.send("negative Schulden sind illegal hab ich beschlossen")
                         elif betrag > 500.0:
@@ -76,12 +76,12 @@ class Schulden(commands.Cog):
                                     except Exception as e:
                                         print(f"{e}")
                                         await ctx.message.add_reaction('⚠')
-                                        await interaction.response.edit_message(content=f"{user1.guild.name} ERROR", view=view3)
+                                        await interaction.response.edit_message(content=f"{user1.name} ERROR", view=view3)
                             accept_button.callback=button_callback
                             
                             async def revoke_callback(interaction:discord.Interaction):
                                 if interaction.user == ctx.author:
-                                    await interaction.response.edit_message(content=f"{ctx.author.guild.name} hat widerrufen.", view=view2)                    
+                                    await interaction.response.edit_message(content=f"{ctx.author.name} hat widerrufen.", view=view2)                    
                             revoke_button.callback=revoke_callback
 
                             view0 = View(timeout=30.0)\

@@ -120,15 +120,15 @@ class Schuldenverwaltung:
                         betrag0 = betragxy-betragab # 350 - 200 = 150
                         betrag1 = betragxy - betrag0 # 350 - 150 = 200
                         #print(f"a {userx} {usery} {usera} {userb} {betragxy} {betragab}")
-                        self.schulden_tilgen(userx, usery, betrag1)
-                        self.schulden_tilgen(usera, userb, betrag1)
+                        self.schulden_tilgen(userx, usery, round(betrag1,2))
+                        self.schulden_tilgen(usera, userb, round(betrag1,2))
                     elif betragxy < betragab:
                     #   150         200:
                         betrag0 = betragab-betragxy
                         betrag1 = betragab - betrag0
                         #print(f"b {userx} {usery} {usera} {userb} {betragxy} {betragab} {betrag0}")
-                        self.schulden_tilgen(userx, usery, betragxy)
-                        self.schulden_tilgen(usera, userb, betrag1)
+                        self.schulden_tilgen(userx, usery, round(betragxy,2))
+                        self.schulden_tilgen(usera, userb, round(betrag1,2))
                     else: # ==
                         self.schulden_tilgen(userx, usery, betragab)
                         self.schulden_tilgen(usery, userx, betragab)
