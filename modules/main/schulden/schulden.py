@@ -40,7 +40,6 @@ class Schulden(commands.Cog):
 
     @commands.command(brief="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, ctx, user1=None, betrag=None):
-        self.schulden_db.aktualisieren()
         try:
             user1 = await commands.MemberConverter().convert(ctx, user1)
             if user1 == ctx.author or user1.id == ctx.author.id or str(ctx.author.name) == str(user1.name) or ctx.author.bot or user1.bot:
@@ -123,6 +122,13 @@ class Schulden(commands.Cog):
             await ctx.send("User not found")
         self.schulden_db.aktualisieren()
         #return f"Alter Betrag: {betrag0} Neuer Betrag: {betrag1}"
+
+    @app_commands.command(name="getschuldenlog", description="[SCHULDEN] .getschulden um Einsicht in die Datenbank zu erhalten")
+    async def getschuldenlog(self, interaction:discord.Interaction):
+        bt:commands.Bot = self.bot
+
+        if interaction.user.id in bt.owner_ids:
+            interaction.response.send_message(file=discord.File(self.schulden_db.backup_database()))
 
 
 ###Funktion: Log schreiben um streitigkeiten zu vermeiden
