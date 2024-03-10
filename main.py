@@ -79,7 +79,7 @@ async def on_ready():
     #                        large_image=)
     
     activity2 = discord.Activity(type=discord.ActivityType.playing, 
-        large_image = "https://img.freepik.com/vektoren-kostenlos/png-cartoon-globus-vintage-aufkleber_53876-127373.jpg",
+        large_image_url = "https://img.freepik.com/vektoren-kostenlos/png-cartoon-globus-vintage-aufkleber_53876-127373.jpg",
         large_text = "This is Game Icon",
         name = "Sleeping Simulator💤",
         details = "Dreams of Desires(Easy)")
