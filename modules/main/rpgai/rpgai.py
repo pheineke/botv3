@@ -238,8 +238,8 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
                         await self.loadgame(message.channel)
                         await self.channel.send(self.game.chat(ingameuser, message))
                     except httpx.ConnectError:
-                        workingpath = "./../AI/ollama-linux-amd64"
-                        response = subprocess.run(workingpath, shell=True, capture_output=True, check=True)
+                        command = "./../AI/ollama-linux-amd64 serve"
+                        response = subprocess.run(command, shell=True, capture_output=True, check=True)
                         await self.channel.send(str(response))
                         #await self.channel.send(self.game.chat(ingameuser, message))
                 else:
