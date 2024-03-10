@@ -78,13 +78,9 @@ async def on_ready():
     #activity = discord.Game(name="Starting...", type=3,
     #                        large_image=)
     
-    activity2 = discord.Activity(type=discord.ActivityType.playing, 
-        large_image = "power_icon",
-        large_text = "This is Game Icon",
-        name = "Sleeping Simulator💤",
-        details = "Dreams of Desires(Easy)")
 
-    await bot.change_presence(status=discord.Status.idle, activity=activity2)
+    await bot.change_presence(status=discord.Status.idle)
+    await bot.user.edit(avatar='./lib/pic/loading.gif')
 
     
     await create_logdir()
