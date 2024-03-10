@@ -22,7 +22,7 @@ async def create_logdir():
 async def load_spine():
     mainpath = "./modules/spine/"
     modulliste = [x for x in os.listdir(mainpath) if "_" not in x]
-    mainmodules0 = [("modules.main."+x[:-3]) for x in modulliste if ".py" in x and not("!" in x)]
+    mainmodules0 = [("modules.spine."+x[:-3]) for x in modulliste if ".py" in x and not("!" in x)]
     for module in mainmodules0:
             try:
                 #print(module)
