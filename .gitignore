@@ -15,3 +15,4 @@ userdata/*
 out.csv
 old_users.db
 schulden.db
+modules/main/aihelper/models/alpaca/pytorch_model.bin
