@@ -128,7 +128,7 @@ class Schulden(commands.Cog):
         self.schulden_db.aktualisieren()
         #return f"Alter Betrag: {betrag0} Neuer Betrag: {betrag1}"
 
-    @app_commands.command(name="getschuldenlog", description="[SCHULDEN] .getschulden um Einsicht in die Datenbank zu erhalten. Der Bot wird die gesamte Datenbank inklusive Transaction-History ausgeben.")
+    @app_commands.command(name="getschuldenlog", description="[SCHULDEN] Einsicht in Datenbank. Ausgabe der kompletten Transaction-History")
     async def getschuldenlog(self, interaction:discord.Interaction):
         bt:commands.Bot = self.bot
 
