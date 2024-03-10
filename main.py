@@ -80,8 +80,7 @@ async def on_ready():
     
 
     await bot.change_presence(status=discord.Status.idle)
-    await bot.user.edit(avatar='./lib/pic/loading.gif')
-
+    await bot.user.edit(avatar=open("./lib/pic/loading.gif",'rb').read())
     
     await create_logdir()
     await Helper().do()
