@@ -12,31 +12,31 @@ class Schulden(commands.Cog):
          self.schulden_db = schuldendb.Schuldenverwaltung()
          self.schulden_dir = os.getcwd()
 
-    @commands.command(brief="[SCHULDEN] Zeige alle Schulden von allen Usern")
-    @commands.is_owner()
-    async def allschulden(self,ctx):
-        self.schulden_db.aktualisieren()
-        schulden = self.schulden_db.alle_schulden_anzeigen()
-        if type(schulden) != list:
-            await ctx.send(schulden)
-        else:
-            a,b="Schuldner","Gläubiger"
-            returntext = f"{a:14}| > schuldet > | {b:14}| Betrag (EUR.CENT)\n"
-            for schuldner,gläubiger, betrag in schulden:
-                returntext += f"{schuldner:14}| > -------- > | {gläubiger:14}| {betrag}\n"
-            await ctx.send(f"```{returntext}```")
+    @app_commands.command(name="allschulden", description="[SCHULDEN] Zeige alle Schulden von allen Usern")
+    async def allschulden(self,interaction:discord.Interaction):
+        if interaction.author.id in self.bot.owner_ids:
+            self.schulden_db.aktualisieren()
+            schulden = self.schulden_db.alle_schulden_anzeigen()
+            if type(schulden) != list:
+                await interaction.response.send(schulden)
+            else:
+                a,b="Schuldner","Gläubiger"
+                returntext = f"{a:14}| > schuldet > | {b:14}| Betrag (EUR.CENT)\n"
+                for schuldner,gläubiger, betrag in schulden:
+                    returntext += f"{schuldner:14}| > -------- > | {gläubiger:14}| {betrag}\n"
+                await interaction.response.send(f"```{returntext}```")
 
-    @commands.command(brief="[SCHULDEN] Zeige Schuldenverhältnisse von dir an")
-    async def getschulden(self, ctx):
+    @app_commands.command(name="getschulden", description="[SCHULDEN] Zeige Schuldenverhältnisse von dir an")
+    async def getschulden(self, interaction:discord.Interaction):
         self.schulden_db.aktualisieren()
-        user0 = ctx.author.name
+        user0 = interaction.author.name
         eig = self.schulden_db.schulden_anzeigen(schuldner=user0)
         fremd = self.schulden_db.schulden_anzeigen(glaeubiger=user0)
         
         eigene_schulden = eig if eig != "Keine Schulden gefunden." else None
         fremd_schulden = fremd if fremd != "Keine Schulden gefunden." else None
 
-        await ctx.send(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```")
+        await interaction.response.send(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```")
 
     @app_commands.command(name="addschulden", description="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag:str=None, comment:str=None):
