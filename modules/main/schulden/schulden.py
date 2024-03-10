@@ -59,7 +59,7 @@ class Schulden(commands.Cog):
                     
                     closed_acc_button = Button(label="✅",style=discord.ButtonStyle.gray, disabled=True)
                     closed_rev_button = Button(label="🔄",style=discord.ButtonStyle.gray, disabled=True)
-                    closed_none_button = Button(label="_",style=discord.ButtonStyle.gray, disabled=True)
+                    closed_none_button = Button(label="···",style=discord.ButtonStyle.gray, disabled=True)
                     error_button = Button(label="⚠",style=discord.ButtonStyle.gray, disabled=True)
 
                     async def button_callback(interaction:discord.Interaction):
