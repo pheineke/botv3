@@ -220,12 +220,12 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
     async def on_message(self,message):
         if isinstance(message.channel, discord.channel.DMChannel) or message.channel.id == self.channel_id:
             print(f"{type(RPGLoader.get_commands())} {[type(x) for x in RPGLoader.get_commands()]}")
-            if not any(element in message.content for element in RPGLoader.get_commands()):
+            '''if not any(element in message.content for element in RPGLoader.get_commands()):
                 if message.author.name in self.users:
                     ingameuser = self.users[message.author.name]
                     await self.channel.send(self.game.chat(ingameuser, message))
                 else:
-                    await self.channel.send("No Ingame Name!")
+                    await self.channel.send("No Ingame Name!")'''
                 
 
 async def setup(client):
