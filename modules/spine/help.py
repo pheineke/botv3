@@ -34,8 +34,15 @@ class Help(commands.Cog):
         if sorted_command_info:  # Check if sorted_command_info is not empty before sending
             for category, commands_ in sorted_command_info:
                 formatted_category = str(category.strip("["))
-                formatted_commands = '\n'.join(commands_)
-                returntext += f"***{formatted_category}***\n{formatted_commands}\n"
+                formatted_commands = str('\n'.join(commands_))
+                if not arg:
+                    returntext += f"***{formatted_category}***\n{formatted_commands}\n"
+                else:
+                    
+                    if arg in formatted_category or arg in formatted_commands:
+                        returntext += f"***{formatted_category}***\n{formatted_commands}\n"
+                    else:
+                        pass
             await ctx.send(returntext)
         else:
             await ctx.send("No commands found.")
@@ -53,9 +60,9 @@ class Help(commands.Cog):
                         short_description = command.brief or "Keine kurze Beschreibung verfügbar."
                         command_info += f"`{command.name}` - {short_description}\n"  # Accumulate command_info properly
         if command_info:  # Check if command_info is not empty before sending
-            await interaction.response.send(command_info)
+            await interaction.response.send_message(command_info)
         else:
-            await interaction.response.send("No commands found.")
+            await interaction.response.send_message("No commands found.")
 
         button0 = Button(label="fsin.fo",url="https://www.fachschaft.informatik.uni-kl.de")
         button1 = Button(label="olat",url="https://olat.vcrp.de/dmz/")
@@ -67,7 +74,7 @@ class Help(commands.Cog):
             .add_item(button1)\
             .add_item(button2)\
             .add_item(button3)
-        await interaction.response.send("**Nützliche Seiten:**", view=view, ephemeral=True)
+        await interaction.response.send_message("**Nützliche Seiten:**", view=view, ephemeral=True)
 
 
 async def setup(bot):
