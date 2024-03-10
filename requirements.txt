@@ -1,5 +1,4 @@
 asyncio
-collections
 datetime
 discord
 graphviz
