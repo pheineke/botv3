@@ -53,7 +53,7 @@ class Help(commands.Cog):
         command_info = {}  # Use a dictionary to store commands categorized by brief category
         briefcategories = []
         for cog in self.bot.cogs.values():
-            if isinstance(cog, commands.Cog) or isinstance(cog, app_commands):
+            if isinstance(cog, commands.Cog):
                 commands_list = cog.get_commands()
                 if commands_list:
                     cog_name = cog.qualified_name if cog.qualified_name else "No Category"
