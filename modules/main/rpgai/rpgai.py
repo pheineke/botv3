@@ -1,4 +1,5 @@
 import subprocess
+import httpx
 import ollama
 from ollama import AsyncClient
 import os
@@ -237,17 +238,12 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
                         await self.channel.send(self.game.chat(ingameuser, message))
                     except AttributeError as e:
                         await self.loadgame(message.channel)
-                        #await self.channel.send(self.game.chat(ingameuser, message))
-                    except Exception as e:
-                        
+                        await self.channel.send(self.game.chat(ingameuser, message))
+                    except httpx.ConnectError:
                         workingpath = os.getcwd() + "/../AI/ollama-linux-amd64"
-                        with open("logloglog", "a") as file:
-                            file.write(str(e))
-                            file.write(str(isinstance(e, ConnectionError)))
-                            file.write("_"+str(type(e))+"_")
-                            file.write("\n"+str(workingpath))
-                        
-                        #subprocess.run([f"sh {workingpath}"])
+                        subprocess.run([f"sh {workingpath}"])
+                        asyncio.wait(5)
+                        await self.channel.send(self.game.chat(ingameuser, message))
 
                 else:
                     await self.channel.send("No Ingame Name!")
