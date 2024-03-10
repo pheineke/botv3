@@ -122,5 +122,12 @@ class Schuldenverwaltung:
                     userb = usery
                     betragab = betragxy
 
+            liste = self.alle_schulden_anzeigen()
+            for userx, usery, betragxy in liste:
+                self.c.execute("DELETE FROM Schulden WHERE betrag=0.0")
+                self.conn.commit()
+
+
+
     def __del__(self):
         self.conn.close()

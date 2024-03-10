@@ -15,19 +15,20 @@ class Schulden(commands.Cog):
     @commands.command(brief="[SCHULDEN] Zeige alle Schulden von allen Usern")
     @commands.is_owner()
     async def allschulden(self,ctx):
+        self.schulden_db.aktualisieren()
         schulden = self.schulden_db.alle_schulden_anzeigen()
         if type(schulden) != list:
             await ctx.send(schulden)
         else:
             a,b="Schuldner","Gläubiger"
-            returntext = f"{a:14}| {b:14}| Betrag\n"
-
+            returntext = f"{a:14}| > schuldet > | {b:14}| Betrag\n"
             for schuldner,gläubiger, betrag in schulden:
-                returntext += f"{schuldner:14}| {gläubiger:14}| {betrag}\n"
+                returntext += f"{schuldner:14}| > -------- > | {gläubiger:14}| {betrag}\n"
             await ctx.send(f"```{returntext}```")
 
     @commands.command(brief="[SCHULDEN] Zeige Schuldenverhältnisse von dir an")
     async def getschulden(self, ctx):
+        self.schulden_db.aktualisieren()
         user0 = ctx.author.name
         eig = self.schulden_db.schulden_anzeigen(schuldner=user0)
         fremd = self.schulden_db.schulden_anzeigen(glaeubiger=user0)
@@ -114,8 +115,7 @@ class Schulden(commands.Cog):
                         self.schulden_db.aktualisieren()'''
             except:
                 await ctx.send("da passt was nicht")
-            finally:
-                self.schulden_db.aktualisieren()
+        self.schulden_db.aktualisieren()
         #return f"Alter Betrag: {betrag0} Neuer Betrag: {betrag1}"
 
 
