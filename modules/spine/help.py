@@ -19,7 +19,7 @@ class Help(commands.Cog):
                     cog_name = cog.qualified_name if cog.qualified_name else "No Category"
                     for command in commands_list:
                         commandbrief = str(command.brief)
-                        briefcategory, commandbrief = commandbrief.split("]") if "]" in commandbrief else ("", None)
+                        briefcategory, commandbrief = commandbrief.split("]") if "]" in commandbrief else ("_", None)
                         briefcategories.append(briefcategory)
 
                         short_description = commandbrief or "Keine kurze Beschreibung verfügbar."
@@ -33,8 +33,9 @@ class Help(commands.Cog):
         returntext = ""
         if sorted_command_info:  # Check if sorted_command_info is not empty before sending
             for category, commands_ in sorted_command_info:
-                formatted_category = category.strip("[")
-                returntext += f"**{formatted_category}**\n" + "\n".join(commands_)
+                formatted_category = str(category.strip("["))
+                formatted_commands = '\n'.join(commands_)
+                returntext += f"***{formatted_category}***\n{formatted_commands}\n"
             await ctx.send(returntext)
         else:
             await ctx.send("No commands found.")
