@@ -10,7 +10,7 @@ class Loader_prefix(commands.Cog):
         self.bot = bot
 
     @commands.is_owner()
-    @commands.command(aliases=["l"])
+    @commands.command(brief="[LOADER_PREF]", aliases=["l"])
     async def load(self, ctx, extension):
         try:
             await self.bot.load_extension(f"modules.{extension}")
@@ -20,7 +20,7 @@ class Loader_prefix(commands.Cog):
             await ctx.message.add_reaction('❌')
 
     @commands.is_owner()
-    @commands.command(aliases=["u"])
+    @commands.command(brief="[LOADER_PREF]", aliases=["u"])
     async def unload(self, ctx, extension):
     #####unload side
         try:
@@ -39,21 +39,21 @@ class Loader_prefix(commands.Cog):
         
 
     @commands.is_owner()
-    @commands.command(aliases=["r"])
+    @commands.command(brief="[LOADER_PREF]", aliases=["r"])
     async def reload(self, ctx, extension):
         await self.bot.unload_extension(f"modules.{extension}")
         await self.bot.load_extension(f"modules.{extension}")
 
 
     '''Bot kann heruntergefahren werden.'''
-    @commands.command()
+    @commands.command(brief="[LOADER_PREF]")
     @commands.is_owner()
     async def shutdown(self, ctx):
         await ctx.send('Shutting down...')
         print('Shutting down...')
         await self.bot.close()
 
-    @commands.command()
+    @commands.command(brief="[LOADER_PREF]")
     @commands.is_owner()
     async def gitpull(self, ctx):
         # Speichere den aktuellen Pfad
@@ -71,7 +71,7 @@ class Loader_prefix(commands.Cog):
 
         os.execv(sys.executable, ['python3', 'main.py'])
 
-    @commands.command()
+    @commands.command(brief="[LOADER_PREF]")
     @commands.is_owner()
     async def modulespull(self,ctx):
         # Speichere den aktuellen Pfad
@@ -87,7 +87,7 @@ class Loader_prefix(commands.Cog):
             print(module)
 
 
-    @commands.command(aliases=["f"])
+    @commands.command(brief="[LOADER_PREF]", aliases=["f"])
     async def freeze(self, ctx):
         loaded_cogs = [cog for cog in self.bot.cogs.keys()]
         if loaded_cogs:
@@ -95,7 +95,7 @@ class Loader_prefix(commands.Cog):
         else:
             await ctx.send('No cogs loaded.')
 
-    @commands.command() 
+    @commands.command(brief="[LOADER_PREF]") 
     async def sync(self, ctx):
         synced = await self.bot.tree.sync()
         x = f"Synced {len(synced)} command(s)."

@@ -10,14 +10,16 @@ class Help(commands.Cog):
 
     @commands.command()
     async def help(self, ctx):
-        command_info = ""  # Declare command_info outside the loop
+        command_info = []  # Declare command_info outside the loop
         for cog in self.bot.cogs.values():
             if isinstance(cog, commands.Cog):
                 commands_list = cog.get_commands()
                 if commands_list:
                     cog_name = cog.qualified_name if cog.qualified_name else "No Category"
                     for command in commands_list:
-                        short_description = command.brief or "Keine kurze Beschreibung verfügbar."
+                        commandbrief = str(command.brief)
+                        briefcategory, commandbrief = commandbrief.split("]") if "]" in commandbrief else ("", None)
+                        short_description = commandbrief or "Keine kurze Beschreibung verfügbar."
                         command_info += f"`{command.name}` - {short_description}\n"  # Accumulate command_info properly
         if command_info:  # Check if command_info is not empty before sending
             await ctx.send(command_info)
