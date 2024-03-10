@@ -81,8 +81,6 @@ async def on_ready():
     #                        large_image=)
 
     await bot.change_presence(status=discord.Status.idle)
-    await bot.user.edit(avatar=open("./lib/pic/loading.gif",'rb').read())
-
 
     await create_logdir()
     await Helper().do()
@@ -90,7 +88,6 @@ async def on_ready():
     loaded = await getmainmodules()
 
     await bot.change_presence(status=discord.Status.online)
-    await bot.user.edit(avatar=open("./lib/pic/normal_pfp.png",'rb').read())
 
 
 
