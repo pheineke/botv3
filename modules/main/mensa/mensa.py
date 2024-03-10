@@ -69,7 +69,7 @@ class Mensa(commands.Cog):
                 y += f"{value[0]} | {key:15}\n"
             return ("4", y) #4
 
-    @commands.command()
+    @commands.command(brief="[MENSA]: Einstellen und einsehen der User-Mensazeiten")
     async def mensatime(self, ctx, equal=None, arg=None):
         try:
             authorname = ctx.author.name

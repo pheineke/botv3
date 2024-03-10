@@ -91,7 +91,7 @@ class RPGLoader(commands.Cog):
         self.load_usernames()
     
     @commands.is_owner()
-    @commands.command()
+    @commands.command(brief="[RPGAI]")
     async def aitargetchannel(self, ctx, channelid=None):
         if channelid is None:
             self.channel = self.client.get_channel(self.channel_id)
@@ -100,7 +100,7 @@ class RPGLoader(commands.Cog):
         await self.channel.send("ChannelID set")
 
 
-    @commands.command()
+    @commands.command(brief="[RPGAI]")
     async def listgames(self, ctx):
         directory_path = self.path + "/modules/main/rpgai/gameStates/"
         try:
@@ -113,17 +113,16 @@ class RPGLoader(commands.Cog):
         except Exception as e:
             await self.channel.send(f"Fehler beim Auflisten der Dateien: {e}")
 
-    @commands.command(brief="GameState herunterladen")
+    @commands.command(brief="[RPGAI]")
     async def downloadgame(self, ctx, gameStateName):
         file_path = f'{self.path}/modules/main/rpgai/gameStates/{gameStateName}.txt'
         try:
             with open(file_path, 'rb') as file:
-                file_contents = discord.File(file, filename=f'{gameStateName}.txt')
-                await ctx.send(content='Hier ist dein GameState:', file=file_contents)
+                await ctx.send(content='Hier ist dein GameState:', file=lambda: discord.File(file, filename=f'{gameStateName}.txt'))
         except Exception as e:
             await self.channel.send("Error: ", e)
 
-    @commands.command()
+    @commands.command(brief="[RPGAI]")
     async def loadgame(self, ctx, gameStateName=None):
         try:
             self.game = MedievalGame('rpgai')
@@ -139,7 +138,7 @@ class RPGLoader(commands.Cog):
 
 
 
-    @commands.command()
+    @commands.command(brief="[RPGAI]")
     async def savegame(self, ctx, gameStateName):
         game = self.game
         game.loadGame(gameStateName)
@@ -154,7 +153,7 @@ class RPGLoader(commands.Cog):
             # Falls die Datei nicht gefunden wird, leeres Dictionary initialisieren
             self.users = {}
 
-    @commands.command(brief="Falls du noch keinen Plan hast")
+    @commands.command(brief="[RPGAI] Alle Commands erklärt")
     async def tutorial(self, ctx):
         await self.channel.send('''
 Hi du hast das Tutorial aufgerufen!\n

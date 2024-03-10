@@ -9,7 +9,7 @@ class Data(commands.Cog):
         self.bot = bot
 
 
-    @commands.command()
+    @commands.command(brief="[DATA] Gibt Discord Userdaten aus.")
     async def getuserinfo(self, ctx, member: discord.Member = None):
         userdata = {
             "member": {

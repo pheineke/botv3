@@ -11,13 +11,13 @@ class Schulden(commands.Cog):
          self.schulden_db = schuldendb.Schuldenverwaltung()
          self.schulden_dir = os.getcwd()
 
-    @commands.command()
+    @commands.command(brief="[SCHULDEN] Zeige alle Schulden von allen Usern")
     @commands.is_owner()
     async def allschulden(self,ctx):
         schulden = self.schulden_db.alle_schulden_anzeigen()
         await ctx.send(f"```{schulden}```")
 
-    @commands.command()
+    @commands.command(brief="[SCHULDEN] Zeige Schuldenverhältnisse von dir an")
     async def getschulden(self, ctx):
         user0 = ctx.author.name
         eig = self.schulden_db.schulden_anzeigen(schuldner=user0)
@@ -28,7 +28,7 @@ class Schulden(commands.Cog):
 
         await ctx.send(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```")
 
-    @commands.command(brief=".addschulden @Schuldner Betrag")
+    @commands.command(brief="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, ctx, user1: discord.Member, betrag):
         self.schulden_db.aktualisieren()
         if user1 == ctx.author:

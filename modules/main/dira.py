@@ -14,7 +14,7 @@ class DIRA(commands.Cog):
     # Beispielaufruf
     
 
-    @commands.command(brief="Bool Formula Generator. Add + for '∧','∨' and ++ for '∧','∨','→','↔','⊕','⊼','⊽'")
+    @commands.command(brief="[DIRA] Bool Formula Generator. Add + for '∧','∨' and ++ for '∧','∨','→','↔','⊕','⊼','⊽'")
     async def boolgen(self, ctx, extends=None):
         variables = ['A', 'B', 'C', 'D','E']
         operators = ['∧','∨','→','↔']
@@ -66,7 +66,7 @@ class DIRA(commands.Cog):
 
         return finallist, base
 
-    @commands.command()
+    @commands.command(brief="[DIRA] Generiert deterministische Automaten")
     async def automatagen(self,ctx):
         filename = "custom_bdd.png"
 
@@ -105,19 +105,19 @@ class DIRA(commands.Cog):
 
         
 
-    @commands.command()
+    @commands.command(brief="[DIRA] generiert Radixzahl")
     async def radixgen(self, ctx, base=None, length=None):
         finallist, base = self.radixgen0(base, length)
         await ctx.send(f"<{finallist}>{base}")
 
-    @commands.command(aliases=["rdxcg"])
+    @commands.command(brief="[DIRA] generiert Radixaufgabe", aliases=["rdxcg"])
     async def radixcalcgen(self, ctx, base=None, length=None):
         radix0, base = self.radixgen0(base, length)
         radix1, base = self.radixgen0(base, length)
         zeichen = random.choice(["+","-","*","÷",""])
         await ctx.send(f"<{radix0}>{base} {zeichen} <{radix1}>{base}".replace("'",""))
 
-    @commands.command()
+    @commands.command(brief="[DIRA] generiert Radix-Additionsaufgabe")
     async def addradixgen(self, ctx, base=None, length=None):
         radix0, base = self.radixgen0(base, length)
         radix1, base = self.radixgen0(base, length)

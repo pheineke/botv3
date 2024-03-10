@@ -78,7 +78,7 @@ class Fslock(commands.Cog):
 
         clean_data('lock-log.txt')
 
-    @commands.command()
+    @commands.command(brief="[FSLOCK] Zeigt opendoor Graph")
     async def get_diagram(self, ctx, datum0=None, datum1=None):
         #datum0 = "2024-02-26"
         #datum1 = "2024-02-26"
