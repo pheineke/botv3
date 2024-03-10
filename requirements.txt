@@ -13,9 +13,8 @@ pickle
 prettytable
 random
 requests
+requests
 sqlite3
 subprocess
 sys
 table2ascii
-transformers
-requests
