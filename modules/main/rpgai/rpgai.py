@@ -241,10 +241,10 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
                     except Exception as e:
                         workingpath = os.getcwd() + "/../"
                         print(workingpath)
-                        
+
                         with open("logloglog", "a") as file:
-                            file.write(e)
-                            file.write("\n"+workingpath)
+                            file.write(str(e))
+                            file.write("\n"+str(workingpath))
                         
                         #subprocess.run([f"sh {workingpath}"])
 
