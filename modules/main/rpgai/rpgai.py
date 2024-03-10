@@ -114,17 +114,23 @@ class RPGLoader(commands.Cog):
 
     @commands.command(brief="[RPGAI]")
     async def loadgame(self, ctx, gameStateName=None):
+        
         try:
             self.game = MedievalGame('rpgai')
             self.game.loadGame(gameStateName)
             if gameStateName is None:
-                await ctx.send("Loaded new Game")
+                returntext = "Loaded new Game"
             else:
-                await ctx.send(f"Loaded {gameStateName}")
+                returntext = f"Loaded {gameStateName}"
         except FileNotFoundError:
-            await ctx.send("Error: File not found")
+            returntext = ("Error: File not found")
         except Exception as e:
-            await ctx.send(f"Error: {e}")
+            returntext = (f"Error: {e}")
+
+        if isinstance(ctx, discord.DMChannel):
+            await ctx.send(returntext)
+        else:
+            self.channel.send(returntext)
 
 
 
@@ -224,7 +230,10 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
             if not any(str(element) in message.content for element in self.get_commands()):
                 if message.author.name in self.users:
                     ingameuser = self.users[message.author.name]
-                    await self.channel.send(self.game.chat(ingameuser, message))
+                    try:
+                        await self.channel.send(self.game.chat(ingameuser, message))
+                    except AttributeError as e:
+                        await self.loadgame(message.channel, )
                 else:
                     await self.channel.send("No Ingame Name!")
                 
