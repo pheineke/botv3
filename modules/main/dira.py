@@ -18,7 +18,7 @@ class DIRA(commands.Cog):
     
 
     @app_commands.command(name="boolgen", description="[DIRA] Bool Formula Generator. Add + for '∧','∨' and ++ for '∧','∨','→','↔','⊕','⊼','⊽'")
-    async def boolgen(self, interaction:discord.Interaction, extends=None):
+    async def boolgen(self, interaction:discord.Interaction, extends:str=None):
         variables = ['A', 'B', 'C', 'D','E']
         operators = ['∧','∨','→','↔']
         negations = ['','¬']
@@ -109,19 +109,19 @@ class DIRA(commands.Cog):
         
 
     @app_commands.command(name="radixgen", description="[DIRA] generiert Radixzahl")
-    async def radixgen(self, interaction:discord.Interaction, base=None, length=None):
+    async def radixgen(self, interaction:discord.Interaction, base:str=None, length:str=None):
         finallist, base = self.radixgen0(base, length)
         await interaction.response.send(f"<{finallist}>{base}")
 
     @app_commands.command(name="radixcalcgen", description="[DIRA] generiert Radixaufgabe", aliases=["rdxcg"])
-    async def radixcalcgen(self, interaction:discord.Interaction, base=None, length=None):
+    async def radixcalcgen(self, interaction:discord.Interaction, base:str=None, length:str=None):
         radix0, base = self.radixgen0(base, length)
         radix1, base = self.radixgen0(base, length)
         zeichen = random.choice(["+","-","*","÷",""])
         await interaction.response.send(f"<{radix0}>{base} {zeichen} <{radix1}>{base}".replace("'",""))
 
     @commands.command(name="addradixgen", description="[DIRA] generiert Radix-Additionsaufgabe")
-    async def addradixgen(self, interaction:discord.Interaction, base=None, length=None):
+    async def addradixgen(self, interaction:discord.Interaction, base:str=None, length:str=None):
         radix0, base = self.radixgen0(base, length)
         radix1, base = self.radixgen0(base, length)
         await interaction.response.send(f"<{radix0}>{base} + <{radix1}>{base}".replace("'",""))
