@@ -1,0 +1,1 @@
+print(len("Kasten Spezi mit Späsen hallihalo"))

@@ -54,6 +54,8 @@ class Schulden(commands.Cog):
                             await ctx.send("negative Schulden sind illegal hab ich beschlossen")
                         elif betrag > 500.0:
                             await ctx.send(f"Ja theoretisch kann man {betrag} Schulden plötzlich machen aber hier erstmal net.")
+                        elif len(comment) > 100:
+                            await ctx.send("Kommentar darf nicht mehr als 100 Zeichen enthalten.")
                         else:
                             user0_str = str(ctx.author.name)
                             user1_str = str(user1.name)
