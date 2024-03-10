@@ -10,9 +10,41 @@ from discord.ext import commands, tasks
 from dotenv import load_dotenv
 from datetime import datetime
 
-#IMPORTS Discord..............END
 
-#IMPORTS Else.................END
+
+async def create_logdir():
+    if not os.path.exists(os.getcwd() + "/logs"):
+    # Erstelle den Ordner, wenn er nicht vorhanden ist
+        os.makedirs(os.getcwd() + "/logs")
+        print("Der 'logs' Ordner wurde erstellt.")
+    else:
+        print("Der 'logs' Ordner existiert bereits.")
+    
+async def getmainmodules():
+        mainpath = "./modules/main/"
+        modulliste = [x for x in os.listdir(mainpath) if "_" not in x]
+        
+        mainmodules0 = [("modules.main."+x[:-3]) for x in modulliste if ".py" in x and not("!" in x)]
+        modulpaths = [x for x in modulliste if ".py" not in x]
+
+        #print(f"a{modulliste}\nb{mainmodules0}\nc{modulpaths}\n")
+        
+        for path in modulpaths:
+            for data in os.listdir(mainpath+f"{path}"):
+                data = data[:-3]
+                #print(f"{path} und {data}")
+                if data == path:
+                    mainmodules0.append(f"modules.main.{path}.{data}")
+
+        #print(f"d{mainmodules0}")
+        for module in mainmodules0:
+            try:
+                #print(module)
+                await bot.load_extension(module)
+            except Exception as d:
+                print(d)
+        print("Main modules loaded.")
+
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -26,7 +58,7 @@ bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners),
 async def on_ready():
     await create_logdir()
     print(f'{"-" * 50}\nConnected Bot: {bot.user.name}\n{"-" * 50}')
-    getmainmodules()
+    await getmainmodules()
 
 
 @bot.command()
@@ -161,36 +193,5 @@ bot.run(TOKEN)
 
 ###################################################################
 
-async def create_logdir():
-    if not os.path.exists(os.getcwd() + "/logs"):
-    # Erstelle den Ordner, wenn er nicht vorhanden ist
-        os.makedirs(os.getcwd() + "/logs")
-        print("Der 'logs' Ordner wurde erstellt.")
-    else:
-        print("Der 'logs' Ordner existiert bereits.")
-    
-def getmainmodules():
-        mainpath = "./modules/main/"
-        modulliste = [x for x in os.listdir(mainpath) if "_" not in x]
-        
-        mainmodules0 = [("modules.main."+x[:-3]) for x in modulliste if ".py" in x and not("!" in x)]
-        modulpaths = [x for x in modulliste if ".py" not in x]
 
-        #print(f"a{modulliste}\nb{mainmodules0}\nc{modulpaths}\n")
-        
-        for path in modulpaths:
-            for data in os.listdir(mainpath+f"{path}"):
-                data = data[:-3]
-                #print(f"{path} und {data}")
-                if data == path:
-                    mainmodules0.append(f"modules.main.{path}.{data}")
-
-        #print(f"d{mainmodules0}")
-        for module in  mainmodules0:
-            try:
-                #print(module)
-                await bot.load_extension(module)
-            except Exception as d:
-                print(d)
-        print("Main modules loaded.")
 
