@@ -75,10 +75,24 @@ bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners),
 #BOTEVENTS
 @bot.event
 async def on_ready():
+    activity = discord.Game(name="Starting...", type=3
+                            large_image=)
+    
+    activity2 = discord.Activity(type=discord.ActivityType.playing, 
+        large_image = "https://eternallybored.org/imgs/boot/Win7.gif",
+        large_text = "This is Game Icon",
+        name = "Sleeping Simulator💤",
+        details = "Dreams of Desires(Easy)")
+
+    await bot.change_presence(status=discord.Status.idle, activity=activity2)
+
+    
     await create_logdir()
     await Helper().do()
     await load_spine()
     await getmainmodules()
+
+    await bot.change_presence(status=discord.Status.online)
 
     print(f'{"-" * 50}\nConnected Bot: {bot.user.name}\n{"-" * 50}')
 
