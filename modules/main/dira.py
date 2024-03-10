@@ -113,7 +113,7 @@ class DIRA(commands.Cog):
         finallist, base = self.radixgen0(base, length)
         await interaction.response.send(f"<{finallist}>{base}")
 
-    @app_commands.command(name="radixcalcgen", description="[DIRA] generiert Radixaufgabe", aliases=["rdxcg"])
+    @app_commands.command(name="radixcalcgen", description="[DIRA] generiert Radixaufgabe")
     async def radixcalcgen(self, interaction:discord.Interaction, base:str=None, length:str=None):
         radix0, base = self.radixgen0(base, length)
         radix1, base = self.radixgen0(base, length)
