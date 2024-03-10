@@ -43,11 +43,10 @@ class Schulden(commands.Cog):
         self.schulden_db.aktualisieren()
         try:
             user1 = await commands.MemberConverter().convert(ctx, user1)
-            if user1 == ctx.author or user1.id == ctx.author.id:
+            if user1 == ctx.author or user1.id == ctx.author.id or str(ctx.author.name) == str(user1.name):
                 await ctx.send("haha sehr witzig")
             else:
                 try:
-                    
                     if betrag is None:
                         await ctx.send("nö kein geld")
                     else:
