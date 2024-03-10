@@ -55,13 +55,14 @@ class Loader_prefix(commands.Cog):
         slower = True
         while(slower):
             try:
+                await self.bot.change_presence(status=discord.Status.idle)
                 await self.bot.user.edit(avatar=open("./lib/pic/offline_pfp.png",'rb').read())
                 slower = False
                 break
             except:
                 await asyncio.sleep(10.0)
                 slower = True
-                
+
         await self.bot.close()
 
     @commands.command(brief="[LOADER_PREF]")
