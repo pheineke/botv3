@@ -17,7 +17,7 @@ class DIRA(commands.Cog):
     # Beispielaufruf
     
 
-    @app_commands.command(name="boolgen", brief="[DIRA] Bool Formula Generator. Add + for '∧','∨' and ++ for '∧','∨','→','↔','⊕','⊼','⊽'")
+    @app_commands.command(name="boolgen", description="[DIRA] Bool Formula Generator. Add + for '∧','∨' and ++ for '∧','∨','→','↔','⊕','⊼','⊽'")
     async def boolgen(self, interaction:discord.Interaction, extends=None):
         variables = ['A', 'B', 'C', 'D','E']
         operators = ['∧','∨','→','↔']
@@ -69,7 +69,7 @@ class DIRA(commands.Cog):
 
         return finallist, base
 
-    @app_commands.command(name="automatagen", brief="[DIRA] Generiert deterministische Automaten")
+    @app_commands.command(name="automatagen", description="[DIRA] Generiert deterministische Automaten")
     async def automatagen(self,interaction:discord.Interaction):
         filename = "custom_bdd.png"
 
@@ -108,19 +108,19 @@ class DIRA(commands.Cog):
 
         
 
-    @app_commands.command(brief="[DIRA] generiert Radixzahl")
+    @app_commands.command(name="radixgen", description="[DIRA] generiert Radixzahl")
     async def radixgen(self, interaction:discord.Interaction, base=None, length=None):
         finallist, base = self.radixgen0(base, length)
         await interaction.response.send(f"<{finallist}>{base}")
 
-    @app_commands.command(brief="[DIRA] generiert Radixaufgabe", aliases=["rdxcg"])
+    @app_commands.command(name="radixcalcgen", description="[DIRA] generiert Radixaufgabe", aliases=["rdxcg"])
     async def radixcalcgen(self, interaction:discord.Interaction, base=None, length=None):
         radix0, base = self.radixgen0(base, length)
         radix1, base = self.radixgen0(base, length)
         zeichen = random.choice(["+","-","*","÷",""])
         await interaction.response.send(f"<{radix0}>{base} {zeichen} <{radix1}>{base}".replace("'",""))
 
-    @commands.command(brief="[DIRA] generiert Radix-Additionsaufgabe")
+    @commands.command(name="addradixgen", description="[DIRA] generiert Radix-Additionsaufgabe")
     async def addradixgen(self, interaction:discord.Interaction, base=None, length=None):
         radix0, base = self.radixgen0(base, length)
         radix1, base = self.radixgen0(base, length)
