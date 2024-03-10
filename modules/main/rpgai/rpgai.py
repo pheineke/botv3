@@ -226,12 +226,10 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
 
     @commands.Cog.listener()
     async def on_message(self,message):
-        if "-" == message.content[0]:
-            return
-        elif (isinstance(message.channel, discord.channel.DMChannel) or message.channel.id == self.channel_id) and not(message.author.bot):
-            for command in self.get_commands():
-                print(f"{type(command)} {command}")
-            if not any(str(element) in message.content for element in self.get_commands()):
+        if (isinstance(message.channel, discord.channel.DMChannel) or message.channel.id == self.channel_id) and not(message.author.bot):
+            if "-" == message.content[0]:
+                return
+            elif not any(str(element) in message.content for element in self.get_commands()):
                 if message.author.name in self.users:
                     ingameuser = self.users[message.author.name]
                     try:
