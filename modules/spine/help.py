@@ -55,7 +55,7 @@ class Help(commands.Cog):
         for cog in self.bot.cogs.values():
             if isinstance(cog, commands.Cog) or isinstance(cog, app_commands):
                 commands_list = cog.get_commands()
-                commands_list += await self.bot.tree.get_commands(type=discord.AppCommandType.chat_input)
+                commands_list += self.bot.tree.get_commands(type=discord.AppCommandType.chat_input)
                 if commands_list:
                     cog_name = cog.qualified_name if cog.qualified_name else "No Category"
                     for command in commands_list:
