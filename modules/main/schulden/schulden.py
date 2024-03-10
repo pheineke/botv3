@@ -40,7 +40,7 @@ class Schulden(commands.Cog):
     @commands.command(brief="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, ctx, user1=None, betrag=None):
         self.schulden_db.aktualisieren()
-        if not user1:
+        if user1 == ctx.author:
             await ctx.send("haha sehr witzig")
         else:
             try:
