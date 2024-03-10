@@ -235,7 +235,10 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
                     try:
                         await self.channel.send(self.game.chat(ingameuser, message))
                     except AttributeError as e:
-                        await self.loadgame(message.channel, )
+                        await self.loadgame(message.channel)
+                    except Exception as e:
+                        print(e)
+
                 else:
                     await self.channel.send("No Ingame Name!")
                 
