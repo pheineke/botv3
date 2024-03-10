@@ -24,8 +24,8 @@ class Help(commands.Cog):
         else:
             await interaction.response.send("No commands found.")
 
-        button0 = Button(label="fsin.fo",url="https://www.fachschaft.informatik.uni-kl.de", row=0)
-        button1 = Button(label="olat",url="https://olat.vcrp.de/dmz/", row=0)
+        button0 = Button(label="fsin.fo",url="https://www.fachschaft.informatik.uni-kl.de")
+        button1 = Button(label="olat",url="https://olat.vcrp.de/dmz/")
         button2 = Button(label="qis",url="https://qis.verw.uni-kl.de/")
         button3 = Button(label="semestertermine", url="https://rptu.de/studium/im-studium/fristen-und-termine")
 
