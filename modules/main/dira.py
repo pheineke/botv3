@@ -1,5 +1,8 @@
 import discord
-from discord.ext import commands
+from discord import app_commands
+from discord.ext import commands, tasks
+from discord.ui import Button, View
+
 from prettytable import PrettyTable
 import random
 import os
@@ -14,8 +17,8 @@ class DIRA(commands.Cog):
     # Beispielaufruf
     
 
-    @commands.command(brief="[DIRA] Bool Formula Generator. Add + for '∧','∨' and ++ for '∧','∨','→','↔','⊕','⊼','⊽'")
-    async def boolgen(self, ctx, extends=None):
+    @app_commands.command(name="boolgen", brief="[DIRA] Bool Formula Generator. Add + for '∧','∨' and ++ for '∧','∨','→','↔','⊕','⊼','⊽'")
+    async def boolgen(self, interaction:discord.Interaction, extends=None):
         variables = ['A', 'B', 'C', 'D','E']
         operators = ['∧','∨','→','↔']
         negations = ['','¬']
@@ -50,7 +53,7 @@ class DIRA(commands.Cog):
 
             return generate_subformula(max_length)
         
-        await ctx.send(generate_random_boolean_formula())
+        await interaction.response.send_message(generate_random_boolean_formula())
 
     def radixgen0(self, base=None, length=None):
         biggerbase = ["A","B","C","D","E","F"]
@@ -66,8 +69,8 @@ class DIRA(commands.Cog):
 
         return finallist, base
 
-    @commands.command(brief="[DIRA] Generiert deterministische Automaten")
-    async def automatagen(self,ctx):
+    @app_commands.command(name="automatagen", brief="[DIRA] Generiert deterministische Automaten")
+    async def automatagen(self,interaction:discord.Interaction):
         filename = "custom_bdd.png"
 
         bdd = graphviz.Digraph(format='png')
@@ -99,29 +102,29 @@ class DIRA(commands.Cog):
         # Speichere das BDD als PNG-Datei
         bdd.render(filename, view=False)
 
-        await ctx.send(file=discord.File(f"{filename}.png"))
+        await interaction.response.send_message(file=discord.File(f"{filename}.png"))
         os.remove(f"./{filename}")
         os.remove(f"./{filename}.png")
 
         
 
-    @commands.command(brief="[DIRA] generiert Radixzahl")
-    async def radixgen(self, ctx, base=None, length=None):
+    @app_commands.command(brief="[DIRA] generiert Radixzahl")
+    async def radixgen(self, interaction:discord.Interaction, base=None, length=None):
         finallist, base = self.radixgen0(base, length)
-        await ctx.send(f"<{finallist}>{base}")
+        await interaction.response.send(f"<{finallist}>{base}")
 
-    @commands.command(brief="[DIRA] generiert Radixaufgabe", aliases=["rdxcg"])
-    async def radixcalcgen(self, ctx, base=None, length=None):
+    @app_commands.command(brief="[DIRA] generiert Radixaufgabe", aliases=["rdxcg"])
+    async def radixcalcgen(self, interaction:discord.Interaction, base=None, length=None):
         radix0, base = self.radixgen0(base, length)
         radix1, base = self.radixgen0(base, length)
         zeichen = random.choice(["+","-","*","÷",""])
-        await ctx.send(f"<{radix0}>{base} {zeichen} <{radix1}>{base}".replace("'",""))
+        await interaction.response.send(f"<{radix0}>{base} {zeichen} <{radix1}>{base}".replace("'",""))
 
     @commands.command(brief="[DIRA] generiert Radix-Additionsaufgabe")
-    async def addradixgen(self, ctx, base=None, length=None):
+    async def addradixgen(self, interaction:discord.Interaction, base=None, length=None):
         radix0, base = self.radixgen0(base, length)
         radix1, base = self.radixgen0(base, length)
-        await ctx.send(f"<{radix0}>{base} + <{radix1}>{base}".replace("'",""))
+        await interaction.response.send(f"<{radix0}>{base} + <{radix1}>{base}".replace("'",""))
 
 
 async def setup(bot):
