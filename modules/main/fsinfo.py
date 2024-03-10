@@ -78,7 +78,7 @@ class Fsinfo(commands.Cog):
         clean_data('lock-log.txt')
 
     @app_commands.command(name="opendoor_graph", description="[FSINFO] Zeigt opendoor Graph")
-    async def get_diagram(self, ctx, datum0: str=None, datum1:str=None):
+    async def get_diagram(self, interaction:discord.Interaction, datum0: str=None, datum1:str=None):
         #datum0 = "2024-02-26"
         #datum1 = "2024-02-26"
         # Laden der Daten aus der Datei
@@ -132,10 +132,10 @@ class Fsinfo(commands.Cog):
             plt.savefig("plot-door.png")
 
 
-            await ctx.send(file=discord.File('plot-door.png'))
+            await interaction.response.send_message(file=discord.File('plot-door.png'))
 
         except Exception as e:
-            await ctx.send(f"No Data\n```{e}```")
+            await interaction.response.send_message(f"No Data\n```{e}```")
 
 
 
