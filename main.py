@@ -89,11 +89,11 @@ async def on_ready():
     await load_spine()
     loaded = await getmainmodules()
 
-    while(True):
+    '''while(True):
         if loaded:
             await bot.change_presence(status=discord.Status.online)
             await bot.user.edit(avatar=open("./lib/pic/normal_pfp.png",'rb').read())
-        asyncio.wait(10.0)
+        asyncio.wait(10.0)'''
 
 
 
