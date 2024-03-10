@@ -130,7 +130,7 @@ class RPGLoader(commands.Cog):
         if isinstance(ctx, discord.DMChannel):
             await ctx.send(returntext)
         else:
-            self.channel.send(returntext)
+            await self.channel.send(returntext)
 
 
 
