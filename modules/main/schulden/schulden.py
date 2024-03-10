@@ -41,81 +41,87 @@ class Schulden(commands.Cog):
     @commands.command(brief="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, ctx, user1=None, betrag=None):
         self.schulden_db.aktualisieren()
-        if user1 == ctx.author:
-            await ctx.send("haha sehr witzig")
-        else:
-            try:
-                user1 = await commands.MemberConverter().convert(ctx, user1)
-                if betrag is None:
-                    await ctx.send("nö kein geld")
-                else:
-                    betrag=float(str(betrag).replace(",","."))
-                    if betrag < 0.0:
-                        await ctx.send("negative Schulden sind illegal hab ich beschlossen")
+        try:
+            user1 = await commands.MemberConverter().convert(ctx, user1)
+            if user1 == ctx.author or user1.id == ctx.author.id:
+                await ctx.send("haha sehr witzig")
+            else:
+                try:
+                    
+                    if betrag is None:
+                        await ctx.send("nö kein geld")
                     else:
-                        user0_str = str(ctx.author.name)
-                        user1_str = str(user1.name)
-                        
-                        accept_button = Button(label="Accept", style=discord.ButtonStyle.blurple)
-                        revoke_button = Button(label="Revoke", style=discord.ButtonStyle.red)
-                        
-                        closed_acc_button = Button(label="✅",style=discord.ButtonStyle.gray, disabled=True)
-                        closed_rev_button = Button(label="🔄",style=discord.ButtonStyle.gray, disabled=True)
-                        closed_none_button = Button(label="···",style=discord.ButtonStyle.gray, disabled=True)
-                        error_button = Button(label="⚠",style=discord.ButtonStyle.gray, disabled=True)
-
-                        async def button_callback(interaction:discord.Interaction):
-                            if interaction.user == user1:
-                                try:
-                                    self.schulden_db.schulden_hinzufuegen(user1_str, user0_str, betrag=betrag)
-                                    await ctx.message.add_reaction('✅')
-                                    await interaction.response.edit_message(content=f"{user1.name} hat akzeptiert.", view=view1)
-                                except Exception as e:
-                                    print(f"{e}")
-                                    await ctx.message.add_reaction('⚠')
-                                    await interaction.response.edit_message(content=f"{user1.guild.name} ERROR", view=view3)
-                        accept_button.callback=button_callback
-                        
-                        async def revoke_callback(interaction:discord.Interaction):
-                            if interaction.user == ctx.author:
-                                await interaction.response.edit_message(content=f"{ctx.author.guild.name} hat widerrufen.", view=view2)                    
-                        revoke_button.callback=revoke_callback
-
-                        view0 = View(timeout=30.0)\
-                            .add_item(accept_button)\
-                            .add_item(revoke_button)
-                        view1 = View()\
-                            .add_item(closed_acc_button)\
-                            .add_item(closed_none_button)
-                        view2 = View()\
-                            .add_item(closed_none_button)\
-                            .add_item(closed_rev_button)
-                        view3 = View()\
-                            .add_item(error_button)
-                        await ctx.send(f"{user1.mention} muss akzeptieren:", view=view0)
-
-                        '''try:
-                            sent_message = await ctx.send(f"{user1.mention} muss die Schulden bestätigen:")
-                            await sent_message.add_reaction('✅')
-
-                            reaction, _ = await self.bot.wait_for('reaction_add', check=check, timeout=60.0)
-                            if reaction:
-                                try:
-                                    self.schulden_db.schulden_hinzufuegen(user1_str, user0_str, betrag=betrag)
-                                except Exception as e:
-                                    print(f"{e}")
-                                    await sent_message.add_reaction('⚠')
+                        betrag=float(str(betrag).replace(",","."))
+                        if betrag < 0.0:
+                            await ctx.send("negative Schulden sind illegal hab ich beschlossen")
+                        elif betrag > 500.0:
+                            await ctx.send(f"Ja theoretisch kann man {betrag} Schulden plötzlich machen aber hier erstmal net.")
+                        else:
+                            user0_str = str(ctx.author.name)
+                            user1_str = str(user1.name)
                             
-                        except asyncio.TimeoutError:
-                            await ctx.message.add_reaction('🕒')
-                            await ctx.message.add_reaction('❌')
-                        except Exception as e:
-                            print(f"Ein Fehler ist aufgetreten: {e}")
-                        
-                        finally:
-                            self.schulden_db.aktualisieren()'''
-            except:
-                await ctx.send("da passt was nicht")
+                            accept_button = Button(label="Accept", style=discord.ButtonStyle.blurple)
+                            revoke_button = Button(label="Revoke", style=discord.ButtonStyle.red)
+                            
+                            closed_acc_button = Button(label="✅",style=discord.ButtonStyle.gray, disabled=True)
+                            closed_rev_button = Button(label="🔄",style=discord.ButtonStyle.gray, disabled=True)
+                            closed_none_button = Button(label="···",style=discord.ButtonStyle.gray, disabled=True)
+                            error_button = Button(label="⚠",style=discord.ButtonStyle.gray, disabled=True)
+
+                            async def button_callback(interaction:discord.Interaction):
+                                if interaction.user == user1:
+                                    try:
+                                        self.schulden_db.schulden_hinzufuegen(user1_str, user0_str, betrag=betrag)
+                                        await ctx.message.add_reaction('✅')
+                                        await interaction.response.edit_message(content=f"{user1.name} hat akzeptiert.", view=view1)
+                                    except Exception as e:
+                                        print(f"{e}")
+                                        await ctx.message.add_reaction('⚠')
+                                        await interaction.response.edit_message(content=f"{user1.guild.name} ERROR", view=view3)
+                            accept_button.callback=button_callback
+                            
+                            async def revoke_callback(interaction:discord.Interaction):
+                                if interaction.user == ctx.author:
+                                    await interaction.response.edit_message(content=f"{ctx.author.guild.name} hat widerrufen.", view=view2)                    
+                            revoke_button.callback=revoke_callback
+
+                            view0 = View(timeout=30.0)\
+                                .add_item(accept_button)\
+                                .add_item(revoke_button)
+                            view1 = View()\
+                                .add_item(closed_acc_button)\
+                                .add_item(closed_none_button)
+                            view2 = View()\
+                                .add_item(closed_none_button)\
+                                .add_item(closed_rev_button)
+                            view3 = View()\
+                                .add_item(error_button)
+                            await ctx.send(f"{user1.mention} muss akzeptieren:", view=view0)
+
+                            '''try:
+                                sent_message = await ctx.send(f"{user1.mention} muss die Schulden bestätigen:")
+                                await sent_message.add_reaction('✅')
+
+                                reaction, _ = await self.bot.wait_for('reaction_add', check=check, timeout=60.0)
+                                if reaction:
+                                    try:
+                                        self.schulden_db.schulden_hinzufuegen(user1_str, user0_str, betrag=betrag)
+                                    except Exception as e:
+                                        print(f"{e}")
+                                        await sent_message.add_reaction('⚠')
+                                
+                            except asyncio.TimeoutError:
+                                await ctx.message.add_reaction('🕒')
+                                await ctx.message.add_reaction('❌')
+                            except Exception as e:
+                                print(f"Ein Fehler ist aufgetreten: {e}")
+                            
+                            finally:
+                                self.schulden_db.aktualisieren()'''
+                except:
+                    await ctx.send("da passt was nicht")
+        except:
+            await ctx.send("User not found")
         self.schulden_db.aktualisieren()
         #return f"Alter Betrag: {betrag0} Neuer Betrag: {betrag1}"
 

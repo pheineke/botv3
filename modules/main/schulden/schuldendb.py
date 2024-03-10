@@ -7,6 +7,10 @@ class Schuldenverwaltung:
         self.c = self.conn.cursor()
         self.create_table()
 
+        # self.conn_log = sqlite3.connect("schulden_log.db")
+        # self.c_log = self.conn_log.cursor()
+        # self.create_log()
+
     def create_table(self):
         self.c.execute('''CREATE TABLE IF NOT EXISTS Schulden (
                             id INTEGER PRIMARY KEY,
@@ -16,7 +20,19 @@ class Schuldenverwaltung:
                          )''')
         self.conn.commit()
 
-    def schulden_hinzufuegen(self, schuldner, glaeubiger, betrag):
+    # def create_log(self):
+    #     self.c.execute('''CREATE TABLE IF NOT EXISTS transaction_log (
+    #                         id INTEGER PRIMARY KEY,
+    #                         aktion TEXT NOT NULL,
+    #                         schuldner TEXT NOT NULL,
+    #                         glaeubiger TEXT NOT NULL,
+    #                         betrag REAL NOT NULL,
+    #                         zeit TEXT NOT NULL,
+    #                         comment TEXT NOT NULL
+    #                      )''')
+    #     self.conn.commit()
+
+    def schulden_hinzufuegen(self, schuldner, glaeubiger, betrag, comment=None):
         # Überprüfen, ob bereits Schulden existieren
         self.c.execute("SELECT betrag FROM Schulden WHERE schuldner=? AND glaeubiger=?", (schuldner, glaeubiger))
         result = self.c.fetchone()
@@ -25,6 +41,7 @@ class Schuldenverwaltung:
             neuer_betrag = vorhandener_betrag + betrag
             self.c.execute("UPDATE Schulden SET betrag=? WHERE schuldner=? AND glaeubiger=?", (neuer_betrag, schuldner, glaeubiger))
             self.conn.commit()
+            
             return f"Schulden von {schuldner} zu {glaeubiger} um {betrag} erhöht. Neue Gesamtschulden: {neuer_betrag}."
         else:
             self.c.execute("INSERT INTO Schulden (schuldner, glaeubiger, betrag) VALUES (?, ?, ?)", (schuldner, glaeubiger, betrag))
