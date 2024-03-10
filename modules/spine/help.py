@@ -49,18 +49,41 @@ class Help(commands.Cog):
 
 
     @app_commands.command(name="help", description="Help-Message")
-    async def help_(self, interaction: discord.Interaction):
-        command_info = ""  # Declare command_info outside the loop
+    async def help_(self, interaction: discord.Interaction, arg: str=None):
+        command_info = {}  # Use a dictionary to store commands categorized by brief category
+        briefcategories = []
         for cog in self.bot.cogs.values():
             if isinstance(cog, commands.Cog):
                 commands_list = cog.get_commands()
                 if commands_list:
                     cog_name = cog.qualified_name if cog.qualified_name else "No Category"
                     for command in commands_list:
-                        short_description = command.brief or "Keine kurze Beschreibung verfügbar."
-                        command_info += f"`{command.name}` - {short_description}\n"  # Accumulate command_info properly
-        if command_info:  # Check if command_info is not empty before sending
-            await interaction.response.send_message(command_info)
+                        commandbrief = str(command.brief)
+                        briefcategory, commandbrief = commandbrief.split("]") if "]" in commandbrief else ("_", None)
+                        briefcategories.append(briefcategory)
+
+                        short_description = commandbrief or "Keine kurze Beschreibung verfügbar."
+                        if briefcategory not in command_info:
+                            command_info[briefcategory] = []
+                        command_info[briefcategory].append(f"`{command.name}` - {short_description}")
+
+
+        # Sort the command descriptions by brief category
+        sorted_command_info = sorted(command_info.items(), key=lambda x: x[0])
+        returntext = ""
+        if sorted_command_info:  # Check if sorted_command_info is not empty before sending
+            for category, commands_ in sorted_command_info:
+                formatted_category = str(category.strip("["))
+                formatted_commands = str('\n'.join(commands_))
+                if not arg:
+                    returntext += f"***{formatted_category}***\n{formatted_commands}\n"
+                else:
+                    
+                    if arg in formatted_category or arg in formatted_commands:
+                        returntext += f"***{formatted_category}***\n{formatted_commands}\n"
+                    else:
+                        pass
+            await interaction.response.send_message(returntext)
         else:
             await interaction.response.send_message("No commands found.")
 
