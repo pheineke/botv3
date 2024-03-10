@@ -64,6 +64,7 @@ async def getmainmodules():
             except Exception as d:
                 print(d)
         print("Main modules loaded.")
+        return True
 
 
 load_dotenv()
@@ -78,33 +79,25 @@ bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners),
 async def on_ready():
     #activity = discord.Game(name="Starting...", type=3,
     #                        large_image=)
-    slower = True
-    while(slower):
+    while(True):
         try:
             await bot.change_presence(status=discord.Status.idle)
             await bot.user.edit(avatar=open("./lib/pic/loading.gif",'rb').read())
-            slower = False
             break
         except:
             await asyncio.sleep(10.0)
-            slower = True
 
     await create_logdir()
     await Helper().do()
     await load_spine()
-    await getmainmodules()
+    loaded = await getmainmodules()
 
-
-    slower = True
-    while(slower):
-        try:
+    while(True):
+        if loaded:
             await bot.change_presence(status=discord.Status.online)
             await bot.user.edit(avatar=open("./lib/pic/normal_pfp.png",'rb').read())
-            slower = False
             break
-        except:
-            await asyncio.sleep(10.0)
-            slower = True
+
 
 
     print(f'{"-" * 50}\nConnected Bot: {bot.user.name}\n{"-" * 50}')
