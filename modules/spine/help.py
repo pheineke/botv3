@@ -8,7 +8,7 @@ class Help(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
-    @commands.command(brief="Help")
+    @commands.command()
     async def help(self, ctx):
         command_info = ""  # Declare command_info outside the loop
         for cog in self.bot.cogs.values():
@@ -25,7 +25,7 @@ class Help(commands.Cog):
             await ctx.send("No commands found.")
 
     @app_commands.command(name="help", description="Help-Message")
-    async def help(self, interaction: discord.Interaction):
+    async def help_(self, interaction: discord.Interaction):
         command_info = ""  # Declare command_info outside the loop
         for cog in self.bot.cogs.values():
             if isinstance(cog, commands.Cog):
