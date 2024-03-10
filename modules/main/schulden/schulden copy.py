@@ -39,24 +39,25 @@ class Schulden(commands.Cog):
         await ctx.send(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```")
 
     @commands.command(brief="[SCHULDEN] .addschulden @Schuldner Betrag")
-    async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag=None, comment=None):
+    async def addschulden(self, ctx, user1=None, betrag=None, comment=None):
         try:
-            if user1 == interaction.author or user1.id == interaction.author.id or str(interaction.author.name) == str(user1.name) or interaction.author.bot or user1.bot:
-                await interaction.response.send_message("haha sehr witzig", ephemeral=True)
+            user1 = await commands.MemberConverter().convert(ctx, user1)
+            if user1 == ctx.author or user1.id == ctx.author.id or str(ctx.author.name) == str(user1.name) or ctx.author.bot or user1.bot:
+                await ctx.send("haha sehr witzig")
             else:
                 try:
                     if betrag is None:
-                        await interaction.response.send_message("nö kein geld", ephemeral=True)
+                        await ctx.send("nö kein geld")
                     else:
                         betrag=round(float(str(betrag).replace(",",".")),2)
                         if betrag < 0.0:
-                            await interaction.response.send_message("negative Schulden sind illegal hab ich beschlossen", ephemeral=True)
+                            await ctx.send("negative Schulden sind illegal hab ich beschlossen")
                         elif betrag > 500.0:
-                            await interaction.response.send_message(f"Ja theoretisch kann man {betrag} Schulden plötzlich machen aber hier erstmal net.")
+                            await ctx.send(f"Ja theoretisch kann man {betrag} Schulden plötzlich machen aber hier erstmal net.")
                         elif len(comment) > 100:
-                            await interaction.response.send_message("Kommentar darf nicht mehr als 100 Zeichen enthalten.")
+                            await ctx.send("Kommentar darf nicht mehr als 100 Zeichen enthalten.")
                         else:
-                            user0_str = str(interaction.author.name)
+                            user0_str = str(ctx.author.name)
                             user1_str = str(user1.name)
                             
                             accept_button = Button(label="Accept", style=discord.ButtonStyle.blurple)
@@ -71,15 +72,17 @@ class Schulden(commands.Cog):
                                 if interaction.user == user1:
                                     try:
                                         self.schulden_db.schulden_hinzufuegen(schuldner=user1_str, glaeubiger=user0_str, betrag=betrag, comment=comment)
+                                        await ctx.message.add_reaction('✅')
                                         await interaction.response.edit_message(content=f"{user1.name} hat akzeptiert.", view=view1)
                                     except Exception as e:
                                         print(f"{e}")
+                                        await ctx.message.add_reaction('⚠')
                                         await interaction.response.edit_message(content=f"{user1.name} ERROR", view=view3)
                             accept_button.callback=button_callback
-
+                            
                             async def revoke_callback(interaction:discord.Interaction):
-                                if interaction.user == interaction.author:
-                                    await interaction.response.edit_message(content=f"{interaction.author.name} hat widerrufen.", view=view2)                    
+                                if interaction.user == ctx.author:
+                                    await interaction.response.edit_message(content=f"{ctx.author.name} hat widerrufen.", view=view2)                    
                             revoke_button.callback=revoke_callback
 
                             view0 = View(timeout=30)\
@@ -95,8 +98,8 @@ class Schulden(commands.Cog):
                                 .add_item(error_button)
                             
                             comment = comment or "-"
-                            returntext = f"{user1.mention} muss akzeptieren:\nSchulden in Höhe von \n`{betrag}` an {interaction.author.name}\nKommentar:\n{comment}"
-                            await interaction.response.send(returntext, view=view0)
+                            returntext = f"{user1.mention} muss akzeptieren:\nSchulden in Höhe von \n`{betrag}` an {ctx.author.name}\nKommentar:\n{comment}"
+                            await ctx.send(returntext, view=view0)
 
                             '''try:
                                 sent_message = await ctx.send(f"{user1.mention} muss die Schulden bestätigen:")
@@ -119,9 +122,9 @@ class Schulden(commands.Cog):
                             finally:
                                 self.schulden_db.aktualisieren()'''
                 except:
-                    await interaction.response.send("da passt was nicht", ephemeral=True)
+                    await ctx.send("da passt was nicht")
         except:
-            await interaction.response.send("User not found", ephemeral=True)
+            await ctx.send("User not found")
         self.schulden_db.aktualisieren()
         #return f"Alter Betrag: {betrag0} Neuer Betrag: {betrag1}"
 
