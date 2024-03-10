@@ -236,11 +236,11 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
                         await self.channel.send(self.game.chat(ingameuser, message))
                     except AttributeError as e:
                         await self.loadgame(message.channel)
-                        #await self.channel.send(self.game.chat(ingameuser, message))
+                        await self.channel.send(self.game.chat(ingameuser, message))
                     except httpx.ConnectError:
                         workingpath = "./../AI/ollama-linux-amd64"
                         subprocess.run(workingpath, shell=True, capture_output=True, check=True)
-
+                        await self.channel.send(self.game.chat(ingameuser, message))
                 else:
                     await self.channel.send("No Ingame Name!")
                 
