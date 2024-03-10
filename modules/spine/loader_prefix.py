@@ -1,3 +1,4 @@
+import asyncio
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
@@ -51,6 +52,16 @@ class Loader_prefix(commands.Cog):
     async def shutdown(self, ctx):
         await ctx.send('Shutting down...')
         print('Shutting down...')
+        slower = True
+        while(slower):
+            try:
+                await self.bot.user.edit(avatar=open("./lib/pic/offline_pfp.png",'rb').read())
+                slower = False
+                break
+            except:
+                await asyncio.sleep(10.0)
+                slower = True
+                
         await self.bot.close()
 
     @commands.command(brief="[LOADER_PREF]")
