@@ -20,7 +20,7 @@ GUILD = os.getenv('DISCORD_GUILD')
 
 owners = [417073119254282240, 386254372646158338]
 
-bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners), intents=discord.Intents.all(), help_command=None)
+bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners), intents=discord.Intents.all(), help_command=None, sync_commands=True)
 #BOTEVENTS
 @bot.event
 async def on_ready():

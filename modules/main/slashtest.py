@@ -7,7 +7,7 @@ class Slashtest(commands.Cog):
         self.bot = bot
 
 
-    @app_commands.command(description="slashtest")
+    @app_commands.command(name="slashtest", description="slashtest")
     async def slashtest(self, interaction: discord.Interaction):
         await interaction.response.send_message("Jo noice")
     
