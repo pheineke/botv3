@@ -2,7 +2,6 @@ asyncio
 collections
 datetime
 discord
-dotenv
 graphviz
 matplotlib
 ollama
