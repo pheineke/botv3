@@ -39,7 +39,7 @@ class Schulden(commands.Cog):
         await ctx.send(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```")
 
     @commands.command(brief="[SCHULDEN] .addschulden @Schuldner Betrag")
-    async def addschulden(self, ctx, user1=None, betrag=None):
+    async def addschulden(self, ctx, user1=None, betrag=None, comment=None):
         try:
             user1 = await commands.MemberConverter().convert(ctx, user1)
             if user1 == ctx.author or user1.id == ctx.author.id or str(ctx.author.name) == str(user1.name) or ctx.author.bot or user1.bot:
@@ -69,7 +69,7 @@ class Schulden(commands.Cog):
                             async def button_callback(interaction:discord.Interaction):
                                 if interaction.user == user1:
                                     try:
-                                        self.schulden_db.schulden_hinzufuegen(user1_str, user0_str, betrag=betrag)
+                                        self.schulden_db.schulden_hinzufuegen(schuldner=user1_str, glaeubiger=user0_str, betrag=betrag, comment=comment)
                                         await ctx.message.add_reaction('✅')
                                         await interaction.response.edit_message(content=f"{user1.name} hat akzeptiert.", view=view1)
                                     except Exception as e:
@@ -94,7 +94,7 @@ class Schulden(commands.Cog):
                                 .add_item(closed_rev_button)
                             view3 = View()\
                                 .add_item(error_button)
-                            await ctx.send(f"{user1.mention} muss akzeptieren:", view=view0)
+                            await ctx.send(f"{user1.mention} muss akzeptieren:\nSchulden in Höhe von \n`{betrag}` an {ctx.author.name}\nKommentar:\n{comment if comment else "-"}", view=view0)
 
                             '''try:
                                 sent_message = await ctx.send(f"{user1.mention} muss die Schulden bestätigen:")
