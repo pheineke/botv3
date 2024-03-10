@@ -81,13 +81,14 @@ async def on_ready():
 
     await bot.change_presence(status=discord.Status.idle)
     await bot.user.edit(avatar=open("./lib/pic/loading.gif",'rb').read())
-    
+
     await create_logdir()
     await Helper().do()
     await load_spine()
     await getmainmodules()
 
     await bot.change_presence(status=discord.Status.online)
+    await bot.user.edit(avatar=open("./lib/pic/normal_pfp.png",'rb').read())
 
     print(f'{"-" * 50}\nConnected Bot: {bot.user.name}\n{"-" * 50}')
 
