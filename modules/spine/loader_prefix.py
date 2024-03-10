@@ -55,7 +55,7 @@ class Loader_prefix(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def gitpull(ctx):
+    async def gitpull(self, ctx):
         # Speichere den aktuellen Pfad
         current_path = os.getcwd() + "/"
 
@@ -73,7 +73,7 @@ class Loader_prefix(commands.Cog):
 
     @commands.command()
     @commands.is_owner()
-    async def modulespull(ctx):
+    async def modulespull(self,ctx):
         # Speichere den aktuellen Pfad
         current_path = os.getcwd() + "/"
 
@@ -95,7 +95,7 @@ class Loader_prefix(commands.Cog):
         else:
             await ctx.send('No cogs loaded.')
 
-    @commands.command(name="sync") 
+    @commands.command() 
     async def sync(self, ctx):
         synced = await self.bot.tree.sync()
         x = f"Synced {len(synced)} command(s)."

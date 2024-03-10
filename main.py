@@ -21,15 +21,17 @@ async def create_logdir():
 
 async def load_spine():
     mainpath = "./modules/spine/"
-    modulliste = [x for x in os.listdir(mainpath) if "_" not in x]
+    modulliste = [x for x in os.listdir(mainpath) if "pycache" not in x]
     mainmodules0 = [("modules.spine."+x[:-3]) for x in modulliste if ".py" in x and not("!" in x)]
+    succeded = []
     for module in mainmodules0:
             try:
                 #print(module)
                 await bot.load_extension(module)
+                succeded.append(module)
             except Exception as d:
                 print(d)
-    print("Spine modules loaded.")
+    print(f"Spine modules loaded. {succeded}")
 
 
 async def getmainmodules():
