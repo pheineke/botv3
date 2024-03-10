@@ -1,3 +1,4 @@
+import subprocess
 import ollama
 from ollama import AsyncClient
 import os
@@ -237,8 +238,10 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
                     except AttributeError as e:
                         await self.loadgame(message.channel)
                         #await self.channel.send(self.game.chat(ingameuser, message))
-                    except Exception as e:
-                        print(e)
+                    except ConnectionRefusedError:
+                        workingpath = os.getcwd() + "/../"
+                        print(workingpath)
+                        #subprocess.run([f"sh {workingpath}"])
 
                 else:
                     await self.channel.send("No Ingame Name!")
