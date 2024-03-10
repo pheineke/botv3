@@ -1,1 +1,3 @@
-print(len("Kasten Spezi mit Späsen hallihalo"))
+x = "-hallo"
+
+print(x[0])
