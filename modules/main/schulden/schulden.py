@@ -1,8 +1,9 @@
+import discord
+from discord import app_commands
+from discord.ext import commands, tasks
+from discord.ui import Button, View
 import asyncio
 import os
-import discord
-from discord.ext import commands
-
 import modules.main.schulden.schuldendb as schuldendb
 
 class Schulden(commands.Cog):
@@ -35,7 +36,7 @@ class Schulden(commands.Cog):
     @commands.command(brief="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, ctx, user1=None, betrag=None):
         self.schulden_db.aktualisieren()
-        if user1 == ctx.author:
+        if not user1:
             await ctx.send("haha sehr witzig")
         else:
             try:
@@ -50,13 +51,46 @@ class Schulden(commands.Cog):
 
                     user0_str = str(ctx.author.name)
                     user1_str = str(user1.name)
-                    print(f"{user0_str} {user1_str}")
-
-                    def check(r: discord.Reaction, u: discord.Member):  # r = discord.Reaction, u = discord.Member or discord.User.
-                        return u.id == user1.id and r.message.channel.id == ctx.channel.id and \
-                            str(r.emoji) == '✅'
                     
-                    try:
+                    accept_button = Button(label="Accept", style=discord.ButtonStyle.blurple)
+                    revoke_button = Button(label="Revoke", style=discord.ButtonStyle.red)
+                    
+                    closed_acc_button = Button(label="✅",style=discord.ButtonStyle.gray, disabled=True)
+                    closed_rev_button = Button(label="🔄",style=discord.ButtonStyle.gray, disabled=True)
+                    closed_none_button = Button(label="_",style=discord.ButtonStyle.gray, disabled=True)
+                    error_button = Button(label="⚠",style=discord.ButtonStyle.gray, disabled=True)
+
+                    async def button_callback(interaction:discord.Interaction):
+                        if interaction.user == user1:
+                            try:
+                                self.schulden_db.schulden_hinzufuegen(user1_str, user0_str, betrag=betrag)
+                                await ctx.message.add_reaction('✅')
+                                await interaction.response.edit_message(content=f"{user1.name} hat akzeptiert.", view=view1)
+                            except Exception as e:
+                                print(f"{e}")
+                                await ctx.message.add_reaction('⚠')
+                                await interaction.response.edit_message(content=f"{user1.guild.name} ERROR", view=view3)
+                    accept_button.callback=button_callback
+                    
+                    async def revoke_callback(interaction:discord.Interaction):
+                        if interaction.user == ctx.author:
+                            await interaction.response.edit_message(content=f"{ctx.author.guild.name} hat widerrufen.", view=view2)                    
+                    revoke_button.callback=revoke_callback
+
+                    view0 = View(timeout=30.0)\
+                        .add_item(accept_button)\
+                        .add_item(revoke_button)
+                    view1 = View()\
+                        .add_item(closed_acc_button)\
+                        .add_item(closed_none_button)
+                    view2 = View()\
+                        .add_item(closed_none_button)\
+                        .add_item(closed_rev_button)
+                    view3 = View()\
+                        .add_item(error_button)
+                    await ctx.send(f"{user1.mention} muss akzeptieren:", view=view0)
+
+                    '''try:
                         sent_message = await ctx.send(f"{user1.mention} muss die Schulden bestätigen:")
                         await sent_message.add_reaction('✅')
 
@@ -75,7 +109,7 @@ class Schulden(commands.Cog):
                         print(f"Ein Fehler ist aufgetreten: {e}")
                     
                     finally:
-                        self.schulden_db.aktualisieren()
+                        self.schulden_db.aktualisieren()'''
             except:
                 await ctx.send("ne den typen gibts net")
         #return f"Alter Betrag: {betrag0} Neuer Betrag: {betrag1}"
