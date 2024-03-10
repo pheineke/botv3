@@ -75,8 +75,8 @@ bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners),
 #BOTEVENTS
 @bot.event
 async def on_ready():
-    activity = discord.Game(name="Starting...", type=3
-                            large_image=)
+    #activity = discord.Game(name="Starting...", type=3,
+    #                        large_image=)
     
     activity2 = discord.Activity(type=discord.ActivityType.playing, 
         large_image = "https://eternallybored.org/imgs/boot/Win7.gif",
