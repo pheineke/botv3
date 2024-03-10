@@ -21,7 +21,7 @@ class Schulden(commands.Cog):
             await ctx.send(schulden)
         else:
             a,b="Schuldner","Gläubiger"
-            returntext = f"{a:14}| > schuldet > | {b:14}| Betrag\n"
+            returntext = f"{a:14}| > schuldet > | {b:14}| Betrag (EUR.CENT)\n"
             for schuldner,gläubiger, betrag in schulden:
                 returntext += f"{schuldner:14}| > -------- > | {gläubiger:14}| {betrag}\n"
             await ctx.send(f"```{returntext}```")
