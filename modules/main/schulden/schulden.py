@@ -48,10 +48,8 @@ class Schulden(commands.Cog):
                 if betrag is None:
                     await ctx.send("nö kein geld")
                 else:
-                    try:
-                        betrag=float(betrag)
-                    except:
-                        await ctx.message.add_reaction('❌')
+                    betrag=float(str(betrag).replace(",","."))
+
 
                     user0_str = str(ctx.author.name)
                     user1_str = str(user1.name)
@@ -115,7 +113,7 @@ class Schulden(commands.Cog):
                     finally:
                         self.schulden_db.aktualisieren()'''
             except:
-                await ctx.send("ne den typen gibts net")
+                await ctx.send("da passt was nicht")
         #return f"Alter Betrag: {betrag0} Neuer Betrag: {betrag1}"
 
 
