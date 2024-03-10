@@ -4,17 +4,9 @@ datetime
 discord
 dotenv
 graphviz
-json
 matplotlib
 ollama
-os
 pathlib
-pickle
 prettytable
-random
 requests
-requests
-sqlite3
-subprocess
-sys
 table2ascii
