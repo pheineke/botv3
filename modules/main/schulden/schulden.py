@@ -84,7 +84,7 @@ class Schulden(commands.Cog):
                                     await interaction.response.edit_message(content=f"{ctx.author.name} hat widerrufen.", view=view2)                    
                             revoke_button.callback=revoke_callback
 
-                            view0 = View(timeout=30.0)\
+                            view0 = View(timeout=30)\
                                 .add_item(accept_button)\
                                 .add_item(revoke_button)
                             view1 = View()\
