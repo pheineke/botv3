@@ -160,14 +160,14 @@ Hi du hast das Tutorial aufgerufen!\n
 Als allererstes musst du dich zusammen mit einem Owner oder Admin vergewissern, dass dieser Channel über den Bot als Outputchannel für das Game gesetzt wurde.
 Falls der Bot schon länger läuft und du schon andere Chats siehst, kannst du diesen Schritt überspringen.\n
 Weiterhin musst du einen Usernamen setzen, mit dem du dich in der Game-Welt identifizierst.
-Dies kannst du über `~setusername "hier-name"` tun.\n
-Falls noch kein Game geladen oder gestartet wurde, kannst du ein neues Spiel mit ~loadgame erstellen.
-Wenn du ein bestehendes Spiel weiterspielen möchtest, rufe `~listgames` auf.
+Dies kannst du über `.setusername "hier-name"` tun.\n
+Falls noch kein Game geladen oder gestartet wurde, kannst du ein neues Spiel mit .loadgame erstellen.
+Wenn du ein bestehendes Spiel weiterspielen möchtest, rufe `.listgames` auf.
 Dieser Command wird dir eine Liste an gespeicherten Spielen zeigen.
-Diese kannst du entweder mit `~downloadgame "hier den namen der txt"` herunterladen oder mit
-`~loadgame "hier den namen der txt"` laden.\n
+Diese kannst du entweder mit `.downloadgame "hier den namen der txt"` herunterladen oder mit
+`.loadgame "hier den namen der txt"` laden.\n
 Der nächste Schritt ist in die Welt eintauchen.\n
-Du kannst in der Welt spielen in dem du `~chat` oder `~c` aufrufst und dahinter deinen Input für das Spiel schreibst.
+Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter deinen Input für das Spiel schreibst.
             ''')
 
 

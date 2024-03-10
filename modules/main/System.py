@@ -12,6 +12,5 @@ class System(commands.Cog):
 
             with open(f"{ctx.channel.name}_messages.txt", "a") as file:
                 file.write(f'{{ "{user_name}" : "{message_content}" }}\n')
-
 async def setup(bot):
     await bot.add_cog(System(bot))

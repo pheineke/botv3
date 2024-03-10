@@ -1,16 +1,15 @@
-import asyncio
-from datetime import datetime
-import os
-import time
-import requests
-import json
 import discord
+from discord import app_commands
 from discord.ext import commands, tasks
+from discord.ui import Button, View
+
+import requests, json
 import matplotlib.pyplot as plt
 import numpy as np
+from datetime import datetime
 
 
-class Fslock(commands.Cog):
+class Fsinfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.main.start()
@@ -78,8 +77,8 @@ class Fslock(commands.Cog):
 
         clean_data('lock-log.txt')
 
-    @commands.command(brief="[FSLOCK] Zeigt opendoor Graph")
-    async def get_diagram(self, ctx, datum0=None, datum1=None):
+    @app_commands.command(name="opendoor_graph", description="[FSINFO] Zeigt opendoor Graph")
+    async def get_diagram(self, ctx, datum0: str=None, datum1:str=None):
         #datum0 = "2024-02-26"
         #datum1 = "2024-02-26"
         # Laden der Daten aus der Datei
@@ -139,5 +138,6 @@ class Fslock(commands.Cog):
             await ctx.send(f"No Data\n```{e}```")
 
 
+
 async def setup(bot):
-    await bot.add_cog(Fslock(bot))
+    await bot.add_cog(Fsinfo(bot))
