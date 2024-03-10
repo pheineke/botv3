@@ -38,7 +38,7 @@ class Schulden(commands.Cog):
 
         await ctx.send(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```")
 
-    @app_commands.command(name="", description="[SCHULDEN] .addschulden @Schuldner Betrag")
+    @app_commands.command(name="addschulden", description="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag=None, comment=None):
         try:
             if user1 == interaction.author or user1.id == interaction.author.id or str(interaction.author.name) == str(user1.name) or interaction.author.bot or user1.bot:
@@ -56,6 +56,7 @@ class Schulden(commands.Cog):
                         elif len(comment) > 100:
                             await interaction.response.send_message("Kommentar darf nicht mehr als 100 Zeichen enthalten.")
                         else:
+                            message = await interaction.original_response()
                             user0_str = str(interaction.author.name)
                             user1_str = str(user1.name)
                             
@@ -72,9 +73,11 @@ class Schulden(commands.Cog):
                                     try:
                                         self.schulden_db.schulden_hinzufuegen(schuldner=user1_str, glaeubiger=user0_str, betrag=betrag, comment=comment)
                                         await interaction.response.edit_message(content=f"{user1.name} hat akzeptiert.", view=view1)
+                                        message.add_reaction('✅')
                                     except Exception as e:
                                         print(f"{e}")
                                         await interaction.response.edit_message(content=f"{user1.name} ERROR", view=view3)
+                                        message.add_reaction('⚠')
                             accept_button.callback=button_callback
 
                             async def revoke_callback(interaction:discord.Interaction):
