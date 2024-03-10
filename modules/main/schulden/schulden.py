@@ -16,11 +16,15 @@ class Schulden(commands.Cog):
     @commands.is_owner()
     async def allschulden(self,ctx):
         schulden = self.schulden_db.alle_schulden_anzeigen()
-        a,b="Schuldner","Gläubiger"
-        returntext = f"{a:14}| {b:14}| Betrag\n"
-        for schuldner,gläubiger, betrag in schulden:
-            returntext += f"{schuldner:14}| {gläubiger:14}| {betrag}\n"
-        await ctx.send(f"```{returntext}```")
+        if type(schulden) != list:
+            await ctx.send(schulden)
+        else:
+            a,b="Schuldner","Gläubiger"
+            returntext = f"{a:14}| {b:14}| Betrag\n"
+
+            for schuldner,gläubiger, betrag in schulden:
+                returntext += f"{schuldner:14}| {gläubiger:14}| {betrag}\n"
+            await ctx.send(f"```{returntext}```")
 
     @commands.command(brief="[SCHULDEN] Zeige Schuldenverhältnisse von dir an")
     async def getschulden(self, ctx):
