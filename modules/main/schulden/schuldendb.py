@@ -87,7 +87,7 @@ class Schuldenverwaltung:
 
     def aktualisieren(self):
         liste = self.alle_schulden_anzeigen()
-        if liste is None:
+        if type(liste) is not list:
             return
         else:
             usera = None
