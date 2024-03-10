@@ -10,7 +10,7 @@ class Help(commands.Cog):
 
     @commands.command()
     async def help(self, ctx):
-        command_info = []  # Declare command_info outside the loop
+        command_info = {}  # Use a dictionary to store commands categorized by brief category
         for cog in self.bot.cogs.values():
             if isinstance(cog, commands.Cog):
                 commands_list = cog.get_commands()
@@ -20,11 +20,20 @@ class Help(commands.Cog):
                         commandbrief = str(command.brief)
                         briefcategory, commandbrief = commandbrief.split("]") if "]" in commandbrief else ("", None)
                         short_description = commandbrief or "Keine kurze Beschreibung verfügbar."
-                        command_info += f"`{command.name}` - {short_description}\n"  # Accumulate command_info properly
-        if command_info:  # Check if command_info is not empty before sending
-            await ctx.send(command_info)
+                        if briefcategory not in command_info:
+                            command_info[briefcategory] = []
+                        command_info[briefcategory].append(f"`{command.name}` - {short_description}")
+
+        # Sort the command descriptions by brief category
+        sorted_command_info = sorted(command_info.items(), key=lambda x: x[0])
+
+        if sorted_command_info:  # Check if sorted_command_info is not empty before sending
+            for category, commands_ in sorted_command_info:
+                formatted_category = category.strip("[")
+                await ctx.send(f"**{formatted_category}**\n" + "\n".join(commands_))
         else:
             await ctx.send("No commands found.")
+
 
     @app_commands.command(name="help", description="Help-Message")
     async def help_(self, interaction: discord.Interaction):
