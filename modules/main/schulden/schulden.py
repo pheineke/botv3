@@ -114,6 +114,8 @@ class Schulden(commands.Cog):
                         self.schulden_db.aktualisieren()'''
             except:
                 await ctx.send("da passt was nicht")
+            finally:
+                self.schulden_db.aktualisieren()
         #return f"Alter Betrag: {betrag0} Neuer Betrag: {betrag1}"
 
 
