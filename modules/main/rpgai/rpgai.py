@@ -236,6 +236,7 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
                         await self.channel.send(self.game.chat(ingameuser, message))
                     except AttributeError as e:
                         await self.loadgame(message.channel)
+                        #await self.channel.send(self.game.chat(ingameuser, message))
                     except Exception as e:
                         print(e)
 
