@@ -9,8 +9,9 @@ class Help(commands.Cog):
         self.bot = bot
 
     @commands.command()
-    async def help(self, ctx):
+    async def help(self, ctx, arg=None):
         command_info = {}  # Use a dictionary to store commands categorized by brief category
+        briefcategories = []
         for cog in self.bot.cogs.values():
             if isinstance(cog, commands.Cog):
                 commands_list = cog.get_commands()
@@ -19,10 +20,13 @@ class Help(commands.Cog):
                     for command in commands_list:
                         commandbrief = str(command.brief)
                         briefcategory, commandbrief = commandbrief.split("]") if "]" in commandbrief else ("", None)
+                        briefcategories.append(briefcategory)
+
                         short_description = commandbrief or "Keine kurze Beschreibung verfügbar."
                         if briefcategory not in command_info:
                             command_info[briefcategory] = []
                         command_info[briefcategory].append(f"`{command.name}` - {short_description}")
+
 
         # Sort the command descriptions by brief category
         sorted_command_info = sorted(command_info.items(), key=lambda x: x[0])
