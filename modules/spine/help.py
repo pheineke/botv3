@@ -53,12 +53,16 @@ class Help(commands.Cog):
         command_info = {}  # Use a dictionary to store commands categorized by brief category
         briefcategories = []
         for cog in self.bot.cogs.values():
-            if isinstance(cog, commands.Cog):
+            if isinstance(cog, commands.Cog) or isinstance(cog, app_commands):
                 commands_list = cog.get_commands()
+                commands_list += await self.bot.tree.get_commands(type=discord.AppCommandType.chat_input)
                 if commands_list:
                     cog_name = cog.qualified_name if cog.qualified_name else "No Category"
                     for command in commands_list:
-                        commandbrief = str(command.brief)
+                        try:
+                            commandbrief = str(command.brief)
+                        except:
+                            commandbrief = str(command.description)
                         briefcategory, commandbrief = commandbrief.split("]") if "]" in commandbrief else ("_", None)
                         briefcategories.append(briefcategory)
 

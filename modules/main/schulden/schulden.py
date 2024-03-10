@@ -96,7 +96,7 @@ class Schulden(commands.Cog):
                                 .add_item(closed_rev_button)
                             view3 = View()\
                                 .add_item(error_button)
-                            await ctx.send(f"{user1.mention} muss akzeptieren:\nSchulden in Höhe von \n`{betrag}` an {ctx.author.name}\nKommentar:\n{comment if comment else "-"}", view=view0)
+                            await ctx.send(f"{user1.mention} muss akzeptieren:\nSchulden in Höhe von \n`{betrag}` an {ctx.author.name}\nKommentar:\n{comment or "-"}", view=view0)
 
                             '''try:
                                 sent_message = await ctx.send(f"{user1.mention} muss die Schulden bestätigen:")
