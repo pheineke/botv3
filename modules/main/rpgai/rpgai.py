@@ -239,6 +239,8 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
                         await self.loadgame(message.channel)
                         #await self.channel.send(self.game.chat(ingameuser, message))
                     except Exception as e:
+                        if isinstance(e, ConnectionError):
+                            print("halihalo")
                         workingpath = os.getcwd() + "/../AI/ollama-linux-amd64"
                         with open("logloglog", "a") as file:
                             file.write(str(e))
