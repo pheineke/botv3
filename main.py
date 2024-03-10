@@ -6,9 +6,11 @@ from discord import app_commands
 from discord.ext import commands, tasks
 from discord.ui import Button, View
 
-import os, sys
+import os, sys, subprocess
 from dotenv import load_dotenv
 from datetime import datetime
+
+from main_helper import Helper
 
 
 async def create_logdir():
@@ -18,6 +20,9 @@ async def create_logdir():
         print("Der 'logs' Ordner wurde erstellt.")
     else:
         print("Der 'logs' Ordner existiert bereits.")
+
+
+
 
 async def load_spine():
     mainpath = "./modules/spine/"
@@ -71,6 +76,7 @@ bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners),
 @bot.event
 async def on_ready():
     await create_logdir()
+    Helper().do()
     await load_spine()
     await getmainmodules()
 
