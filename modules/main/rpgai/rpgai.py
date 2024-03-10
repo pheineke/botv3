@@ -237,11 +237,13 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
                     except AttributeError as e:
                         await self.loadgame(message.channel)
                         await self.channel.send(self.game.chat(ingameuser, message))
-                    except httpx.ConnectError:
-                        command = "./../AI/ollama-linux-amd64 serve"
-                        response = subprocess.run(command, shell=True, capture_output=True, check=True)
-                        print(response)
-                        await self.channel.send(self.game.chat(ingameuser, message))
+                    except Exception as e:
+                        if "httpx.ConnectError: [Errno 111] Connection refused" in e:
+                            print("yes")
+                            command = "./../AI/ollama-linux-amd64 serve"
+                            response = subprocess.run(command, shell=True, capture_output=True, check=True)
+                            print(response)
+                            await self.channel.send(self.game.chat(ingameuser, message))
                 else:
                     await self.channel.send("No Ingame Name!")
                 
