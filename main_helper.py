@@ -20,7 +20,7 @@ class Helper():
             except FileNotFoundError:
                 print(f"Die Datei '{self.requirementspath}' wurde nicht gefunden.")
 
-    def install_requirements_if_missing(self):
+    async def install_requirements_if_missing(self):
         try:
             # Öffne die requirements.txt-Datei und lies die Anforderungen
             with open(self.requirementspath, "r") as file:
@@ -50,6 +50,6 @@ class Helper():
         except FileNotFoundError:
             print(f"Die Datei '{self.requirementspath}' wurde nicht gefunden.")
 
-    def do(self):
+    async def do(self):
         self.sort_requirements()
-        self.install_requirements_if_missing()
+        await self.install_requirements_if_missing()

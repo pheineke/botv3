@@ -76,7 +76,7 @@ bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners),
 @bot.event
 async def on_ready():
     await create_logdir()
-    Helper().do()
+    await Helper().do()
     await load_spine()
     await getmainmodules()
 
