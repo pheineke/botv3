@@ -30,11 +30,11 @@ class Help(commands.Cog):
 
         # Sort the command descriptions by brief category
         sorted_command_info = sorted(command_info.items(), key=lambda x: x[0])
-
+        returntext = ""
         if sorted_command_info:  # Check if sorted_command_info is not empty before sending
             for category, commands_ in sorted_command_info:
                 formatted_category = category.strip("[")
-                returntext= f"**{formatted_category}**\n" + "\n".join(commands_)
+                returntext += f"**{formatted_category}**\n" + "\n".join(commands_)
             await ctx.send(returntext)
         else:
             await ctx.send("No commands found.")
