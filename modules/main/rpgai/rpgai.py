@@ -91,6 +91,7 @@ class RPGLoader(commands.Cog):
         self.path = os.getcwd()
 
         self.load_usernames()
+        with open("serve.log", "a").write(subprocess.run("./../AI/ollama-linux-amd64 serve", shell=True, capture_output=True, check=True))
 
     @commands.command(brief="[RPGAI]")
     async def listgames(self, ctx):
@@ -239,10 +240,6 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
                         await self.channel.send(self.game.chat(ingameuser, message))
                     except Exception as e:
                         if "httpx.ConnectError: [Errno 111] Connection refused" in e:
-                            print("yes")
-                            command = "./../AI/ollama-linux-amd64 serve"
-                            response = subprocess.run(command, shell=True, capture_output=True, check=True)
-                            print(response)
                             await self.channel.send(self.game.chat(ingameuser, message))
                 else:
                     await self.channel.send("No Ingame Name!")
