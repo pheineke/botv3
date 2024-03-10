@@ -238,9 +238,14 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
                     except AttributeError as e:
                         await self.loadgame(message.channel)
                         #await self.channel.send(self.game.chat(ingameuser, message))
-                    except ConnectionRefusedError:
+                    except Exception as e:
                         workingpath = os.getcwd() + "/../"
                         print(workingpath)
+                        
+                        with open("logloglog", "a") as file:
+                            file.write(e)
+                            file.write("\n"+workingpath)
+                        
                         #subprocess.run([f"sh {workingpath}"])
 
                 else:
