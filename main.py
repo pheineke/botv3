@@ -93,6 +93,7 @@ async def on_ready():
         if loaded:
             await bot.change_presence(status=discord.Status.online)
             await bot.user.edit(avatar=open("./lib/pic/normal_pfp.png",'rb').read())
+        asyncio.wait(10.0)
 
 
 
