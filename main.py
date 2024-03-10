@@ -79,13 +79,10 @@ bot = commands.Bot(command_prefix = ["my.", "xs.","."], owner_ids = set(owners),
 async def on_ready():
     #activity = discord.Game(name="Starting...", type=3,
     #                        large_image=)
-    while(True):
-        try:
-            await bot.change_presence(status=discord.Status.idle)
-            await bot.user.edit(avatar=open("./lib/pic/loading.gif",'rb').read())
-            break
-        except:
-            await asyncio.sleep(10.0)
+
+    await bot.change_presence(status=discord.Status.idle)
+    await bot.user.edit(avatar=open("./lib/pic/loading.gif",'rb').read())
+
 
     await create_logdir()
     await Helper().do()
@@ -96,7 +93,6 @@ async def on_ready():
         if loaded:
             await bot.change_presence(status=discord.Status.online)
             await bot.user.edit(avatar=open("./lib/pic/normal_pfp.png",'rb').read())
-            break
 
 
 
