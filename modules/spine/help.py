@@ -8,6 +8,22 @@ class Help(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
+    @commands.command(brief="Help")
+    async def help(self, ctx):
+        command_info = ""  # Declare command_info outside the loop
+        for cog in self.bot.cogs.values():
+            if isinstance(cog, commands.Cog):
+                commands_list = cog.get_commands()
+                if commands_list:
+                    cog_name = cog.qualified_name if cog.qualified_name else "No Category"
+                    for command in commands_list:
+                        short_description = command.brief or "Keine kurze Beschreibung verfügbar."
+                        command_info += f"`{command.name}` - {short_description}\n"  # Accumulate command_info properly
+        if command_info:  # Check if command_info is not empty before sending
+            await ctx.send(command_info)
+        else:
+            await ctx.send("No commands found.")
+
     @app_commands.command(name="help", description="Help-Message")
     async def help(self, interaction: discord.Interaction):
         command_info = ""  # Declare command_info outside the loop
@@ -35,6 +51,7 @@ class Help(commands.Cog):
             .add_item(button2)\
             .add_item(button3)
         await interaction.response.send("**Nützliche Seiten:**", view=view, ephemeral=True)
+
 
 async def setup(bot):
     await bot.add_cog(Help(bot))
