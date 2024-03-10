@@ -38,7 +38,7 @@ class Schulden(commands.Cog):
 
         await ctx.send(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```")
 
-    @commands.command(brief="[SCHULDEN] .addschulden @Schuldner Betrag")
+    @app_commands.command(name="", description="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag=None, comment=None):
         try:
             if user1 == interaction.author or user1.id == interaction.author.id or str(interaction.author.name) == str(user1.name) or interaction.author.bot or user1.bot:
