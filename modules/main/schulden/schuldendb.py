@@ -9,8 +9,8 @@ class Schuldenverwaltung:
         self.c = self.conn.cursor()
         self.create_table()
 
-        self.conn_log = sqlite3.connect("schulden_log.db")
-        self.c_log = self.conn_log.cursor()
+        # self.conn_log = sqlite3.connect("schulden_log.db")
+        # self.c_log = self.conn_log.cursor()
         self.create_log()
 
     def create_table(self):
@@ -23,7 +23,7 @@ class Schuldenverwaltung:
         self.conn.commit()
 
     def create_log(self):
-        self.c_log.execute('''CREATE TABLE IF NOT EXISTS transaction_log (
+        self.c.execute('''CREATE TABLE IF NOT EXISTS transaction_log (
                             id INTEGER PRIMARY KEY,
                             aktion TEXT NOT NULL,
                             schuldner TEXT NOT NULL,
@@ -32,13 +32,13 @@ class Schuldenverwaltung:
                             zeit TEXT NOT NULL,
                             comment TEXT NOT NULL
                          )''')
-        self.conn_log.commit()
+        self.conn.commit()
 
     def log_transaction(self, aktion, schuldner, glaeubiger, betrag, comment=""):
         zeit = time.strftime('%Y-%m-%d %H:%M:%S')
-        self.c_log.execute("INSERT INTO transaction_log (aktion, schuldner, glaeubiger, betrag, zeit, comment) VALUES (?, ?, ?, ?, ?, ?)",
+        self.c.execute("INSERT INTO transaction_log (aktion, schuldner, glaeubiger, betrag, zeit, comment) VALUES (?, ?, ?, ?, ?, ?)",
                             (aktion, schuldner, glaeubiger, betrag, zeit, comment))
-        self.conn_log.commit()
+        self.conn.commit()
 
     def backup_database(self, backup_filename=f"backup_{datetime.now()}.db"):
     # Kopiere die aktuelle Datenbankdatei
