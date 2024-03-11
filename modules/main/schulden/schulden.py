@@ -50,6 +50,7 @@ class Schulden(commands.Cog):
                     if "." in betrag:
                         betragteile = betrag.split(".")
                     try:
+                        print(betragteile)
                         if len(betragteile[1]) > 2:
                             raise Exception 
                     except:
