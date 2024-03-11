@@ -95,6 +95,6 @@ class Dominascrp(commands.Cog):
             
             interaction.response.send_message()
 
-async def setup(client):
-    await client.add_cog(Dominascrp(client))
+async def setup(bot):
+    await bot.add_cog(Dominascrp(bot))
 
