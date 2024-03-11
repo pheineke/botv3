@@ -3,7 +3,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests,os
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup as bs 
@@ -80,38 +80,49 @@ class Dominascrp(commands.Cog):
         return overview, tabelle
 
 
-    def filter_by_timespan(start_date, end_date, sorted_data):
-        returndata = {}
-        for key, value in sorted_data.items():
-            date_obj = datetime.strptime(key, '%d.%m.%Y %H:%M')
-            if start_date <= date_obj <= end_date:
-                returndata[key] = value
-
-        return returndata
+    
     
     @app_commands.command(name="wohnheimsperre", description="Zeig Sperrstatus eines Apartments")
-    async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, vonMonat:int=None, bisMonat:int=None):
-        if not(vonMonat and bisMonat):
-            def check_format(string):
+    async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, days:str=None):
+        def check_format(string):
                 pattern = r'^[A-Z]-\d{3}$'
                 if re.match(pattern, string):
                     getint = string.split('-')
                     return (0 < int(getint[1]) < 1000)
                 else:
                     return False
-            if check_format(apartment):
-                try:
-                    overview,tabelle = self.scraper(apartment=apartment)
-                except:
-                    interaction.response.send_message("Either false Apart. or Website not reachable", ephemeral=True)
-            else:
-                interaction.response.send_message("Wrong Apart. Format", ephemeral=True)
+                
+        def filter_last_x_days(x, data):
+            returndata = ""
+            end_date = datetime.now()  # Aktuelles Datum
+            start_date = end_date - timedelta(days=x)  # Berechne Startdatum
+            for key, value in data.items():
+                date_obj = datetime.strptime(key, '%d.%m.%Y %H:%M')
+                if start_date <= date_obj <= end_date:
+                    temp_dict = {}
+                    temp_dict[key] = value
+                    returndata += f"{temp_dict}\n"
 
+            return returndata
+
+        if check_format(apartment):
+            try:
+                overview,tabelle = self.scraper(apartment=apartment)
+            except:
+                interaction.response.send_message("Either false Apart. or Website not reachable", ephemeral=True)
+
+            if days:
+                tabelle_new = filter_last_x_days(days, tabelle)
+            else:
+                tabelle_new = tabelle
+                
             embed=discord.Embed(title="APART")
             embed.add_field(name="Overview:", value=pprint.pformat(overview), inline=False)
-            embed.add_field(name="TABLE", value=tabelle, inline=False)
-                           
+            embed.add_field(name="TABLE", value=tabelle_new, inline=False)
+                        
             interaction.response.send_message(embed=embed)
+        else:
+            interaction.response.send_message("Wrong Apart. Format", ephemeral=True)
 
 async def setup(bot):
     await bot.add_cog(Dominascrp(bot))

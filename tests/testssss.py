@@ -1,3 +1,4 @@
+from datetime import datetime
 import re
 def check_format(string):
     pattern = r'^[A-Z]-\d{3}$'
@@ -9,3 +10,6 @@ def check_format(string):
 
     
 print(check_format("A-999"))
+
+year = datetime.now().year
+print(year)
