@@ -47,10 +47,11 @@ class Schulden(commands.Cog):
                 try:
                     if "," in betrag:
                         betrag.replace(",",".")
-                    try:
+                    if "." in betrag:
                         betragteile = betrag.split(".")
+                    try:
                         if len(betragteile[1]) > 2:
-                            raise Exception
+                            raise Exception 
                     except:
                         await interaction.response.send_message("Betrag muss zwei Nachkommastellen haben",ephemeral=True)
                     try:
