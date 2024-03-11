@@ -18,13 +18,13 @@ class Schulden(commands.Cog):
             self.schulden_db.aktualisieren()
             schulden = self.schulden_db.alle_schulden_anzeigen()
             if type(schulden) != list:
-                await interaction.response.send(schulden)
+                await interaction.response.send_message(schulden)
             else:
                 a,b="Schuldner","Gläubiger"
                 returntext = f"{a:14}| > schuldet > | {b:14}| Betrag (EUR.CENT)\n"
                 for schuldner,gläubiger, betrag in schulden:
                     returntext += f"{schuldner:14}| > -------- > | {gläubiger:14}| {betrag}\n"
-                await interaction.response.send(f"```{returntext}```")
+                await interaction.response.send_message(f"```{returntext}```")
 
     @app_commands.command(name="getschulden", description="[SCHULDEN] Zeige Schuldenverhältnisse von dir an")
     async def getschulden(self, interaction:discord.Interaction):
@@ -36,7 +36,7 @@ class Schulden(commands.Cog):
         eigene_schulden = eig if eig != "Keine Schulden gefunden." else None
         fremd_schulden = fremd if fremd != "Keine Schulden gefunden." else None
 
-        await interaction.response.send(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```")
+        await interaction.response.send_message(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```")
 
     @app_commands.command(name="addschulden", description="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag:str=None, comment:str=None):
@@ -99,7 +99,7 @@ class Schulden(commands.Cog):
                             
                             comment = comment or "-"
                             returntext = f"{user1.mention} muss akzeptieren:\nSchulden in Höhe von \n`{betrag}` an {interaction.user.name}\nKommentar:\n{comment}"
-                            await interaction.response.send(returntext, view=view0)
+                            await interaction.response.send_message(returntext, view=view0)
 
                             '''try:
                                 sent_message = await ctx.send(f"{user1.mention} muss die Schulden bestätigen:")
