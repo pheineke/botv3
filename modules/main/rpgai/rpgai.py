@@ -225,46 +225,25 @@ Du kannst in der Welt spielen in dem du `.chat` oder `.c` aufrufst und dahinter 
         else:
             await self.channel.send("No Ingame Name!")'''
 
-    async def check_for_webhook(self, ctx, hookname):
-        # Überprüfe, ob in diesem Channel bereits ein Webhook existiert
-        existing_webhooks = await ctx.channel.webhooks()
-        webhook = None
-
-        for existing in existing_webhooks:
-            if existing.name == hookname:
-                webhook = existing
-                print("Es exisitiert ein Webhook")
-                break
-
-        # Wenn kein Webhook gefunden wurde, erstelle einen neuen
-        if webhook is None:
-            webhook = await ctx.channel.create_webhook(name=hookname)
-            print("Es exisitiert kein Webhook -> Wurde ein Neuer erstellt.")
-        return webhook
-
     @commands.Cog.listener()
     async def on_message(self,message):
         if (isinstance(message.channel, discord.channel.DMChannel) or message.channel.id == self.channel_id) and not(message.author.bot):
-            if message.content[0] in ["+","-",".","[","/"]:
+            if message.content[0] in ["+","-",".","[",]:
                 return
             elif not any(str(element) in message.content for element in self.get_commands()):
                 if message.author.name in self.users:
                     ingameuser = self.users[message.author.name]
-                    webhook = await self.check_for_webhook(message, self.bot.user.name)
                     try:
-                        
-                        webhookmsg = await webhook.send(content=self.game.chat(ingameuser, message), avatar_url="https://cdn-icons-png.flaticon.com/512/2619/2619285.png", username="GAME", wait=True)
+                        await self.channel.send(self.game.chat(ingameuser, message))
                     except AttributeError as e:
                         await self.loadgame(message.channel)
-                        webhookmsg = await webhook.send(content=self.game.chat(ingameuser, message), avatar_url="https://cdn-icons-png.flaticon.com/512/2619/2619285.png", username="GAME", wait=True)
+                        await self.channel.send(self.game.chat(ingameuser, message))
                     except Exception as e:
                         if "httpx.ConnectError: [Errno 111] Connection refused" in e:
-                            webhookmsg = await webhook.send(content=self.game.chat(ingameuser, message), avatar_url="https://cdn-icons-png.flaticon.com/512/2619/2619285.png", username="GAME", wait=True)
+                            await self.channel.send(self.game.chat(ingameuser, message))
                 else:
                     await self.channel.send("No Ingame Name!")
-
-    
-
+                
 
 async def setup(client):
     await client.add_cog(RPGLoader(client))
