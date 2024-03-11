@@ -47,8 +47,11 @@ class Schulden(commands.Cog):
                 try:
                     if "," in betrag:
                         betrag.replace(",",".")
-                    if "." in betrag:
                         betragteile = betrag.split(".")
+                    elif "." in betrag:
+                        betragteile = betrag.split(".")
+                    else:
+                        betrag += ".00"
                     try:
                         print(betragteile)
                         if len(betragteile[1]) > 2:
