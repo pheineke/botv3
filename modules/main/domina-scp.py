@@ -1,3 +1,4 @@
+import re
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -91,9 +92,26 @@ class Dominascrp(commands.Cog):
     @app_commands.command(name="wohnheimsperre")
     async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, vonMonat:int=None, bisMonat:int=None):
         if not(vonMonat and bisMonat):
-            overview,tabelle = self.scraper(apartment=apartment)
-            
-            interaction.response.send_message()
+            def check_format(string):
+                pattern = r'^[A-Z]-\d{3}$'
+                if re.match(pattern, string):
+                    getint = string.split('-')
+                    return (0 < int(getint[1]) < 1000)
+                else:
+                    return False
+            if check_format(apartment):
+                try:
+                    overview,tabelle = self.scraper(apartment=apartment)
+                except:
+                    interaction.response.send_message("Either false Apart. or Website not reachable", ephemeral=True)
+            else:
+                interaction.response.send_message("Wrong Apart. Format", ephemeral=True)
+
+            embed=discord.Embed(title="APART")
+            embed.add_field(name="Overview:", value=pprint.pformat(overview), inline=False)
+            embed.add_field(name="TABLE", value=tabelle, inline=False)
+                           
+            interaction.response.send_message(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Dominascrp(bot))
