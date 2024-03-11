@@ -40,8 +40,8 @@ class Schulden(commands.Cog):
 
     @app_commands.command(name="addschulden", description="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag:str=None, comment:str=None):
-        try:
-            if user1 == interaction.user or user1.id == interaction.user.id or str(interaction.user.name) == str(user1.name) or interaction.user.bot or user1.bot:
+        try: # user1 == interaction.user or user1.id == interaction.user.id or str(interaction.user.name) == str(user1.name) or 
+            if interaction.user.bot or user1.bot:
                 await interaction.response.send_message("haha sehr witzig", ephemeral=True)
             else:
                 try:
@@ -122,9 +122,9 @@ class Schulden(commands.Cog):
                             finally:
                                 self.schulden_db.aktualisieren()'''
                 except:
-                    await interaction.response.send("da passt was nicht", ephemeral=True)
+                    await interaction.response.send_message("da passt was nicht", ephemeral=True)
         except:
-            await interaction.response.send("User not found", ephemeral=True)
+            await interaction.response.send_message("User not found", ephemeral=True)
         self.schulden_db.aktualisieren()
         #return f"Alter Betrag: {betrag0} Neuer Betrag: {betrag1}"
 
