@@ -68,7 +68,6 @@ class Schulden(commands.Cog):
                         if len(comment) > 100:
                             await interaction.response.send_message("Kommentar darf nicht mehr als 100 Zeichen enthalten.")
                     else:
-                        message = await interaction.original_response()
                         user0_str = str(interaction.user.name)
                         user1_str = str(user1.name)
                         
@@ -85,11 +84,9 @@ class Schulden(commands.Cog):
                                 try:
                                     self.schulden_db.schulden_hinzufuegen(schuldner=user1_str, glaeubiger=user0_str, betrag=betrag, comment=comment)
                                     await interaction.response.edit_message(content=f"{user1.name} hat akzeptiert.", view=view1)
-                                    message.add_reaction('✅')
                                 except Exception as e:
                                     print(f"{e}")
                                     await interaction.response.edit_message(content=f"{user1.name} ERROR", view=view3)
-                                    message.add_reaction('⚠')
                         accept_button.callback=button_callback
 
                         async def revoke_callback(interaction:discord.Interaction):
