@@ -36,7 +36,7 @@ class Schulden(commands.Cog):
         eigene_schulden = eig if eig != "Keine Schulden gefunden." else None
         fremd_schulden = fremd if fremd != "Keine Schulden gefunden." else None
 
-        await interaction.response.send_message(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```")
+        await interaction.response.send_message(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```", ephemeral=True)
 
     @app_commands.command(name="addschulden", description="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag:str=None, comment:str=None):
