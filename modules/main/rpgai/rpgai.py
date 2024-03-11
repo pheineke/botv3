@@ -91,8 +91,7 @@ class RPGLoader(commands.Cog):
         self.path = os.getcwd()
 
         self.load_usernames()
-        with open("serve.log", "a") as file:
-            file.write(subprocess.run("./../AI/ollama-linux-amd64 serve", shell=True, capture_output=True, check=True))
+        subprocess.run("./../AI/ollama-linux-amd64 serve", shell=True, capture_output=True, check=True)
 
     @commands.command(brief="[RPGAI]")
     async def listgames(self, ctx):
