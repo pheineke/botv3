@@ -40,13 +40,23 @@ class Schulden(commands.Cog):
 
     @app_commands.command(name="addschulden", description="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag:str, comment:str=None):
-        print(type(betrag))
         try: # user1 == interaction.user or user1.id == interaction.user.id or str(interaction.user.name) == str(user1.name) or 
             if interaction.user.bot or user1.bot:
                 await interaction.response.send_message("haha sehr witzig", ephemeral=True)
             else:
                 try:
-                    betrag=round(float(str(betrag).replace(",",".")),2)
+                    if "," in betrag:
+                        betrag.replace(",",".")
+                    try:
+                        betragteile = betrag.split(".")
+                        if len(betragteile[1]) > 2:
+                            raise Exception
+                    except:
+                        await interaction.response.send_message("Betrag muss zwei Nachkommastellen haben",ephemeral=True)
+                    try:
+                        betrag=round(float(betrag),2)
+                    except:
+                        await interaction.response.send_message("Betrag kann nicht zu einer Zahl konvertiert werden.",ephemeral=True)
                     if betrag < 0.0:
                         await interaction.response.send_message("negative Schulden sind illegal hab ich beschlossen", ephemeral=True)
                     elif betrag > 500.0:
