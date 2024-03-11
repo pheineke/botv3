@@ -40,7 +40,7 @@ class Schulden(commands.Cog):
 
     @app_commands.command(name="addschulden", description="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag:str, comment:str=None):
-        print(betrag)
+        print(type(betrag))
         try: # user1 == interaction.user or user1.id == interaction.user.id or str(interaction.user.name) == str(user1.name) or 
             if interaction.user.bot or user1.bot:
                 await interaction.response.send_message("haha sehr witzig", ephemeral=True)
