@@ -40,6 +40,9 @@ class Schulden(commands.Cog):
 
     @app_commands.command(name="addschulden", description="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag:str, comment:str=None):
+        message_author = interaction.user
+        message_author_id = message_author.id
+        user1_name = user1.name
         try: # user1 == interaction.user or user1.id == interaction.user.id or str(interaction.user.name) == str(user1.name) or 
             if interaction.user.bot or user1.bot:
                 await interaction.response.send_message("haha sehr witzig", ephemeral=True)
@@ -90,7 +93,7 @@ class Schulden(commands.Cog):
                         accept_button.callback=button_callback
 
                         async def revoke_callback(interaction:discord.Interaction):
-                            if interaction.user == interaction.author:
+                            if interaction.user == message_author:
                                 await interaction.response.edit_message(content=f"{interaction.author.name} hat widerrufen.", view=view2)                    
                         revoke_button.callback=revoke_callback
 
