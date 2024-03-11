@@ -89,7 +89,7 @@ class Dominascrp(commands.Cog):
 
         return returndata
     
-    @app_commands.command(name="wohnheimsperre")
+    @app_commands.command(name="wohnheimsperre", description="Zeig Sperrstatus eines Apartments")
     async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, vonMonat:int=None, bisMonat:int=None):
         if not(vonMonat and bisMonat):
             def check_format(string):
