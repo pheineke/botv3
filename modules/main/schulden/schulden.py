@@ -29,7 +29,7 @@ class Schulden(commands.Cog):
     @app_commands.command(name="getschulden", description="[SCHULDEN] Zeige Schuldenverhältnisse von dir an")
     async def getschulden(self, interaction:discord.Interaction):
         self.schulden_db.aktualisieren()
-        user0 = interaction.author.name
+        user0 = interaction.message.author.name
         eig = self.schulden_db.schulden_anzeigen(schuldner=user0)
         fremd = self.schulden_db.schulden_anzeigen(glaeubiger=user0)
         
