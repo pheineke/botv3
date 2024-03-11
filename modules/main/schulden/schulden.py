@@ -44,8 +44,8 @@ class Schulden(commands.Cog):
         message_author_name = message_author.name
         message_author_id = message_author.id
         user1_name = user1.name
-        try: # user1 == interaction.user or user1.id == interaction.user.id or str(interaction.user.name) == str(user1.name) or 
-            if interaction.user.bot or user1.bot:
+        try: # 
+            if (user1 == message_author or user1.id == message_author_id or str(message_author_name) == str(user1_name)) and (interaction.user.bot or user1.bot):
                 await interaction.response.send_message("haha sehr witzig", ephemeral=True)
             else:
                 try:
