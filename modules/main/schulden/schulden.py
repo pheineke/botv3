@@ -29,7 +29,7 @@ class Schulden(commands.Cog):
     @app_commands.command(name="getschulden", description="[SCHULDEN] Zeige Schuldenverhältnisse von dir an")
     async def getschulden(self, interaction:discord.Interaction):
         self.schulden_db.aktualisieren()
-        user0 = interaction.message.author.name
+        user0 = interaction.user.name
         eig = self.schulden_db.schulden_anzeigen(schuldner=user0)
         fremd = self.schulden_db.schulden_anzeigen(glaeubiger=user0)
         
@@ -41,7 +41,7 @@ class Schulden(commands.Cog):
     @app_commands.command(name="addschulden", description="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag:str=None, comment:str=None):
         try:
-            if user1 == interaction.message.author or user1.id == interaction.message.author.id or str(interaction.message.author.name) == str(user1.name) or interaction.message.author.bot or user1.bot:
+            if user1 == interaction.user or user1.id == interaction.user.id or str(interaction.user.name) == str(user1.name) or interaction.user.bot or user1.bot:
                 await interaction.response.send_message("haha sehr witzig", ephemeral=True)
             else:
                 try:
@@ -57,7 +57,7 @@ class Schulden(commands.Cog):
                             await interaction.response.send_message("Kommentar darf nicht mehr als 100 Zeichen enthalten.")
                         else:
                             message = await interaction.original_response()
-                            user0_str = str(interaction.message.author.name)
+                            user0_str = str(interaction.user.name)
                             user1_str = str(user1.name)
                             
                             accept_button = Button(label="Accept", style=discord.ButtonStyle.blurple)
@@ -98,7 +98,7 @@ class Schulden(commands.Cog):
                                 .add_item(error_button)
                             
                             comment = comment or "-"
-                            returntext = f"{user1.mention} muss akzeptieren:\nSchulden in Höhe von \n`{betrag}` an {interaction.message.author.name}\nKommentar:\n{comment}"
+                            returntext = f"{user1.mention} muss akzeptieren:\nSchulden in Höhe von \n`{betrag}` an {interaction.user.name}\nKommentar:\n{comment}"
                             await interaction.response.send(returntext, view=view0)
 
                             '''try:
