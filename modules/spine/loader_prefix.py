@@ -73,6 +73,24 @@ class Loader_prefix(commands.Cog):
 
             os.execv(sys.executable, ['python3', 'main.py'])
 
+    @commands.command(brief="[LOADER_PREF] Update bot backup")
+    @commands.is_owner()
+    async def gitpull_(self, ctx):
+            # Speichere den aktuellen Pfad
+            current_path = os.getcwd() + "/"
+
+            print(current_path)
+            os.chdir(os.path.dirname(os.path.abspath(__file__)))
+
+            if os.popen('python3 --version').read() == "Python 3.6.8":
+                os.system('export PATH=~/.localpython/bin:$PATH')
+
+            await ctx.send(f"```{os.popen('git pull').read()}```")
+
+            os.chdir(current_path)
+
+            os.execv(sys.executable, ['python3', 'main.py'])
+
     @commands.command(brief="[LOADER_PREF]")
     @commands.is_owner()
     async def modulespull(self,ctx):
