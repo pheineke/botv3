@@ -63,8 +63,9 @@ class Schulden(commands.Cog):
                         await interaction.response.send_message("negative Schulden sind illegal hab ich beschlossen", ephemeral=True)
                     elif betrag > 500.0:
                         await interaction.response.send_message(f"Ja theoretisch kann man {betrag} Schulden plötzlich machen aber hier erstmal net.")
-                    elif len(comment) > 100:
-                        await interaction.response.send_message("Kommentar darf nicht mehr als 100 Zeichen enthalten.")
+                    elif comment:
+                        if len(comment) > 100:
+                            await interaction.response.send_message("Kommentar darf nicht mehr als 100 Zeichen enthalten.")
                     else:
                         message = await interaction.original_response()
                         user0_str = str(interaction.user.name)
