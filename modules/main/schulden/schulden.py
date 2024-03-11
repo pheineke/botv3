@@ -46,18 +46,16 @@ class Schulden(commands.Cog):
             else:
                 try:
                     if "," in betrag:
-                        betrag.replace(",",".")
-                        betragteile = betrag.split(".")
-                    elif "." in betrag:
-                        betragteile = betrag.split(".")
-                    else:
+                        betrag = betrag.replace(",", ".")
+                    betragteile = betrag.split(".")
+                    if len(betragteile) == 1:
                         betrag += ".00"
-                    try:
-                        print(betragteile)
-                        if len(betragteile[1]) > 2:
-                            raise Exception 
-                    except:
-                        await interaction.response.send_message("Betrag muss zwei Nachkommastellen haben",ephemeral=True)
+                    else:
+                        try:
+                            if len(betragteile[1]) > 2:
+                                raise Exception 
+                        except:
+                            await interaction.response.send_message("Betrag muss zwei Nachkommastellen haben",ephemeral=True)
                     try:
                         betrag=round(float(betrag),2)
                     except:
