@@ -41,6 +41,7 @@ class Schulden(commands.Cog):
     @app_commands.command(name="addschulden", description="[SCHULDEN] .addschulden @Schuldner Betrag")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag:str, comment:str=None):
         message_author = interaction.user
+        message_author_name = message_author.name
         message_author_id = message_author.id
         user1_name = user1.name
         try: # user1 == interaction.user or user1.id == interaction.user.id or str(interaction.user.name) == str(user1.name) or 
@@ -71,8 +72,8 @@ class Schulden(commands.Cog):
                         if len(comment) > 100:
                             await interaction.response.send_message("Kommentar darf nicht mehr als 100 Zeichen enthalten.")
                     else:
-                        user0_str = str(interaction.user.name)
-                        user1_str = str(user1.name)
+                        user0_str = str(message_author_name)
+                        user1_str = str(user1_name)
                         
                         accept_button = Button(label="Accept", style=discord.ButtonStyle.blurple)
                         revoke_button = Button(label="Revoke", style=discord.ButtonStyle.red)
@@ -86,15 +87,15 @@ class Schulden(commands.Cog):
                             if interaction.user == user1:
                                 try:
                                     self.schulden_db.schulden_hinzufuegen(schuldner=user1_str, glaeubiger=user0_str, betrag=betrag, comment=comment)
-                                    await interaction.response.edit_message(content=f"{user1.name} hat akzeptiert.", view=view1)
+                                    await interaction.response.edit_message(content=f"{user1_name} hat akzeptiert.", view=view1)
                                 except Exception as e:
                                     print(f"{e}")
-                                    await interaction.response.edit_message(content=f"{user1.name} ERROR", view=view3)
+                                    await interaction.response.edit_message(content=f"{user1_name} ERROR", view=view3)
                         accept_button.callback=button_callback
 
                         async def revoke_callback(interaction:discord.Interaction):
                             if interaction.user == message_author:
-                                await interaction.response.edit_message(content=f"{interaction.author.name} hat widerrufen.", view=view2)                    
+                                await interaction.response.edit_message(content=f"{message_author_name} hat widerrufen.", view=view2)                    
                         revoke_button.callback=revoke_callback
 
                         view0 = View(timeout=30)\
@@ -110,7 +111,7 @@ class Schulden(commands.Cog):
                             .add_item(error_button)
                         
                         comment = comment or "-"
-                        returntext = f"{user1.mention} muss akzeptieren:\nSchulden in Höhe von \n`{betrag}` an {interaction.user.name}\nKommentar:\n{comment}"
+                        returntext = f"{user1.mention} muss akzeptieren:\nSchulden in Höhe von \n`{betrag}` an {message_author_name}\nKommentar:\n{comment}"
                         await interaction.response.send_message(returntext, view=view0)
 
                         '''try:
