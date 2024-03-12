@@ -109,7 +109,7 @@ class Dominascrp(commands.Cog):
             try:
                 overview,tabelle = self.scraper(apartment=apartment)
             except:
-                interaction.response.send_message("Either false Apart. or Website not reachable", ephemeral=True)
+                await interaction.response.send_message("Either false Apart. or Website not reachable", ephemeral=True)
 
             if days:
                 tabelle_new = filter_last_x_days(days, tabelle)
@@ -120,9 +120,9 @@ class Dominascrp(commands.Cog):
             embed.add_field(name="Overview:", value=pprint.pformat(overview), inline=False)
             embed.add_field(name="TABLE", value=tabelle_new, inline=False)
                         
-            interaction.response.send_message(embed=embed)
+            await interaction.response.send_message(embed=embed)
         else:
-            interaction.response.send_message("Wrong Apart. Format", ephemeral=True)
+            await interaction.response.send_message("Wrong Apart. Format", ephemeral=True)
 
 async def setup(bot):
     await bot.add_cog(Dominascrp(bot))
