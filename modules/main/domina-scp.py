@@ -82,8 +82,10 @@ class Dominascrp(commands.Cog):
 
     
     
-    @app_commands.command(name="wohnheimsperre", description="Zeig Sperrstatus eines Apartments")
-    async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, days:str=None):
+    #@app_commands.command(name="wohnheimsperre", description="Zeig Sperrstatus eines Apartments")
+    @commands.command()
+    #async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, days:str=None):
+    async def wohnheimsperre(self, ctx, apartment:str, days:str=None):
         def check_format(string):
                 pattern = r'^[A-Z]-\d{3}$'
                 if re.match(pattern, string):
@@ -109,7 +111,8 @@ class Dominascrp(commands.Cog):
             try:
                 overview,tabelle = self.scraper(apartment=apartment)
             except:
-                await interaction.response.send_message("Either false Apart. or Website not reachable", ephemeral=True)
+                #await interaction.response.send_message("Either false Apart. or Website not reachable", ephemeral=True)
+                await ctx.send("Either false Apart. or Website not reachable")
 
             if days:
                 tabelle_new = filter_last_x_days(days, tabelle)
@@ -132,9 +135,11 @@ class Dominascrp(commands.Cog):
 
             embed.add_field(name="TABLE", value=tabelle_new_str, inline=False)
                         
-            await interaction.response.send_message(embed=embed)
+            #await interaction.response.send_message(embed=embed)
+            await ctx.send(embed=embed)
         else:
-            await interaction.response.send_message("Wrong Apart. Format", ephemeral=True)
+            #await interaction.response.send_message("Wrong Apart. Format", ephemeral=True)
+            await ctx.send("Wrong Apart. Format")
 
 async def setup(bot):
     await bot.add_cog(Dominascrp(bot))
