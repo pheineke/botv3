@@ -117,7 +117,7 @@ class Dominascrp(commands.Cog):
                 tabelle_new = filter_last_x_days(100, tabelle)
                 
             embed=discord.Embed(title="APART")
-            embed.add_field(name="Overview:", value=pprint.pformat(overview), inline=False)
+            embed.add_field(name="Overview:", value=pprint.pformat(tabelle_new), inline=False)
             embed.add_field(name="TABLE", value=tabelle_new, inline=False)
                         
             await interaction.response.send_message(embed=embed)
