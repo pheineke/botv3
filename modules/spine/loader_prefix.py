@@ -56,12 +56,11 @@ class Loader_prefix(commands.Cog):
         await self.bot.close()
 
     @app_commands.command(name="gitpull", description="[LOADER_PREF] Update bot")
-    async def gitpull(self, interaction:discord.Interaction):
+    async def gitpull_(self, interaction:discord.Interaction):
         if interaction.user in self.bot.owner_ids:
             # Speichere den aktuellen Pfad
             current_path = os.getcwd() + "/"
 
-            print(current_path)
             os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
             if os.popen('python3 --version').read() == "Python 3.6.8":
@@ -75,7 +74,7 @@ class Loader_prefix(commands.Cog):
 
     @commands.command(brief="[LOADER_PREF] Update bot backup")
     @commands.is_owner()
-    async def gitpull_(self, ctx):
+    async def gitpull(self, ctx):
             # Speichere den aktuellen Pfad
             current_path = os.getcwd() + "/"
 
