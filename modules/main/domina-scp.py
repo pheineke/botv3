@@ -128,7 +128,7 @@ class Dominascrp(commands.Cog):
     
     @app_commands.command(name="wohnheimsperre", description="Zeig Sperrstatus eines Apartments")
     #@commands.command()
-    async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, days:str=None, startDay:str=None, endDay:str=None):
+    async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, days:str=None, startday:str=None, endday:str=None):
     #async def testosteron(self, ctx, apartment:str, startDay:str=None, endDay:str=None):
         if self.check_format(apartment):
             try:
@@ -136,22 +136,27 @@ class Dominascrp(commands.Cog):
             except:
                 await interaction.response.send_message("Either false Apart. or Website not reachable", ephemeral=True)
                 #await ctx.send("Either false Apart. or Website not reachable")
-
-            if (not(startDay) and not(endDay)):
+                
+            if (not(days) and not(startday) and not(endday)):
                 tabelle_new = self.filter_data_timespan(data=tabelle, start=None, end=None)
                 lentabelle_new = len(tabelle_new.keys())
                 if lentabelle_new > 50:
                     tabelle_new = dict(list(tabelle_new.keys())[:10])
                 lenanzeige = lentabelle_new - len(tabelle_new.keys())
 
-            elif (startDay or endDay):
-                tabelle_new = self.filter_data_timespan(data=tabelle, start=startDay, end=endDay)
+            elif (startday or endday):
+                tabelle_new = self.filter_data_timespan(data=tabelle, start=startday, end=endday)
 
                 lentabelle_new = len(tabelle_new.keys())
                 if lentabelle_new > 50:
                     tabelle_new = dict(list(tabelle_new.keys())[:10])
                 lenanzeige = lentabelle_new - len(tabelle_new.keys())
-            
+            elif days and not(startday and endday):
+                try:
+                    tabelle_new = self.filter_last_x_days(x=int(days), data=tabelle)
+                except:
+                    await interaction.response.send_message("Bro Tage sind INTS", ephemeral=True)
+                
             else:
                 await interaction.response.send_message("Entscheide dich, entweder Tage oder start und ende", ephemeral=True)
                 #await ctx.send("Entscheide dich")
