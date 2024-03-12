@@ -8,3 +8,4 @@ pathlib
 prettytable
 requests
 table2ascii
+tabulate

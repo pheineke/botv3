@@ -8,7 +8,7 @@ import requests,os
 from dotenv import load_dotenv
 from bs4 import BeautifulSoup as bs 
 import pprint
-
+from tabulate import tabulate
 
 
 class Dominascrp(commands.Cog):
@@ -56,10 +56,10 @@ class Dominascrp(commands.Cog):
                         # Extract key-value pairs from each row's cells (<td>)
                         key, value = row.find_all('td', bgcolor="#dddddd")[0].text, row.find_all('td', bgcolor="#dddddd")[1].text
                         table_data[key] = value
-
                     # Add the sub-dictionary for the current greyBox to the main data dictionary
                     overview[f"greyBox_{i+1}"] = table_data  # Use f-string for clear numbering
 
+                
                 
                 
                 # Parse the HTML content
@@ -116,9 +116,21 @@ class Dominascrp(commands.Cog):
             else:
                 tabelle_new = filter_last_x_days(100, tabelle)
                 
-            embed=discord.Embed(title="APART")
-            embed.add_field(name="Overview:", value=pprint.pformat(overview), inline=False)
-            embed.add_field(name="TABLE", value=tabelle_new, inline=False)
+            embed=discord.Embed(title=str(apartment))
+            embed.add_field(name="Overview:", inline=False)
+
+            overview0_iter = overview["greyBox_1"]
+            overview1_iter = overview["greyBox_2"]
+            for key, value in overview0_iter.items():
+                embed.add_field(name=str(key), value=str(value), inline=True)
+            for key, value in overview1_iter.items():
+                embed.add_field(name=str(key), value=str(value), inline=True)
+
+            tabelle_new_str = ""
+            for key,value in tabelle_new.items():
+                tabelle_new_str += f">{key} {value}\n" 
+
+            embed.add_field(name="TABLE", value=tabelle_new_str, inline=False)
                         
             await interaction.response.send_message(embed=embed)
         else:
