@@ -119,7 +119,7 @@ class Dominascrp(commands.Cog):
             
             random_color = discord.Color(random.randint(0, 0xFFFFFF))
             embed=discord.Embed(title=f"{apartment}", color=random_color, timestamp=datetime.now())
-            embed.set_footer(text='Quota wird random 0am - 2am freigeschalten',icon_url="https://i.imgur.com/uZIlRnK.png")
+            embed.set_footer(text='Quota wird random 0am - 2am freigeschalten')
             embed.add_field(name="Overview:", value='** **', inline=False)
 
             overview0_iter = overview["greyBox_1"]
