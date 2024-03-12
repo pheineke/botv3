@@ -85,7 +85,7 @@ class Dominascrp(commands.Cog):
     #@app_commands.command(name="wohnheimsperre", description="Zeig Sperrstatus eines Apartments")
     @commands.command()
     #async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, days:str=None):
-    async def wohnheimsperre(self, ctx, apartment:str, days:str=None):
+    async def testosteron(self, ctx, apartment:str, days:str=None):
         def check_format(string):
                 pattern = r'^[A-Z]-\d{3}$'
                 if re.match(pattern, string):
