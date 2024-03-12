@@ -102,29 +102,34 @@ class Dominascrp(commands.Cog):
         return returndata
 
     def filter_data_timespan(self, data:dict, start=None, end=None):
-        if start or end:
-            if start and not(end):
-                end_date = datetime.now()
-            elif end and not(start):
-                start=end
-                start_date = datetime.strptime(start, "%d.%m")
-                end_date = datetime.now()
-            elif start and end:
-                start_date = datetime.strptime(start, "%d.%m")
-                end_date = datetime.strptime(end, "%d.%m")
+        current_ = datetime.strptime(datetime.now().strftime("%d.%m.%Y"), "%d.%m.%Y")
+        if not(start and end):
+            start = "01.09.2022"
+            end_date = datetime.now().strftime("%d.%m.%Y")
+        if start and not(end):
+            end_date = current_
+        elif not(start) and end:
+            start=end
+            end_date = current_
+        elif start and end:
+            end_date = datetime.strptime(end, "%d.%m.%Y")
 
-            returndata = {}
-            for key, value in data.items():
-                date_obj = datetime.strptime(key, '%d.%m.%Y %H:%M')
-                if start_date <= date_obj <= end_date:
-                    returndata[key] = value
-            return returndata
+        start_date = datetime.strptime(start, "%d.%m.%Y")
+
+
+        returndata = {}
+        for key, value in data.items():
+            date_obj = datetime.strptime(key, '%d.%m.%Y %H:%M')
+            if start_date <= date_obj <= end_date:
+                returndata[key] = value
+        return returndata
+        
     
     
     @app_commands.command(name="wohnheimsperre", description="Zeig Sperrstatus eines Apartments")
     #@commands.command()
     async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, days:str=None, startDay:str=None, endDay:str=None):
-    #async def testosteron(self, ctx, apartment:str, days:str=None):
+    #async def testosteron(self, ctx, apartment:str, startDay:str=None, endDay:str=None):
         if self.check_format(apartment):
             try:
                 overview,tabelle = self.scraper(apartment=apartment)
@@ -132,16 +137,24 @@ class Dominascrp(commands.Cog):
                 await interaction.response.send_message("Either false Apart. or Website not reachable", ephemeral=True)
                 #await ctx.send("Either false Apart. or Website not reachable")
 
-            if days and (not(startDay) and not(endDay)):
-                tabelle_new = self.filter_last_x_days(data=tabelle, x=days)
-            elif not(days) and (startDay or endDay):
-                tabelle_new = self.filter_data_timespan(data=tabelle, start=startDay, end=endDay)
-                if len(tabelle_new.keys()) > 50:
+            if (not(startDay) and not(endDay)):
+                tabelle_new = self.filter_data_timespan(data=tabelle, start=None, end=None)
+                lentabelle_new = len(tabelle_new.keys())
+                if lentabelle_new > 50:
                     tabelle_new = dict(list(tabelle_new.keys())[:10])
+                lenanzeige = lentabelle_new - len(tabelle_new.keys())
 
+            elif (startDay or endDay):
+                tabelle_new = self.filter_data_timespan(data=tabelle, start=startDay, end=endDay)
+
+                lentabelle_new = len(tabelle_new.keys())
+                if lentabelle_new > 50:
+                    tabelle_new = dict(list(tabelle_new.keys())[:10])
+                lenanzeige = lentabelle_new - len(tabelle_new.keys())
+            
             else:
                 await interaction.response.send_message("Entscheide dich, entweder Tage oder start und ende", ephemeral=True)
-            
+                #await ctx.send("Entscheide dich")
             
             random_color = discord.Color(random.randint(0, 0xFFFFFF))
             embed=discord.Embed(title=f"{apartment}", color=random_color, timestamp=datetime.now())
@@ -159,9 +172,9 @@ class Dominascrp(commands.Cog):
             for key,value in tabelle_new.items():
                 for ky, vl in value.items():
                     tabelle_new_str += f"{key} | {ky} {vl}\n"
-            tabelle_new_str += "..."
+            tabelle_new_str += f"...[{lenanzeige}]"
 
-            embed.add_field(name="Table", value=f"```{tabelle_new_str}```", inline=False)
+            embed.add_field(name="Table", value=f"```{tabelle_new_str} Einträge left bis 01.09.2022```", inline=False)
                         
             await interaction.response.send_message(embed=embed)
             #await ctx.send(embed=embed)
