@@ -114,7 +114,7 @@ class Dominascrp(commands.Cog):
             if days:
                 tabelle_new = filter_last_x_days(days, tabelle)
             else:
-                tabelle_new = tabelle
+                tabelle_new = filter_last_x_days(100, tabelle)
                 
             embed=discord.Embed(title="APART")
             embed.add_field(name="Overview:", value=pprint.pformat(overview), inline=False)
