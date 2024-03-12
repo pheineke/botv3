@@ -117,7 +117,7 @@ class Dominascrp(commands.Cog):
                 tabelle_new = filter_last_x_days(100, tabelle)
                 
             embed=discord.Embed(title=str(apartment))
-            embed.add_field(name="Overview:", inline=False)
+            embed.add_field(name="Overview:", value="_", inline=False)
 
             overview0_iter = overview["greyBox_1"]
             overview1_iter = overview["greyBox_2"]
