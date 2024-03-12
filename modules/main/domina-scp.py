@@ -1,3 +1,4 @@
+import random
 import re
 import discord
 from discord import app_commands
@@ -76,16 +77,15 @@ class Dominascrp(commands.Cog):
                     tabelle[key] = tblrow
 
                 tabelle = dict(sorted(tabelle.items(), key=lambda x: datetime.strptime(x[0], '%d.%m.%Y %H:%M'), reverse=True))
-
         return overview, tabelle
 
 
     
     
-    #@app_commands.command(name="wohnheimsperre", description="Zeig Sperrstatus eines Apartments")
-    @commands.command()
-    #async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, days:str=None):
-    async def testosteron(self, ctx, apartment:str, days:str=None):
+    @app_commands.command(name="wohnheimsperre", description="Zeig Sperrstatus eines Apartments")
+    #@commands.command()
+    async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, days:str=None):
+    #async def testosteron(self, ctx, apartment:str, days:str=None):
         def check_format(string):
                 pattern = r'^[A-Z]-\d{3}$'
                 if re.match(pattern, string):
@@ -95,15 +95,13 @@ class Dominascrp(commands.Cog):
                     return False
                 
         def filter_last_x_days(x, data):
-            returndata = ""
+            returndata = {}
             end_date = datetime.now()  # Aktuelles Datum
             start_date = end_date - timedelta(days=x)  # Berechne Startdatum
             for key, value in data.items():
                 date_obj = datetime.strptime(key, '%d.%m.%Y %H:%M')
                 if start_date <= date_obj <= end_date:
-                    temp_dict = {}
-                    temp_dict[key] = value
-                    returndata += f"{temp_dict}\n"
+                    returndata[key] = value
 
             return returndata
 
@@ -111,35 +109,37 @@ class Dominascrp(commands.Cog):
             try:
                 overview,tabelle = self.scraper(apartment=apartment)
             except:
-                #await interaction.response.send_message("Either false Apart. or Website not reachable", ephemeral=True)
-                await ctx.send("Either false Apart. or Website not reachable")
+                await interaction.response.send_message("Either false Apart. or Website not reachable", ephemeral=True)
+                #await ctx.send("Either false Apart. or Website not reachable")
 
             if days:
                 tabelle_new = filter_last_x_days(days, tabelle)
             else:
-                tabelle_new = filter_last_x_days(100, tabelle)
-                
-            embed=discord.Embed(title=str(apartment))
-            embed.add_field(name="Overview:", value="_", inline=False)
+                tabelle_new = filter_last_x_days(800, tabelle)
+            
+            random_color = discord.Color(random.randint(0, 0xFFFFFF))
+            embed=discord.Embed(title=f"{apartment}", color=random_color)
+            embed.add_field(name="Overview:", value='** **', inline=False)
 
             overview0_iter = overview["greyBox_1"]
             overview1_iter = overview["greyBox_2"]
             for key, value in overview0_iter.items():
-                embed.add_field(name=str(key), value=str(value), inline=True)
+                embed.add_field(name=str(key), value=f"> {value}", inline=True)
             for key, value in overview1_iter.items():
-                embed.add_field(name=str(key), value=str(value), inline=True)
+                embed.add_field(name=str(key), value=f"> {value}", inline=True)
 
             tabelle_new_str = ""
             for key,value in tabelle_new.items():
-                tabelle_new_str += f">{key} {value}\n" 
+                for ky, vl in value.items():
+                    tabelle_new_str += f"{key} | {ky} {vl}\n"
 
-            embed.add_field(name="TABLE", value=tabelle_new_str, inline=False)
+            embed.add_field(name="Table", value=f"```{tabelle_new_str}```", inline=False)
                         
-            #await interaction.response.send_message(embed=embed)
-            await ctx.send(embed=embed)
+            await interaction.response.send_message(embed=embed)
+            #await ctx.send(embed=embed)
         else:
-            #await interaction.response.send_message("Wrong Apart. Format", ephemeral=True)
-            await ctx.send("Wrong Apart. Format")
+            await interaction.response.send_message("Wrong Apart. Format (X-000)", ephemeral=True)
+            #await ctx.send("Wrong Apart. Format")
 
 async def setup(bot):
     await bot.add_cog(Dominascrp(bot))
