@@ -115,7 +115,7 @@ class Dominascrp(commands.Cog):
             if days:
                 tabelle_new = filter_last_x_days(days, tabelle)
             else:
-                tabelle_new = filter_last_x_days(800, tabelle)
+                tabelle_new = filter_last_x_days(200, tabelle)
             
             random_color = discord.Color(random.randint(0, 0xFFFFFF))
             embed=discord.Embed(title=f"{apartment}", color=random_color, timestamp=datetime.now())
