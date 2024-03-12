@@ -57,7 +57,7 @@ class Loader_prefix(commands.Cog):
 
     @app_commands.command(name="gitpull", description="[LOADER_PREF] Update bot")
     async def gitpull_(self, interaction:discord.Interaction):
-        if interaction.user in self.bot.owner_ids:
+        if interaction.user.id in self.bot.owner_ids:
             # Speichere den aktuellen Pfad
             current_path = os.getcwd() + "/"
 
