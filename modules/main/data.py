@@ -32,13 +32,13 @@ class Data(commands.Cog):
 
 
     def create_empty_text_file(self, file_path):
-        try:
-            # Try to open the file in write mode which will create it if it doesn't exist
-            with open(file_path, 'w') as file:
-                pass  # Do nothing, creating an empty file
-            print(f"Empty file created: {file_path}")
-        except IOError as e:
-            print(f"Error: {e}")
+        if not os.path.exists(file_path):
+            try:
+                with open(file_path, 'w') as file:
+                    pass  # Do nothing, creating an empty file
+                print(f"Empty file created: {file_path}")
+            except IOError as e:
+                print(f"Error: {e}")
 
     def get_allowed_users(self):
         with open("privacy_log.txt", 'r') as file:
