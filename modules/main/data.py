@@ -230,7 +230,6 @@ class Data(commands.Cog):
         cursor = conn.cursor()
         cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
         table_names = cursor.fetchall()
-        conn.close()
         return [x[0] for x in table_names]
     
     def get_table_headers(self, table_name):
@@ -238,7 +237,6 @@ class Data(commands.Cog):
         cursor = conn.cursor()
         cursor.execute(f"PRAGMA table_info({table_name})")
         headers = cursor.fetchall()
-        conn.close()
         return [header[1] for header in headers]
 
     @commands.command(brief="[DATA] Exportiert deine Daten yay .export_user_activity mit nichts, json oder db")
