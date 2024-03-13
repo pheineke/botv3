@@ -414,7 +414,8 @@ class Data(commands.Cog):
                 self.drop_table(f"user_{difference[0]}")
             elif len_difference > 1:
                 for user0 in difference:
-                    self.drop_table(f"user_{user0.id}")
+                    print(f"DATA - diff users{difference}")
+                    self.drop_table(f"user_{user0}")
 
             #TODO HIER EVTL ein ephemeral
             print(f"Users {liste}")
