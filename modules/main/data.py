@@ -64,20 +64,18 @@ class Data(commands.Cog):
 
     def create_user_tables(self):
         for user in self.allowed_users: #42
-            id = self.fetch_user_id(user)
+            #id = self.fetch_user_id(user)
             self.c.execute(f'''
-                CREATE TABLE IF NOT EXISTS user_00000{id} (
+                CREATE TABLE IF NOT EXISTS user_{user} (
                     user_id INTEGER,
                     timestamp TEXT,
                     accent_color TEXT,
-                    accent_colour TEXT,
                     activities TEXT,
                     activity TEXT,
                     avatar TEXT,
                     banner TEXT,
                     bot INTEGER,
                     color TEXT,
-                    colour TEXT,
                     desktop_status TEXT,
                     display_avatar TEXT,
                     display_icon TEXT,
@@ -104,6 +102,12 @@ class Data(commands.Cog):
             ''')
             self.conn.commit()
 
+    def drop_table(self, table_name):
+        self.conn = sqlite3.connect(self.db_path)
+        cursor = self.conn.cursor()
+        cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
+        self.conn.commit()
+        
     @tasks.loop(minutes=1)
     async def check_activity_changes(self):
         for guild in self.bot.guilds:
@@ -111,11 +115,15 @@ class Data(commands.Cog):
                 if member.id in self.allowed_users:
                     previous_activity = self.get_previous_activity(member)
                     current_activity = self.get_current_activity(member)
-                    if self.compare_tuples_except_index(previous_activity, current_activity, 1):
+                    compare:bool = self.compare_tuples_except_index(previous_activity, current_activity, 1)
+                    print(f"Data collector - compare: {compare}")
+                    if not(compare):
                         self.save_activity(member, current_activity)
 
     def compare_tuples_except_index(self, tuple1, tuple2, index_to_ignore):
-        if len(tuple1) != len(tuple2):
+        if not(tuple1):
+            return False
+        elif len(tuple1) != len(tuple2):
             return False
         
         for i in range(len(tuple1)):
@@ -124,9 +132,9 @@ class Data(commands.Cog):
         return True
     
     def get_previous_activity(self, member):
-        id = self.fetch_user_id(member_id=member.id)
+        #id = self.fetch_user_id(member_id=member.id)
     # Manuell den Tabellennamen in die Abfrage einfügen
-        query = f"SELECT * FROM user_00000{id} ORDER BY timestamp DESC LIMIT 1"
+        query = f"SELECT * FROM user_{member.id} ORDER BY timestamp DESC LIMIT 1"
         self.c.execute(query)
         previous_activity = self.c.fetchone()
         return previous_activity
@@ -136,14 +144,12 @@ class Data(commands.Cog):
         user_id = member.id
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         accent_color = member.accent_color
-        accent_colour = member.accent_colour 
         activities = [x for x in member.activities]
         activity = member.activity
         avatar = member.avatar 
         banner = member.banner 
         bot = member.bot 
-        color = member.color 
-        colour = member.colour 
+        color = member.color
         desktop_status = member.desktop_status 
         display_avatar = member.display_avatar 
         display_icon = member.display_icon 
@@ -170,14 +176,12 @@ class Data(commands.Cog):
         return (user_id,
                 timestamp,
                 str(accent_color),
-                str(accent_colour),
                 str(activities),
                 str(activity),
                 str(avatar),
                 str(banner),
                 str(bot),
                 str(color),
-                str(colour),
                 str(desktop_status),
                 str(display_avatar),
                 str(display_icon),
@@ -203,8 +207,8 @@ class Data(commands.Cog):
 
 
     def save_activity(self, member, activity):
-        id = self.fetch_user_id(member_id=member.id)
-        self.c.execute(f'''INSERT INTO user_00000{id} VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', activity)
+        #id = self.fetch_user_id(member_id=member.id)
+        self.c.execute(f'''INSERT INTO user_{member.id} VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', activity)
         self.conn.commit()
 
 
@@ -235,11 +239,9 @@ class Data(commands.Cog):
             if ctx_author_id in self.allowed_users:
                 id = self.fetch_user_id(ctx_author_id)
                 for table in self.get_table_names():
-                    if "user_" in table:
-                        userid = table.split('_')[1]
-                        if int(id) == int(userid):
-                            author_table = table
-                            break
+                    if str(ctx_author_id) in table:
+                        author_table = table
+                        break
                 self.c.execute(f'''SELECT * FROM {author_table}''')
                 
                 if format_ == "json":
@@ -276,14 +278,12 @@ class Data(commands.Cog):
                                 user_id INTEGER,
                                 timestamp TEXT,
                                 accent_color TEXT,
-                                accent_colour TEXT,
                                 activities TEXT,
                                 activity TEXT,
                                 avatar TEXT,
                                 banner TEXT,
                                 bot INTEGER,
                                 color TEXT,
-                                colour TEXT,
                                 desktop_status TEXT,
                                 display_avatar TEXT,
                                 display_icon TEXT,
@@ -310,7 +310,7 @@ class Data(commands.Cog):
                         ''')
 
                     for elem in user_activities:
-                        c_export.execute('''INSERT INTO user_activity VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', elem)
+                        c_export.execute('''INSERT INTO user_activity VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', elem)
                     conn_export.commit()
                     conn_export.close()
 
@@ -322,19 +322,103 @@ class Data(commands.Cog):
             else:
                 await ctx.send("User nicht vorhanden")
 
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self,payload:discord.RawReactionActionEvent):
+        channel = self.bot.get_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
+        user = await self.bot.fetch_user(payload.user_id)
+        
+        message_id = message.id
+        user_id = user.id
+        
+        if message_id == 1217200712576929945:
+            reaction_users = []
+            for reaction in message.reactions:
+                async for user in reaction.users():
+                    reaction_users.append(user.id)
+
+            with open("privacy_log.txt", 'w') as file:
+                file.write('')
+                for elem in reaction_users:
+                    file.write(f"{elem}\n")
+
+            with open("privacy_log.txt", 'r') as file:
+                liste = [int(x) for x in file.readlines()]
+                self.allowed_users = liste
+            
+
+            self.add_user_to_user_db(user_id)
+            self.create_user_tables()
+            #TODO HIER EVTL ein ephemeral
+            print(f"Users {liste}")
+
+    def get_different_elements(self, list1, list2):
+        # Convert lists to sets to get unique elements
+        set1 = set(list1)
+        set2 = set(list2)
+        
+        # Get the elements that are in set1 but not in set2
+        diff1 = set1 - set2
+        
+        # Get the elements that are in set2 but not in set1
+        diff2 = set2 - set1
+        
+        # Combine the two sets of different elements
+        different_elements = diff1.union(diff2)
+        
+        return list(different_elements)
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_remove(self,payload:discord.RawReactionActionEvent):
+        channel = self.bot.get_channel(payload.channel_id)
+        message = await channel.fetch_message(payload.message_id)
+        user = await self.bot.fetch_user(payload.user_id)
+
+        message_id = message.id
+        
+        if message_id == 1217200712576929945:
+            reaction_users = []
+            for reaction in message.reactions:
+                async for user in reaction.users():
+                    reaction_users.append(user.id)
+
+            with open("privacy_log.txt", 'r') as file:
+                liste_old = [int(x) for x in file.readlines()]
+            
+            difference = self.get_different_elements(liste_old, reaction_users)
+            len_difference = len(difference)
+
+            with open("privacy_log.txt", 'w') as file:
+                file.write('')
+                for elem in reaction_users:
+                    file.write(f"{elem}\n")
+
+            with open("privacy_log.txt", 'r') as file:
+                liste = [int(x) for x in file.readlines()]
+                self.allowed_users = liste
+            
+            if len_difference == 1:
+                self.drop_table(f"user_{difference[0]}")
+            elif len_difference > 1:
+                for user0 in difference:
+                    self.drop_table(f"user_{user0.id}")
+
+            #TODO HIER EVTL ein ephemeral
+            print(f"Users {liste}")
+
+
+
     @commands.command(brief="[DATA] Gibt Discord Userdaten aus.")
     async def getuserinfo(self, ctx, member: discord.Member = None):
         userdata = {
             "member": {
                 "accent_color": member.accent_color,
-                "accent_colour": member.accent_colour,
                 "activities": member.activities,
                 "activity": member.activity,
                 "avatar": member.avatar,
                 "banner": member.banner,
                 "bot": member.bot,
                 "color": member.color,
-                "colour": member.colour,
                 "created_at": str(member.created_at),
                 "default_avatar": member.default_avatar,
                 "desktop_status": member.desktop_status,

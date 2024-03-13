@@ -4,9 +4,10 @@ conn = sqlite3.connect('test_datab.db')
 c = conn.cursor()
 
 allowed_users = ['386254372646158338','278965321094660096']
+#mit buchstaben am anfang funkts
 users = ["manager", "autor"]
 
-for user in users: #42
+for user in allowed_users: #42
     c.execute(f'''
         CREATE TABLE IF NOT EXISTS {user} (
             user_id INTEGER,
