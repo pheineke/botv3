@@ -121,7 +121,7 @@ class Data(commands.Cog):
         cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
         self.conn.commit()
         
-    @tasks.loop(minutes=5)
+    @tasks.loop(minutes=2)
     async def check_activity_changes(self):
         for guild in self.bot.guilds:
             for member in guild.members:
