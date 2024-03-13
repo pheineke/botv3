@@ -121,7 +121,7 @@ class Data(commands.Cog):
         cursor.execute(f"DROP TABLE IF EXISTS {table_name}")
         self.conn.commit()
         
-    @tasks.loop(minutes=1)
+    @tasks.loop(minutes=5)
     async def check_activity_changes(self):
         for guild in self.bot.guilds:
             for member in guild.members:
@@ -241,7 +241,7 @@ class Data(commands.Cog):
         conn.close()
         return [header[1] for header in headers]
 
-    @commands.command(brief="Exportiert deine Daten yay .export_user_activity mit nichts, json oder db")
+    @commands.command(brief="[DATA] Exportiert deine Daten yay .export_user_activity mit nichts, json oder db")
     async def export_user_activity(self, ctx, format_="json"):
         if not (format_ in ["db", "json"]):
             await ctx.send("Ungültiges Dateiformat: either json or db")
