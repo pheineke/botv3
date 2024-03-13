@@ -93,6 +93,21 @@ async def on_ready():
 
     print(f'{"-" * 50}\nConnected Bot: {bot.user.name}\n{"-" * 50}')
 
+    channel = bot.get_channel(1129466913492324413)
+    if channel:
+        liste = []
+        async for message in channel.history(limit=5):
+            if message.id == 1217200712576929945:
+                for reaction in message.reactions:
+                    async for user in reaction.users():
+                        liste.append(user.id)
+                print(f"[on_ready] allowed_users: {liste}")
+                with open("privacy_log.txt", 'w') as file:
+                    file.write('')
+                    for elem in liste:
+                        file.write(f"{elem}\n")
+
+
 
 
 #BOT >>RUN
