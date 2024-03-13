@@ -372,13 +372,13 @@ class Data(commands.Cog):
         
         # Get the elements that are in set1 but not in set2
         diff1 = set1 - set2
-        print(diff1)
+        #print(diff1)
         # Get the elements that are in set2 but not in set1
         diff2 = set2 - set1
-        print(diff2)
+        #print(diff2)
         # Combine the two sets of different elements
         different_elements = diff1.union(diff2)
-        print(different_elements)
+        #print(different_elements)
         
         return list(different_elements)
 
@@ -401,7 +401,7 @@ class Data(commands.Cog):
             
             print(liste_old)
             difference = self.get_different_elements(liste_old, reaction_users)
-            print(difference)
+            print(f"liste_old {liste_old} diff {difference}")
             len_difference = len(difference)
 
             with open("privacy_log.txt", 'w') as file:
