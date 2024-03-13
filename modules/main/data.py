@@ -241,7 +241,7 @@ class Data(commands.Cog):
         conn.close()
         return [header[1] for header in headers]
 
-    @commands.command()
+    @commands.command(brief="Exportiert deine Daten yay .export_user_activity mit nichts, json oder db")
     async def export_user_activity(self, ctx, format_="json"):
         if not (format_ in ["db", "json"]):
             await ctx.send("Ungültiges Dateiformat: either json or db")
