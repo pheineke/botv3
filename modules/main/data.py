@@ -16,6 +16,8 @@ class Data(commands.Cog):
 
         self.conn = sqlite3.connect(self.db_path)
         self.c = self.conn.cursor()
+        
+        self.create_empty_text_file("privacy_log.txt")
 
         self.get_allowed_users()
         # Tabelle für Benutzeraktivitäten erstellen
@@ -26,6 +28,17 @@ class Data(commands.Cog):
         self.create_user_tables()
 
         self.check_activity_changes.start()
+
+
+
+    def create_empty_text_file(self, file_path):
+        try:
+            # Try to open the file in write mode which will create it if it doesn't exist
+            with open(file_path, 'w') as file:
+                pass  # Do nothing, creating an empty file
+            print(f"Empty file created: {file_path}")
+        except IOError as e:
+            print(f"Error: {e}")
 
     def get_allowed_users(self):
         with open("privacy_log.txt", 'r') as file:
