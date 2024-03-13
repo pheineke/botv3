@@ -18,3 +18,4 @@ schulden.db
 modules/main/aihelper/models/alpaca/pytorch_model.bin
 user_activities.db
 privacy_log.txt
+*.db
