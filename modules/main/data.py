@@ -261,9 +261,7 @@ class Data(commands.Cog):
                     table_headers = self.get_table_headers(author_table)
                     for elem in user_activities:
                         for j in range(0,len(table_headers)):
-                            temp_dict_elem = {}
-                            temp_dict_elem[table_headers[j]] = elem[j]
-                            temp_dict_main[j] = temp_dict_elem
+                            temp_dict_main[table_headers[j]] = elem[j]
                         
 
                     with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix=f".{format_}") as temp_file:
