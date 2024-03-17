@@ -14,7 +14,7 @@ class AiAudio(commands.Cog):
         self.bot = bot
         
 
-    @app_commands.command(name="AI Audio Composer", description="Compose an audio sequence with a prompt")
+    @app_commands.command(name="compose", description="Compose an audio sequence with a prompt")
     async def compose(self, interaction:discord.Interaction, prompt:str):
 
         synthesiser = pipeline("text-to-audio", "facebook/musicgen-small")
