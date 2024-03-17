@@ -1,8 +1,15 @@
+import asyncio
 import subprocess
+from datetime import datetime, timedelta
+
+
 
 class Helper():
     def __init__(self) -> None:
         self.requirementspath = "requirements.txt"
+
+    def parse_datetime(self, dt_str):
+        return datetime.strptime(dt_str, "%Y-%m-%d,%H:%M")
 
     def sort_requirements(self):
             try:
@@ -20,7 +27,8 @@ class Helper():
             except FileNotFoundError:
                 print(f"Die Datei '{self.requirementspath}' wurde nicht gefunden.")
 
-    async def install_requirements_if_missing(self):
+    def install_requirements_if_missing(self):
+        self.sort_requirements()
         try:
             # Öffne die requirements.txt-Datei und lies die Anforderungen
             with open(self.requirementspath, "r") as file:
@@ -50,6 +58,18 @@ class Helper():
         except FileNotFoundError:
             print(f"Die Datei '{self.requirementspath}' wurde nicht gefunden.")
 
-    async def do(self):
-        self.sort_requirements()
-        await self.install_requirements_if_missing()
+    def do(self, file_path):
+        file_path = self.requirementspath
+        
+        with open(file_path, 'r') as file:
+            last_botstart_time = None
+            for line in file:
+                parts = line.strip().split(',')
+                if parts[-1] == 'BOTSTART':
+                    last_botstart_time = self.parse_datetime(parts[0] + ',' + parts[1])
+
+            if last_botstart_time:
+                current_time = datetime.now()
+                time_difference = current_time - last_botstart_time
+                if time_difference <= timedelta(hours=5):
+                    self.install_requirements_if_missing()

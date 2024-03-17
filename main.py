@@ -83,7 +83,7 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.idle)
 
     await create_logdir()
-    #await Helper().do()
+    await Helper().do()
     await load_spine()
     loaded = await getmainmodules()
 

@@ -9,3 +9,7 @@ prettytable
 requests
 table2ascii
 tabulate
+flask
+python-telegram-bot
+transformers
+scipy
