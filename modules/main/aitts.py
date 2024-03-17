@@ -1,3 +1,4 @@
+import asyncio
 from transformers import AutoProcessor, MusicgenForConditionalGeneration
 import scipy
 
@@ -34,7 +35,7 @@ class AiAudio(commands.Cog):
 
         # sampling_rate = model.config.audio_encoder.sampling_rate
         # scipy.io.wavfile.write("musicgen_out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
-
+        asyncio.wait(5)
         await interaction.channel.send_message("test")
         # await interaction.response.send_message(file=discord.File("musicgen_out.wav"))
         # if os.path.exists("./musicgen_out.wav"):
