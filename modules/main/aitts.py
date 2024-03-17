@@ -17,6 +17,8 @@ class AiAudio(commands.Cog):
 
     @app_commands.command(name="compose", description="Compose an audio sequence with a prompt")
     async def compose(self, interaction:discord.Interaction, prompt:str):
+        if os.path.exists("./audio_gen-out.wav"):
+            os.remove("./audio_gen-out.wav")
         
         await interaction.response.send_message("Processing...")
         
