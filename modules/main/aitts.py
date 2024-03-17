@@ -21,25 +21,24 @@ class AiAudio(commands.Cog):
         await interaction.response.send_message("Processing...")
         
     
-        # processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
-        # model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
+        processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
+        model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
 
-        # inputs = processor(
-        #     text=[prompt],
-        #     padding=True,
-        #     return_tensors="pt",
-        # )
+        inputs = processor(
+            text=[prompt],
+            padding=True,
+            return_tensors="pt",
+        )
 
-        # audio_values = model.generate(**inputs, max_new_tokens=256)
+        audio_values = model.generate(**inputs, max_new_tokens=256)
 
 
-        # sampling_rate = model.config.audio_encoder.sampling_rate
-        # scipy.io.wavfile.write("musicgen_out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
-        asyncio.wait(5)
-        await interaction.followup.send("Done", file=discord.File("musicgen_out.wav"))
-        # await interaction.response.send_message(file=discord.File("musicgen_out.wav"))
-        # if os.path.exists("./musicgen_out.wav"):
-        #     os.remove("./musicgen_out.wav")
+        sampling_rate = model.config.audio_encoder.sampling_rate
+        scipy.io.wavfile.write("audio_gen-out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
+
+        await interaction.followup.send("Done", file=discord.File("audio_gen-out.wav"))
+        if os.path.exists("./audio_gen-out.wav"):
+            os.remove("./audio_gen-out.wav")
 
 
 async def setup(client):
