@@ -26,3 +26,7 @@ class AiAudio(commands.Cog):
         await interaction.response.send_message(file=discord.File("musicgen_out.wav"))
         if os.path.exists("./musicgen_out.wav"):
             os.remove("./musicgen_out.wav")
+
+
+async def setup(client):
+    await client.add_cog(AiAudio(client))

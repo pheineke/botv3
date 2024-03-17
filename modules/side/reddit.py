@@ -19,7 +19,7 @@ class Reddit():
 
         self.create_log()
 
-    def create_log(self):
+    def create_loAI Audio Composerg(self):
         if not(os.path.exists('reddit_logger.log')):
             with open('reddit_logger.log', 'w') as file:
                 file.write('a\nb\nc')
