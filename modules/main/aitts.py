@@ -16,25 +16,29 @@ class AiAudio(commands.Cog):
 
     @app_commands.command(name="compose", description="Compose an audio sequence with a prompt")
     async def compose(self, interaction:discord.Interaction, prompt:str):
+        
+        msg = await interaction.response.send_message("Processing...")
+        
+    
+        # processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
+        # model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
 
-        processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
-        model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
+        # inputs = processor(
+        #     text=[prompt],
+        #     padding=True,
+        #     return_tensors="pt",
+        # )
 
-        inputs = processor(
-            text=[prompt],
-            padding=True,
-            return_tensors="pt",
-        )
-
-        audio_values = model.generate(**inputs, max_new_tokens=256)
+        # audio_values = model.generate(**inputs, max_new_tokens=256)
 
 
-        sampling_rate = model.config.audio_encoder.sampling_rate
-        scipy.io.wavfile.write("musicgen_out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
+        # sampling_rate = model.config.audio_encoder.sampling_rate
+        # scipy.io.wavfile.write("musicgen_out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
 
-        await interaction.response.send_message(file=discord.File("musicgen_out.wav"))
-        if os.path.exists("./musicgen_out.wav"):
-            os.remove("./musicgen_out.wav")
+        await interaction.channel.send_message("test")
+        # await interaction.response.send_message(file=discord.File("musicgen_out.wav"))
+        # if os.path.exists("./musicgen_out.wav"):
+        #     os.remove("./musicgen_out.wav")
 
 
 async def setup(client):
