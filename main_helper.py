@@ -58,7 +58,7 @@ class Helper():
         except FileNotFoundError:
             print(f"Die Datei '{self.requirementspath}' wurde nicht gefunden.")
 
-    def do(self):
+    async def do(self):
         file_path = self.requirementspath
         
         with open(file_path, 'r') as file:
