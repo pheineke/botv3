@@ -36,10 +36,26 @@ class AiAudio(commands.Cog):
         sampling_rate = model.config.audio_encoder.sampling_rate
         scipy.io.wavfile.write("./audio_gen-out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
 
+    async def tts_transformer(self,prompt):
+        model = VitsModel.from_pretrained("facebook/mms-tts-eng")
+        tokenizer = AutoTokenizer.from_pretrained("facebook/mms-tts-eng")
+
+        text = str(prompt)
+        inputs = tokenizer(text, return_tensors="pt")
+
+        with torch.no_grad():
+            output = model(**inputs).waveform
+
+        scipy.io.wavfile.write("./tts_fb01-out.wav", rate=model.config.sampling_rate, data=output.float().numpy())
+
     async def worker(self):
         while True:
-            model, prompt, length = await self.queue.get()
-            await self.music_transformer(model, prompt, length)
+            type_, model, prompt, length = await self.queue.get()
+            if type_ == "compose":
+                await self.music_transformer(model, prompt, length)
+            elif type_ == "tts":
+                await self.tts_transformer(prompt)
+
             self.queue.task_done()
 
     @app_commands.command(name="compose", description="Compose an audio sequence with a prompt")
@@ -58,20 +74,7 @@ class AiAudio(commands.Cog):
         await interaction.response.send_message("Processing...")
         model = model or "facebook/musicgen-small"
 
-        processor = AutoProcessor.from_pretrained(str(model))
-        model = MusicgenForConditionalGeneration.from_pretrained(str(model))
-
-        inputs = processor(
-            text=[prompt],
-            padding=True,
-            return_tensors="pt",
-        )
-        length = 256 * (length / 5)
-        audio_values = model.generate(**inputs, max_new_tokens=int(length))
-
-
-        sampling_rate = model.config.audio_encoder.sampling_rate
-        scipy.io.wavfile.write("./audio_gen-out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
+        await self.queue.put(("compose",model, prompt, length))
 
         await interaction.followup.send("Done", file=discord.File("./audio_gen-out.wav"))
         if os.path.exists("./audio_gen-out.wav"):
@@ -83,18 +86,9 @@ class AiAudio(commands.Cog):
             os.remove("./tts_fb01-out.wav")
 
         await interaction.response.send_message("Processing...")
-
-        model = VitsModel.from_pretrained("facebook/mms-tts-eng")
-        tokenizer = AutoTokenizer.from_pretrained("facebook/mms-tts-eng")
-
-        text = str(prompt)
-        inputs = tokenizer(text, return_tensors="pt")
-
-        with torch.no_grad():
-            output = model(**inputs).waveform
-
-        scipy.io.wavfile.write("./tts_fb01-out.wav", rate=model.config.sampling_rate, data=output.float().numpy())
-
+        
+        await self.queue.put(("tts",None, prompt, None))
+        
         await interaction.followup.send("Done", file=discord.File("./tts_fb01-out.wav"))        
         if os.path.exists("./tts_fb01-out.wav"):
             os.remove("./tts_fb01-out.wav")
