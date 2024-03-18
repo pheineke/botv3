@@ -77,9 +77,10 @@ class AiAudio(commands.Cog):
         await interaction.response.send_message("Processing...")
         model = model or "facebook/musicgen-small"
 
-        await self.queue.put((interaction, "compose",model, prompt, length))
+        #await self.queue.put((interaction, "compose",model, prompt, length))
+        await self.music_transformer(prompt, length)
 
-        #await interaction.followup.send("Done", file=lambda: discord.File("./audio_gen-out.wav"))
+        await interaction.followup.send("Done", file=lambda: discord.File("./audio_gen-out.wav"))
         if os.path.exists("./audio_gen-out.wav"):
             os.remove("./audio_gen-out.wav")
 
@@ -90,8 +91,8 @@ class AiAudio(commands.Cog):
 
         await interaction.response.send_message("Processing...")
         
-        await self.queue.put((interaction, "tts" ,None, prompt, None))
-        #await self.tts_transformer(prompt)
+        #await self.queue.put((interaction, "tts" ,None, prompt, None))
+        await self.tts_transformer(prompt)
 
         #await interaction.followup.send("Done", file=lambda: discord.File("./tts_fb01-out.wav"))        
         if os.path.exists("./tts_fb01-out.wav"):
