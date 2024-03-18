@@ -20,7 +20,7 @@ class AiAudio(commands.Cog):
         self.queue = asyncio.Queue()
         self.worker_task = asyncio.create_task(self.worker())
 
-    async def music_transformer(self, model, prompt, length):
+    def music_transformer(self, model, prompt, length):
         processor = AutoProcessor.from_pretrained(str(model))
         model = MusicgenForConditionalGeneration.from_pretrained(str(model))
 
@@ -36,7 +36,7 @@ class AiAudio(commands.Cog):
         sampling_rate = model.config.audio_encoder.sampling_rate
         scipy.io.wavfile.write("./audio_gen-out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
 
-    async def tts_transformer(self,prompt):
+    def tts_transformer(self,prompt):
         model = VitsModel.from_pretrained("facebook/mms-tts-eng")
         tokenizer = AutoTokenizer.from_pretrained("facebook/mms-tts-eng")
 
@@ -52,11 +52,11 @@ class AiAudio(commands.Cog):
         while True:
             interaction, type_, model, prompt, length = await self.queue.get()
             if type_ == "compose":
-                await self.music_transformer(model, prompt, length)
+                self.music_transformer(model, prompt, length)
                 await interaction.followup.send("Done", file=lambda: discord.File("./audio_gen-out.wav"))
 
             elif type_ == "tts":
-                await self.tts_transformer(prompt)
+                self.tts_transformer(prompt)
                 await interaction.followup.send("Done", file=lambda: discord.File("./tts_fb01-out.wav"))
 
             self.queue.task_done()
