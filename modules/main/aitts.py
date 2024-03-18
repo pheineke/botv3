@@ -20,7 +20,7 @@ class AiAudio(commands.Cog):
         self.queue = asyncio.Queue()
         self.worker_task = asyncio.create_task(self.worker())
 
-    async def music_transformer(model, prompt, length):
+    async def music_transformer(self, model, prompt, length):
         processor = AutoProcessor.from_pretrained(str(model))
         model = MusicgenForConditionalGeneration.from_pretrained(str(model))
 
