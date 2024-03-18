@@ -78,7 +78,7 @@ class AiAudio(commands.Cog):
         model = model or "facebook/musicgen-small"
 
         #await self.queue.put((interaction, "compose",model, prompt, length))
-        await self.music_transformer(prompt, length)
+        await self.music_transformer(model=model, prompt=prompt, length=length)
 
         await interaction.followup.send("Done", file=lambda: discord.File("./audio_gen-out.wav"))
         if os.path.exists("./audio_gen-out.wav"):
