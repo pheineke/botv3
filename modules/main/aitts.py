@@ -7,7 +7,6 @@ import scipy
 from transformers import VitsModel, AutoTokenizer
 import torch
 
-from melo.api import TTS
 
 import discord
 from discord import app_commands
@@ -68,33 +67,33 @@ class AiAudio(commands.Cog):
         if os.path.exists("./tts_fb01_out.wav"):
             os.remove("./tts_fb01-out.wav")
 
-    @app_commands.command(name="tts", description="Text to speech")
-    @app_commands.describe(speaker_lang = "EN-US ")
-    @app_commands.choices(option=[
-        app_commands.Choice(name='Default Accent', value='EN-Default'),
-        app_commands.Choice(name='American Accent', value='EN-US'),
-        app_commands.Choice(name='British Accent', value='EN-BR'),
-        app_commands.Choice(name='Indian Accent', value='EN_INDIA'),
-        app_commands.Choice(name='Australian Accent', value='EN-AU')
-    ])
-    async def tts_melo(self, interaction:discord.Interaction, prompt:str, speaker_lang:app_commands.Choice[str]=None):
-        if os.path.exists("./tts_fb01-out.wav"):
-            os.remove("./tts_fb01-out.wav.wav")
+    # @app_commands.command(name="tts", description="Text to speech")
+    # @app_commands.describe(speaker_lang = "EN-US ")
+    # @app_commands.choices(option=[
+    #     app_commands.Choice(name='Default Accent', value='EN-Default'),
+    #     app_commands.Choice(name='American Accent', value='EN-US'),
+    #     app_commands.Choice(name='British Accent', value='EN-BR'),
+    #     app_commands.Choice(name='Indian Accent', value='EN_INDIA'),
+    #     app_commands.Choice(name='Australian Accent', value='EN-AU')
+    # ])
+    # async def tts_melo(self, interaction:discord.Interaction, prompt:str, speaker_lang:app_commands.Choice[str]=None):
+    #     if os.path.exists("./tts_fb01-out.wav"):
+    #         os.remove("./tts_fb01-out.wav.wav")
 
-        await interaction.response.send_message("Processing...")
+    #     await interaction.response.send_message("Processing...")
         
-        speed = 1.0
-        device = 'auto'
-        text = prompt
-        model = TTS(language='EN_V2', device=device)
-        speaker_ids= model.hps.data.spk2id
+    #     speed = 1.0
+    #     device = 'auto'
+    #     text = prompt
+    #     model = TTS(language='EN_V2', device=device)
+    #     speaker_ids= model.hps.data.spk2id
 
-        output_path= "tts_melo-out.wav"
-        model.tts_to_file(text, speaker_ids[speaker_lang], output_path, speed=speed)
+    #     output_path= "tts_melo-out.wav"
+    #     model.tts_to_file(text, speaker_ids[speaker_lang], output_path, speed=speed)
 
-        await interaction.followup.send("Done", file=discord.File("tts_fb01_out.wav"))        
-        if os.path.exists("./tts_fb01_out.wav"):
-            os.remove("./tts_fb01-out.wav")
+    #     await interaction.followup.send("Done", file=discord.File("tts_fb01_out.wav"))        
+    #     if os.path.exists("./tts_fb01_out.wav"):
+    #         os.remove("./tts_fb01-out.wav")
 
 
 async def setup(client):
