@@ -22,18 +22,21 @@ class AiAudio(commands.Cog):
     @app_commands.command(name="compose", description="Compose an audio sequence with a prompt")
     @app_commands.describe(length="Länge in Sekunden")
     @app_commands.choices(model_size=[
-        app_commands.Choice(name='small', value="facebook/musicgen-small"),
-        app_commands.Choice(name='medium', value="facebook/musicgen-medium"),
-        app_commands.Choice(name='large', value="facebook/musicgen-large")
+        app_commands.Choice(name='musicgen-small', value="facebook/musicgen-small"),
+        app_commands.Choice(name='musicgen-medium', value="facebook/musicgen-medium"),
+        app_commands.Choice(name='musicgen-large', value="facebook/musicgen-large"),
+        app_commands.Choice(name='musicgen-melody', value="facebook/musicgen-melody"),
+        app_commands.Choice(name='audiogen-medium', value="facebook/audiogen-medium")
     ])
-    async def compose(self, interaction:discord.Interaction, prompt:str, length:int=None, model_size:app_commands.Choice[str]=None):
+    async def compose(self, interaction:discord.Interaction, prompt:str, length:int=None, model:app_commands.Choice[str]=None):
         if os.path.exists("./audio_gen-out.wav"):
             os.remove("./audio_gen-out.wav")
         
         await interaction.response.send_message("Processing...")
-    
-        processor = AutoProcessor.from_pretrained(model_size or "facebook/musicgen-small")
-        model = MusicgenForConditionalGeneration.from_pretrained(model_size or "facebook/musicgen-small")
+        model = model or "facebook/musicgen-small"
+
+        processor = AutoProcessor.from_pretrained(str(model))
+        model = MusicgenForConditionalGeneration.from_pretrained(str(model))
 
         inputs = processor(
             text=[prompt],
