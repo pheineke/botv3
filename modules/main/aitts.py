@@ -63,9 +63,9 @@ class AiAudio(commands.Cog):
 
         scipy.io.wavfile.write("tts_fb01-out.wav", rate=model.config.sampling_rate, data=output.float().numpy())
 
-        await interaction.followup.send("Done", file=discord.File("tts_fb01_out.wav"))        
-        if os.path.exists("./tts_fb01_out.wav"):
-            os.remove("./tts_fb01-out.wav")
+        await interaction.followup.send("Done", file=discord.File("tts-fb01_out.wav"))        
+        if os.path.exists("./tts-fb01_out.wav"):
+            os.remove("./tts-fb01-out.wav")
 
     # @app_commands.command(name="tts", description="Text to speech")
     # @app_commands.describe(speaker_lang = "EN-US ")
