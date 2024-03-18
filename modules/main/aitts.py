@@ -17,8 +17,8 @@ from discord.ui import Button, View
 class AiAudio(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
-        self.queue = asyncio.Queue()
-        self.worker_task = asyncio.create_task(self.worker())
+        #self.queue = asyncio.Queue()
+        #self.worker_task = asyncio.create_task(self.worker())
 
     def music_transformer(self, model, prompt, length):
         processor = AutoProcessor.from_pretrained(str(model))
@@ -77,8 +77,20 @@ class AiAudio(commands.Cog):
         await interaction.response.send_message("Processing...")
         #model = model or "facebook/musicgen-small"
 
-        await self.queue.put((interaction, "compose",model, prompt, length))
-        #await self.music_transformer(model=model, prompt=prompt, length=length)
+        processor = AutoProcessor.from_pretrained(str(model))
+        model = MusicgenForConditionalGeneration.from_pretrained(str(model))
+
+        inputs = processor(
+            text=[prompt],
+            padding=True,
+            return_tensors="pt",
+        )
+        length = 256 * (length / 5)
+        audio_values = model.generate(**inputs, max_new_tokens=int(length))
+
+
+        sampling_rate = model.config.audio_encoder.sampling_rate
+        scipy.io.wavfile.write("./audio_gen-out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
 
         await interaction.followup.send("Done", file=lambda: discord.File("./audio_gen-out.wav"))
         if os.path.exists("./audio_gen-out.wav"):
@@ -91,10 +103,18 @@ class AiAudio(commands.Cog):
 
         await interaction.response.send_message("Processing...")
         
-        await self.queue.put((interaction, "tts" ,None, prompt, None))
-        #await self.tts_transformer(prompt)
+        model = VitsModel.from_pretrained("facebook/mms-tts-eng")
+        tokenizer = AutoTokenizer.from_pretrained("facebook/mms-tts-eng")
 
-        #await interaction.followup.send("Done", file=lambda: discord.File("./tts_fb01-out.wav"))        
+        text = str(prompt)
+        inputs = tokenizer(text, return_tensors="pt")
+
+        with torch.no_grad():
+            output = model(**inputs).waveform
+
+        scipy.io.wavfile.write("./tts_fb01-out.wav", rate=model.config.sampling_rate, data=output.float().numpy())
+
+        await interaction.followup.send("Done", file=lambda: discord.File("./tts_fb01-out.wav"))        
         if os.path.exists("./tts_fb01-out.wav"):
             os.remove("./tts_fb01-out.wav")
 
