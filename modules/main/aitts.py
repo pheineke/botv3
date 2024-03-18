@@ -32,8 +32,8 @@ class AiAudio(commands.Cog):
         
         await interaction.response.send_message("Processing...")
     
-        processor = AutoProcessor.from_pretrained(model_size)
-        model = MusicgenForConditionalGeneration.from_pretrained(model_size)
+        processor = AutoProcessor.from_pretrained(model_size or "facebook/musicgen-small")
+        model = MusicgenForConditionalGeneration.from_pretrained(model_size or "facebook/musicgen-small")
 
         inputs = processor(
             text=[prompt],
