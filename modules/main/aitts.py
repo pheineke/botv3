@@ -21,7 +21,7 @@ class AiAudio(commands.Cog):
 
     @app_commands.command(name="compose", description="Compose an audio sequence with a prompt")
     @app_commands.describe(length="Länge in Sekunden")
-    @app_commands.choices(model_size=[
+    @app_commands.choices(model=[
         app_commands.Choice(name='musicgen-small', value="facebook/musicgen-small"),
         app_commands.Choice(name='musicgen-medium', value="facebook/musicgen-medium"),
         app_commands.Choice(name='musicgen-large', value="facebook/musicgen-large"),
