@@ -50,11 +50,14 @@ class AiAudio(commands.Cog):
 
     async def worker(self):
         while True:
-            type_, model, prompt, length = await self.queue.get()
+            interaction, type_, model, prompt, length = await self.queue.get()
             if type_ == "compose":
                 await self.music_transformer(model, prompt, length)
+                await interaction.followup.send("Done", file=lambda: discord.File("./audio_gen-out.wav"))
+
             elif type_ == "tts":
                 await self.tts_transformer(prompt)
+                await interaction.followup.send("Done", file=lambda: discord.File("./tts_fb01-out.wav"))
 
             self.queue.task_done()
 
@@ -74,9 +77,9 @@ class AiAudio(commands.Cog):
         await interaction.response.send_message("Processing...")
         model = model or "facebook/musicgen-small"
 
-        await self.queue.put(("compose",model, prompt, length))
+        await self.queue.put((interaction, "compose",model, prompt, length))
 
-        await interaction.followup.send("Done", file=discord.File("./audio_gen-out.wav"))
+        #await interaction.followup.send("Done", file=lambda: discord.File("./audio_gen-out.wav"))
         if os.path.exists("./audio_gen-out.wav"):
             os.remove("./audio_gen-out.wav")
 
@@ -87,9 +90,10 @@ class AiAudio(commands.Cog):
 
         await interaction.response.send_message("Processing...")
         
-        await self.queue.put(("tts",None, prompt, None))
-        
-        await interaction.followup.send("Done", file=discord.File("./tts_fb01-out.wav"))        
+        await self.queue.put((interaction, "tts" ,None, prompt, None))
+        #await self.tts_transformer(prompt)
+
+        #await interaction.followup.send("Done", file=lambda: discord.File("./tts_fb01-out.wav"))        
         if os.path.exists("./tts_fb01-out.wav"):
             os.remove("./tts_fb01-out.wav")
 
