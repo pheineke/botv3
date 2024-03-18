@@ -20,7 +20,8 @@ class AiAudio(commands.Cog):
         
 
     @app_commands.command(name="compose", description="Compose an audio sequence with a prompt")
-    async def compose(self, interaction:discord.Interaction, prompt:str):
+    @app_commands.describe(length="Länge in Sekunden")
+    async def compose(self, interaction:discord.Interaction, prompt:str, length:int=None):
         if os.path.exists("./audio_gen-out.wav"):
             os.remove("./audio_gen-out.wav")
         
@@ -34,7 +35,7 @@ class AiAudio(commands.Cog):
             padding=True,
             return_tensors="pt",
         )
-
+        length = 256 * (length / 5)
         audio_values = model.generate(**inputs, max_new_tokens=256)
 
 
