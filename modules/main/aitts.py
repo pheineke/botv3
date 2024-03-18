@@ -83,7 +83,7 @@ class AiAudio(commands.Cog):
             return_tensors="pt",
         )
         length = 256 * (length / 5)
-        audio_values = model.generate(**inputs, max_new_tokens=int(length))
+        audio_values = model.generate(**inputs, max_new_tokens=length)
 
 
         sampling_rate = model.config.audio_encoder.sampling_rate
