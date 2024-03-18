@@ -127,6 +127,7 @@ class Dominascrp(commands.Cog):
     
     
     @app_commands.command(name="wohnheimsperre", description="Zeig Sperrstatus eines Apartments")
+    @app_commands.describe(apartment="Apart. Nummer im Format A-###", days="Entweder letzen x Tage hier oder start-/endday", startday="von dd.mm.YYYY", endday="bis dd.mm.YYYY")
     #@commands.command()
     async def wohnheimsperre(self, interaction:discord.Interaction, apartment:str, days:str=None, startday:str=None, endday:str=None):
     #async def testosteron(self, ctx, apartment:str, startDay:str=None, endDay:str=None):

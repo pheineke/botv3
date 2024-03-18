@@ -78,6 +78,7 @@ class Fsinfo(commands.Cog):
         clean_data('lock-log.txt')
 
     @app_commands.command(name="opendoor_graph", description="[FSINFO] Zeigt opendoor Graph")
+    @app_commands.describe(datum0 = "Optional von - YYYY-MM-dd", datum1 = "Optional bis - YYYY-MM-dd")
     async def get_diagram(self, interaction:discord.Interaction, datum0: str=None, datum1:str=None):
         #datum0 = "2024-02-26"
         #datum1 = "2024-02-26"

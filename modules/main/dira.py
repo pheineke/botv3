@@ -109,18 +109,22 @@ class DIRA(commands.Cog):
         
 
     @app_commands.command(name="radixgen", description="[DIRA] generiert Radixzahl")
+    @app_commands.describe(base="Radix-Basis für zwei Zahlen", length="Länge der Radix-Stellen")
     async def radixgen(self, interaction:discord.Interaction, base:str=None, length:str=None):
         finallist, base = self.radixgen0(base, length)
         await interaction.response.send(f"<{finallist}>{base}")
 
     @app_commands.command(name="radixcalcgen", description="[DIRA] generiert Radixaufgabe")
-    async def radixcalcgen(self, interaction:discord.Interaction, base:str=None, length:str=None):
+    @app_commands.describe(base="Radix-Basis für zwei Zahlen", length="Länge der Radix-Stellen", operator="+ - * / whatever")
+    async def radixcalcgen(self, interaction:discord.Interaction, base:str=None, length:str=None, operator:str=None):
         radix0, base = self.radixgen0(base, length)
         radix1, base = self.radixgen0(base, length)
-        zeichen = random.choice(["+","-","*","÷",""])
+        zeichen = operator or random.choice(["+","-","*","÷",""])
         await interaction.response.send(f"<{radix0}>{base} {zeichen} <{radix1}>{base}".replace("'",""))
 
+
     @commands.command(name="addradixgen", description="[DIRA] generiert Radix-Additionsaufgabe")
+    @app_commands.describe(base="Radix-Basis für zwei Zahlen", length="Länge der Radix-Stellen")
     async def addradixgen(self, interaction:discord.Interaction, base:str=None, length:str=None):
         radix0, base = self.radixgen0(base, length)
         radix1, base = self.radixgen0(base, length)

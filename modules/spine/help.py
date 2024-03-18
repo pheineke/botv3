@@ -49,6 +49,7 @@ class Help(commands.Cog):
 
 
     @app_commands.command(name="help", description="Help-Message")
+    @app_commands.describe(arg = "Nach commands filtern bzw. iwas was im command steht")
     async def help_(self, interaction: discord.Interaction, arg: str=None):
         command_info = {}  # Use a dictionary to store commands categorized by brief category
         briefcategories = []

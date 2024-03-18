@@ -39,6 +39,7 @@ class Schulden(commands.Cog):
         await interaction.response.send_message(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```", ephemeral=True)
 
     @app_commands.command(name="addschulden", description="[SCHULDEN] .addschulden @Schuldner Betrag")
+    @app_commands.describe(user1 = "An wen gehen die Schulden?", betrag="Wie viel Schulden? XX.XX", comment="Kommentar max 100 Zeichen")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag:str, comment:str=None):
         message_author = interaction.user
         message_author_name = message_author.name
