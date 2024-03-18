@@ -39,9 +39,9 @@ class AiAudio(commands.Cog):
 
 
         sampling_rate = model.config.audio_encoder.sampling_rate
-        scipy.io.wavfile.write("audio_gen-out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
+        scipy.io.wavfile.write("./audio_gen-out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
 
-        await interaction.followup.send("Done", file=discord.File("audio_gen-out.wav"))
+        await interaction.followup.send("Done", file=discord.File("./audio_gen-out.wav"))
         if os.path.exists("./audio_gen-out.wav"):
             os.remove("./audio_gen-out.wav")
 
