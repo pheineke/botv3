@@ -53,11 +53,11 @@ class AiAudio(commands.Cog):
             interaction, type_, model, prompt, length = await self.queue.get()
             if type_ == "compose":
                 self.music_transformer(model, prompt, length)
-                await interaction.followup.send("Done", file=lambda: discord.File("./audio_gen-out.wav"))
+                await interaction.followup.send("Done", file=discord.File("./audio_gen-out.wav"))
 
             elif type_ == "tts":
                 self.tts_transformer(prompt)
-                await interaction.followup.send("Done", file=lambda: discord.File("./tts_fb01-out.wav"))
+                await interaction.followup.send("Done", file=discord.File("./tts_fb01-out.wav"))
 
             self.queue.task_done()
 
