@@ -55,13 +55,13 @@ class AiAudio(commands.Cog):
         model = VitsModel.from_pretrained("facebook/mms-tts-eng")
         tokenizer = AutoTokenizer.from_pretrained("facebook/mms-tts-eng")
 
-        text = prompt
+        text = str(prompt)
         inputs = tokenizer(text, return_tensors="pt")
 
         with torch.no_grad():
             output = model(**inputs).waveform
 
-        scipy.io.wavfile.write("tts_fb01-out.wav", rate=model.config.sampling_rate, data=output.float().numpy())
+        scipy.io.wavfile.write("./tts_fb01-out.wav", rate=model.config.sampling_rate, data=output.float().numpy())
 
         await interaction.followup.send("Done", file=discord.File("tts_fb01-out.wav"))        
         if os.path.exists("./tts_fb01-out.wav"):
