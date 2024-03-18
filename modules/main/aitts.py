@@ -43,7 +43,9 @@ class AiAudio(commands.Cog):
             padding=True,
             return_tensors="pt",
         )
-        length = 256 * (length / 5)
+
+        
+        length = 256 * ((length if length else 29)/ 5)
         audio_values = model.generate(**inputs, max_new_tokens=int(length))
 
 
