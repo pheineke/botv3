@@ -17,7 +17,30 @@ from discord.ui import Button, View
 class AiAudio(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
-        
+        self.queue = asyncio.Queue()
+        self.worker_task = asyncio.create_task(self.worker())
+
+    async def music_transformer(model, prompt, length):
+        processor = AutoProcessor.from_pretrained(str(model))
+        model = MusicgenForConditionalGeneration.from_pretrained(str(model))
+
+        inputs = processor(
+            text=[prompt],
+            padding=True,
+            return_tensors="pt",
+        )
+        length = 256 * (length / 5)
+        audio_values = model.generate(**inputs, max_new_tokens=int(length))
+
+
+        sampling_rate = model.config.audio_encoder.sampling_rate
+        scipy.io.wavfile.write("./audio_gen-out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
+
+    async def worker(self):
+        while True:
+            model, prompt, length = await self.queue.get()
+            await self.music_transformer(model, prompt, length)
+            self.queue.task_done()
 
     @app_commands.command(name="compose", description="Compose an audio sequence with a prompt")
     @app_commands.describe(length="Länge in Sekunden")
@@ -28,7 +51,7 @@ class AiAudio(commands.Cog):
         app_commands.Choice(name='musicgen-melody', value="facebook/musicgen-melody"),
         app_commands.Choice(name='audiogen-medium', value="facebook/audiogen-medium")
     ])
-    async def compose(self, interaction:discord.Interaction, prompt:str, length:int=None, model:app_commands.Choice[str]=None):
+    async def compose(self, interaction:discord.Interaction, prompt:str, length:int=29, model:app_commands.Choice[str]=None):
         if os.path.exists("./audio_gen-out.wav"):
             os.remove("./audio_gen-out.wav")
         
