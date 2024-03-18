@@ -70,12 +70,12 @@ class AiAudio(commands.Cog):
         app_commands.Choice(name='musicgen-melody', value="facebook/musicgen-melody"),
         app_commands.Choice(name='audiogen-medium', value="facebook/audiogen-medium")
     ])
-    async def compose(self, interaction:discord.Interaction, prompt:str, length:int=29, model:app_commands.Choice[str]="facebook/musicgen-small"):
+    async def compose(self, interaction:discord.Interaction, prompt:str, length:int=29, model:app_commands.Choice[str]=None):
         if os.path.exists("./audio_gen-out.wav"):
             os.remove("./audio_gen-out.wav")
         
         await interaction.response.send_message("Processing...")
-        #model = model or "facebook/musicgen-small"
+        model = model or "facebook/musicgen-small"
 
         processor = AutoProcessor.from_pretrained(str(model))
         model = MusicgenForConditionalGeneration.from_pretrained(str(model))
@@ -92,7 +92,7 @@ class AiAudio(commands.Cog):
         sampling_rate = model.config.audio_encoder.sampling_rate
         scipy.io.wavfile.write("./audio_gen-out.wav", rate=sampling_rate, data=audio_values[0, 0].numpy())
 
-        await interaction.followup.send("Done", file=lambda: discord.File("./audio_gen-out.wav"))
+        await interaction.followup.send("Done", file=discord.File("./audio_gen-out.wav"))
         if os.path.exists("./audio_gen-out.wav"):
             os.remove("./audio_gen-out.wav")
 
@@ -114,7 +114,7 @@ class AiAudio(commands.Cog):
 
         scipy.io.wavfile.write("./tts_fb01-out.wav", rate=model.config.sampling_rate, data=output.float().numpy())
 
-        await interaction.followup.send("Done", file=lambda: discord.File("./tts_fb01-out.wav"))        
+        await interaction.followup.send("Done", file=discord.File("./tts_fb01-out.wav"))        
         if os.path.exists("./tts_fb01-out.wav"):
             os.remove("./tts_fb01-out.wav")
 
