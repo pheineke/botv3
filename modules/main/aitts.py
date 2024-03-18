@@ -21,14 +21,19 @@ class AiAudio(commands.Cog):
 
     @app_commands.command(name="compose", description="Compose an audio sequence with a prompt")
     @app_commands.describe(length="Länge in Sekunden")
-    async def compose(self, interaction:discord.Interaction, prompt:str, length:int=None):
+    @app_commands.choices(model_size=[
+        app_commands.Choice(name='small', value="facebook/musicgen-small"),
+        app_commands.Choice(name='medium', value="facebook/musicgen-medium"),
+        app_commands.Choice(name='large', value="facebook/musicgen-large")
+    ])
+    async def compose(self, interaction:discord.Interaction, prompt:str, length:int=None, model_size:app_commands.Choice[str]=None):
         if os.path.exists("./audio_gen-out.wav"):
             os.remove("./audio_gen-out.wav")
         
         await interaction.response.send_message("Processing...")
     
-        processor = AutoProcessor.from_pretrained("facebook/musicgen-small")
-        model = MusicgenForConditionalGeneration.from_pretrained("facebook/musicgen-small")
+        processor = AutoProcessor.from_pretrained(model_size)
+        model = MusicgenForConditionalGeneration.from_pretrained(model_size)
 
         inputs = processor(
             text=[prompt],
