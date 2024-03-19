@@ -203,7 +203,7 @@ class Mensa(commands.Cog):
                         cycle_I -= 1
                     else: cycle_I = len(ausgaben)-1
                     embd = ausgaben[cycle_I]
-                    await interaction.response.edit_message(embed=embd), view=view0)
+                    await interaction.response.edit_message(embed=embd, view=view0)
                 
                 cycle1.callback=cycle1_callback
                 cycle0.callback=cycle0_callback
