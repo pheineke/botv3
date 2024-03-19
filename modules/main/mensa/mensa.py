@@ -158,9 +158,9 @@ class Mensa(commands.Cog):
                 await reaction.message.add_reaction('🟥')
 
     @app_commands.command(name="mensa", description="Zeigt Essen an")
-    async def mensa(self, interaction:discord.Interaction, pictures:str=None,date:str=0):
+    async def mensa(self, interaction:discord.Interaction, pictures:str=None):
         base_url = "https://www.mensa-kl.de/api.php"
-        params = {"format": "json", "date": date}
+        params = {"format": "json", "date": "0"}
         try:
             response = requests.get(f"{base_url}", params=params)
             response.raise_for_status()
