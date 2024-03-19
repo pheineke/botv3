@@ -1,4 +1,3 @@
-
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
@@ -16,6 +15,7 @@ class Mensa(commands.Cog):
         self.user_time_db = database.Manage_database("users.db")
         self.cyclereset.start()
         self.logdir = os.getcwd() + "/logs"
+        self.mensadelay = None
 
     async def db_controller(self, ctxprefix, authormention, authorname, equal=None, arg=None):
         if ctxprefix == "my.":
@@ -184,6 +184,7 @@ class Mensa(commands.Cog):
                     embed.set_footer(text="Daten von Mensa-kl.de")
                     ausgaben.append(embed)
                     
+                global cycle_I 
                 cycle_I = 0
 
                 cycle1 = Button(label="Previous", style=discord.ButtonStyle.blurple)
@@ -193,6 +194,7 @@ class Mensa(commands.Cog):
                             .add_item(cycle1)
                 
                 async def cycle1_callback(interaction:discord.Interaction):
+                
                     if len(ausgaben) < cycle_I:
                         cycle_I += 1
                     else: cycle_I = 0
@@ -214,7 +216,7 @@ class Mensa(commands.Cog):
             await interaction.response.send_message("Well f")
 
 
-    @commands.cooldown(1, 20, commands.BucketType.user)
+    '''@commands.cooldown(1, 20, commands.BucketType.user)
     @commands.command(alias = "Mensa",brief="Zeigt zukünftige Mahlzeiten in der Mensa an")
     async def mensa(self, ctx, pics = 0, date: str ="0"):
         print(os.getcwd())
@@ -272,7 +274,7 @@ class Mensa(commands.Cog):
             current_time = datetime.now().strftime("%H:%M")
             with open(f"{self.logdir}/{current_date}.log", "w") as file:
                 file.write(f"[{current_time}]\n{e}\n\n")
-            await ctx.message.add_reaction('🟥')
+            await ctx.message.add_reaction('🟥')'''
 
 
     @tasks.loop(minutes=15.0)
