@@ -196,12 +196,14 @@ class Mensa(commands.Cog):
                     if len(ausgaben) < cycle_I:
                         cycle_I += 1
                     else: cycle_I = 0
-                    await interaction.response.edit_message(embed=ausgaben[cycle_I], view=view0)
+                    embd = ausgaben[cycle_I]
+                    await interaction.response.edit_message(embed=embd, view=view0)
                 async def cycle0_callback(interaction:discord.Interaction):
                     if len(ausgaben) < cycle_I or cycle_I > 0:
                         cycle_I -= 1
                     else: cycle_I = len(ausgaben)-1
-                    await interaction.response.edit_message(ausgaben[cycle_I], view=view0)
+                    embd = ausgaben[cycle_I]
+                    await interaction.response.edit_message(embed=embd), view=view0)
                 
                 cycle1.callback=cycle1_callback
                 cycle0.callback=cycle0_callback
