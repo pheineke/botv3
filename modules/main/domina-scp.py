@@ -141,7 +141,7 @@ class Dominascrp(commands.Cog):
             if (not(days) and not(startday) and not(endday)):
                 tabelle_new = self.filter_data_timespan(data=tabelle, start=None, end=None)
                 lentabelle_new = len(tabelle_new.keys())
-                if lentabelle_new > 50:
+                if lentabelle_new > 8:
                     tabelle_new = dict(list(tabelle_new.keys())[:8])
                 lenanzeige = lentabelle_new - len(tabelle_new.keys())
 
@@ -149,14 +149,14 @@ class Dominascrp(commands.Cog):
                 tabelle_new = self.filter_data_timespan(data=tabelle, start=startday, end=endday)
 
                 lentabelle_new = len(tabelle_new.keys())
-                if lentabelle_new > 50:
+                if lentabelle_new > 8:
                     tabelle_new = dict(list(tabelle_new.keys())[:8])
                 lenanzeige = lentabelle_new - len(tabelle_new.keys())
             elif days and not(startday and endday):
                 tabelle_new = self.filter_last_x_days(x=int(days), data=tabelle)
                 lentabelle_new = len(tabelle_new.keys())
 
-                if lentabelle_new > 50:
+                if lentabelle_new > 8:
                     tabelle_new = dict(list(tabelle_new.keys())[:8])
                 lenanzeige = lentabelle_new - len(tabelle_new.keys())
             else:
