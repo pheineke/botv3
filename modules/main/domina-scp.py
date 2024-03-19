@@ -142,7 +142,7 @@ class Dominascrp(commands.Cog):
                 tabelle_new = self.filter_data_timespan(data=tabelle, start=None, end=None)
                 lentabelle_new = len(tabelle_new.keys())
                 if lentabelle_new > 50:
-                    tabelle_new = dict(list(tabelle_new.keys())[:10])
+                    tabelle_new = dict(list(tabelle_new.keys())[:8])
                 lenanzeige = lentabelle_new - len(tabelle_new.keys())
 
             elif (startday or endday):
@@ -150,16 +150,18 @@ class Dominascrp(commands.Cog):
 
                 lentabelle_new = len(tabelle_new.keys())
                 if lentabelle_new > 50:
-                    tabelle_new = dict(list(tabelle_new.keys())[:10])
+                    tabelle_new = dict(list(tabelle_new.keys())[:8])
                 lenanzeige = lentabelle_new - len(tabelle_new.keys())
             elif days and not(startday and endday):
-                try:
-                    tabelle_new = self.filter_last_x_days(x=int(days), data=tabelle)
-                except:
-                    await interaction.response.send_message("Bro Tage sind INTS", ephemeral=True)
-                
+                tabelle_new = self.filter_last_x_days(x=int(days), data=tabelle)
+                lentabelle_new = len(tabelle_new.keys())
+
+                if lentabelle_new > 50:
+                    tabelle_new = dict(list(tabelle_new.keys())[:8])
+                lenanzeige = lentabelle_new - len(tabelle_new.keys())
             else:
                 await interaction.response.send_message("Entscheide dich, entweder Tage oder start und ende", ephemeral=True)
+                return
                 #await ctx.send("Entscheide dich")
             
             random_color = discord.Color(random.randint(0, 0xFFFFFF))
