@@ -7,7 +7,10 @@ response = requests.get(f"{base_url}", params=params)
 response.raise_for_status()
 data = response.json()
 if data:
-    formatted_meal =""
+    ausgabe1 =""
+    ausgabe2 =""
+    ausgabe3 =""
+    ausgabe4 =""
     for meal in data:
             title = meal["title_with_additives"]
             price = meal["price"]
@@ -16,11 +19,11 @@ if data:
             ausgabe = str(meal["loc"])
 
             if "1" in ausgabe:
-                formatted_meal += f"Ausgabe {ausgabe} **{title}** - {price}€\n"
+                ausgabe1 += f"Ausgabe {ausgabe} **{title}** - {price}€\n"
             elif "Atrium" in ausgabe:
-                formatted_meal += f"{ausgabe} **{title}** - {price}€\n"
+                ausgabe3 += f"{ausgabe} **{title}** - {price}€\n"
             elif "Abend" in ausgabe:
-                formatted_meal += f"Abendmensa {ausgabe} **{title}** - {price}€\n"
+                ausgabe4 += f"Abendmensa {ausgabe} **{title}** - {price}€\n"
             else:
-                formatted_meal += f"{ausgabe} **{title}** - {price}€\n"
-print(formatted_meal)
+                ausgabe2 += f"{ausgabe} **{title}** - {price}€\n"
+

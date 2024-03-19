@@ -1,10 +1,13 @@
-import os
+
 import discord
+from discord import app_commands
 from discord.ext import commands, tasks
+from discord.ui import Button, View
+
 from datetime import datetime
 
 import requests
-
+import os
 import modules.main.mensa.database as database
 
 class Mensa(commands.Cog):
@@ -154,6 +157,61 @@ class Mensa(commands.Cog):
                     file.write(f"[{current_time}]\n{e}\n\n")
                 await reaction.message.add_reaction('🟥')
 
+    def Helloworld(print):
+        
+
+    @app_commands.command()
+    async def mensa(self, interaction:discord.Interaction, pictures:str=None,date:str=0):
+        base_url = "https://www.mensa-kl.de/api.php"
+        params = {"format": "json", "date": date}
+        try:
+            response = requests.get(f"{base_url}", params=params)
+            response.raise_for_status()
+            data = response.json()
+            if data:
+                ausgaben = []
+                for meal in data:
+                    title = meal["title_with_additives"]
+                    price = meal["price"]
+                    image_url = meal["image"]
+                    icon = meal["icon"]
+                    ausgabe = str(meal["loc"])
+
+                    embed = discord.Embed(title=f"Ausgabe {ausgabe}", description = f"**{title}** - {price}€\n", color=0x0080FF)
+
+                    if image_url and not(pictures):
+                        embed.set_image(url=f"https://www.mensa-kl.de/mimg/{image_url}")
+
+                    if icon and not(pictures):
+                        embed.set_thumbnail(url=f"https://www.mensa-kl.de/img/{icon}.png")
+                    embed.set_footer(text="Daten von Mensa-kl.de")
+                    ausgaben.append(embed)
+                    
+                cycle_I = 0
+
+                cycle1 = Button(label="Previous", style=discord.ButtonStyle.blurple)
+                cycle0 = Button(label="Next", style=discord.ButtonStyle.blurple)
+                view0 = View(timeout=0)\
+                            .add_item(cycle0)\
+                            .add_item(cycle1)
+                
+                async def cycle1_callback(interaction:discord.Interaction):
+                    if len(ausgaben) < cycle_I:
+                        cycle_I += 1
+                    else: cycle_I = 0
+                    await interaction.response.edit_message(embed=ausgaben[cycle_I], view=view0)
+                async def cycle0_callback(interaction:discord.Interaction):
+                    if len(ausgaben) < cycle_I or cycle_I > 0:
+                        cycle_I -= 1
+                    else: cycle_I = len(ausgaben)-1
+                    await interaction.response.edit_message(ausgaben[cycle_I], view=view0)
+                
+                cycle1.callback=cycle1_callback
+                cycle0.callback=cycle0_callback
+
+                await interaction.response.send_message(embed=ausgaben[0], view=view0)
+        except:
+            await interaction.response.send_message("Well f")
 
 
     @commands.cooldown(1, 20, commands.BucketType.user)
