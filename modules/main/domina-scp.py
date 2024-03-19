@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from bs4 import BeautifulSoup as bs 
 import pprint
 from tabulate import tabulate
+import itertools 
 
 
 class Dominascrp(commands.Cog):
@@ -140,27 +141,26 @@ class Dominascrp(commands.Cog):
                 
             if (not(days) and not(startday) and not(endday)):
                 tabelle_new = self.filter_data_timespan(data=tabelle, start=None, end=None)
-                print(tabelle_new)
-                print(list(tabelle_new.keys()))
-                lentabelle_new = len(tabelle_new.keys())
-                if lentabelle_new > 8:
-                    tabelle_new = dict(list(tabelle_new.keys())[:8])
-                lenanzeige = lentabelle_new - len(tabelle_new.keys())
+                lentabelle_new = len(tabelle_new)
+                print(tabelle_new.items())
+                print("\n")
+                print(len(tabelle_new))
+                if lentabelle_new > 16:
+                    tabelle_new = dict(itertools.islice(tabelle_new.items(), 16))
+                lenanzeige = lentabelle_new - len(tabelle_new)
 
             elif (startday or endday):
                 tabelle_new = self.filter_data_timespan(data=tabelle, start=startday, end=endday)
-
-                lentabelle_new = len(tabelle_new.keys())
-                if lentabelle_new > 8:
-                    tabelle_new = dict(list(tabelle_new.keys())[:8])
-                lenanzeige = lentabelle_new - len(tabelle_new.keys())
+                lentabelle_new = len(tabelle_new)
+                if lentabelle_new > 16:
+                    tabelle_new = dict(itertools.islice(tabelle_new.items(), 16))
+                lenanzeige = lentabelle_new - len(tabelle_new)
             elif days and not(startday and endday):
                 tabelle_new = self.filter_last_x_days(x=int(days), data=tabelle)
-                lentabelle_new = len(tabelle_new.keys())
-
-                if lentabelle_new > 8:
-                    tabelle_new = dict(list(tabelle_new.keys())[:8])
-                lenanzeige = lentabelle_new - len(tabelle_new.keys())
+                lentabelle_new = len(tabelle_new)
+                if lentabelle_new > 16:
+                    tabelle_new = dict(itertools.islice(tabelle_new.items(), 16))
+                lenanzeige = lentabelle_new - len(tabelle_new)
             else:
                 await interaction.response.send_message("Entscheide dich, entweder Tage oder start und ende", ephemeral=True)
                 return
