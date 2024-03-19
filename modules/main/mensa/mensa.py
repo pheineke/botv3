@@ -208,7 +208,8 @@ class Mensa(commands.Cog):
                 cycle1.callback=cycle1_callback
                 cycle0.callback=cycle0_callback
 
-                await interaction.response.send_message(embed=ausgaben[0], view=view0)
+                embd0 = ausgaben[0]
+                await interaction.response.send_message(embed=embd0, view=view0)
         except:
             await interaction.response.send_message("Well f")
 
