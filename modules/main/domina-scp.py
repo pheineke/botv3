@@ -140,6 +140,8 @@ class Dominascrp(commands.Cog):
                 
             if (not(days) and not(startday) and not(endday)):
                 tabelle_new = self.filter_data_timespan(data=tabelle, start=None, end=None)
+                print(tabelle_new)
+                print(tabelle_new.keys())
                 lentabelle_new = len(tabelle_new.keys())
                 if lentabelle_new > 8:
                     tabelle_new = dict(list(tabelle_new.keys())[:8])
