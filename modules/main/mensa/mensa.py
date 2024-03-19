@@ -157,10 +157,7 @@ class Mensa(commands.Cog):
                     file.write(f"[{current_time}]\n{e}\n\n")
                 await reaction.message.add_reaction('🟥')
 
-    def Helloworld(print):
-        
-
-    @app_commands.command()
+    @app_commands.command(name="mensa", description="Zeigt Essen an")
     async def mensa(self, interaction:discord.Interaction, pictures:str=None,date:str=0):
         base_url = "https://www.mensa-kl.de/api.php"
         params = {"format": "json", "date": date}

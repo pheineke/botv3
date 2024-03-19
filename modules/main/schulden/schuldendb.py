@@ -18,7 +18,8 @@ class Schuldenverwaltung:
                             id INTEGER PRIMARY KEY,
                             schuldner TEXT NOT NULL,
                             glaeubiger TEXT NOT NULL,
-                            betrag REAL NOT NULL
+                            betrag REAL NOT NULL,
+                            comment TEXT
                          )''')
         self.conn.commit()
 
@@ -49,7 +50,14 @@ class Schuldenverwaltung:
     def schulden_hinzufuegen(self, schuldner, glaeubiger, betrag, comment=None):
         self.c.execute("SELECT betrag FROM Schulden WHERE schuldner=? AND glaeubiger=?", (schuldner, glaeubiger))
         result = self.c.fetchone()
-        if result:
+        if result and comment:
+            vorhandener_betrag = result[0]
+            neuer_betrag = vorhandener_betrag + betrag
+            self.c.execute("UPDATE Schulden SET betrag=? WHERE schuldner=? AND glaeubiger=? AND comment=?", (neuer_betrag, schuldner, glaeubiger, comment))
+            self.conn.commit()
+            self.log_transaction("Schulden hinzugefügt", schuldner, glaeubiger, betrag, comment)
+            return f"Schulden von {schuldner} zu {glaeubiger} um {betrag} erhöht. Neue Gesamtschulden: {neuer_betrag}."
+        elif result:
             vorhandener_betrag = result[0]
             neuer_betrag = vorhandener_betrag + betrag
             self.c.execute("UPDATE Schulden SET betrag=? WHERE schuldner=? AND glaeubiger=?", (neuer_betrag, schuldner, glaeubiger))
@@ -62,25 +70,41 @@ class Schuldenverwaltung:
             self.log_transaction("Schulden hinzugefügt", schuldner, glaeubiger, betrag, comment)
             return f"Schulden von {schuldner} zu {glaeubiger} in Höhe von {betrag} hinzugefügt."
 
-    def schulden_tilgen(self, schuldner, glaeubiger, betrag):
-        self.c.execute("SELECT betrag FROM Schulden WHERE schuldner=? AND glaeubiger=?", (schuldner, glaeubiger))
-        result = self.c.fetchone()
-        if result:
-            vorhandener_betrag = result[0]
-            if vorhandener_betrag >= betrag:
-                neuer_betrag = vorhandener_betrag - betrag
-                self.c.execute("UPDATE Schulden SET betrag=? WHERE schuldner=? AND glaeubiger=?", (neuer_betrag, schuldner, glaeubiger))
-                self.conn.commit()
-                self.log_transaction("Schulden getilgt", schuldner, glaeubiger, betrag)
-                return f"Schulden von {schuldner} zu {glaeubiger} um {betrag} verringert."
+    def schulden_tilgen(self, schuldner, glaeubiger, betrag, comment=None):
+        if comment:
+            self.c.execute("SELECT betrag FROM Schulden WHERE schuldner=? AND glaeubiger=? AND comment=?", (schuldner, glaeubiger, comment))
+            result = self.c.fetchone()
+            if result:
+                vorhandener_betrag = result[0]
+                if vorhandener_betrag >= betrag:
+                    neuer_betrag = vorhandener_betrag - betrag
+                    self.c.execute("UPDATE Schulden SET betrag=? WHERE schuldner=? AND glaeubiger=?", (neuer_betrag, schuldner, glaeubiger))
+                    self.conn.commit()
+                    self.log_transaction("Schulden getilgt", schuldner, glaeubiger, betrag)
+                    return f"Schulden von {schuldner} zu {glaeubiger} um {betrag} verringert."
+                else:
+                    return "Der angegebene Betrag ist größer als die vorhandenen Schulden."
             else:
-                return "Der angegebene Betrag ist größer als die vorhandenen Schulden."
+                return "Keine Schulden gefunden."
         else:
-            return "Keine Schulden gefunden."
+            self.c.execute("SELECT betrag FROM Schulden WHERE schuldner=? AND glaeubiger=?", (schuldner, glaeubiger))
+            result = self.c.fetchone()
+            if result:
+                vorhandener_betrag = result[0]
+                if vorhandener_betrag >= betrag:
+                    neuer_betrag = vorhandener_betrag - betrag
+                    self.c.execute("UPDATE Schulden SET betrag=? WHERE schuldner=? AND glaeubiger=?", (neuer_betrag, schuldner, glaeubiger))
+                    self.conn.commit()
+                    self.log_transaction("Schulden getilgt", schuldner, glaeubiger, betrag)
+                    return f"Schulden von {schuldner} zu {glaeubiger} um {betrag} verringert."
+                else:
+                    return "Der angegebene Betrag ist größer als die vorhandenen Schulden."
+            else:
+                return "Keine Schulden gefunden."
 
     def schulden_anzeigen(self, schuldner=None, glaeubiger=None):
         if schuldner and glaeubiger:
-            self.c.execute("SELECT betrag FROM Schulden WHERE schuldner=? AND glaeubiger=?", (schuldner, glaeubiger))
+            self.c.execute("SELECT betrag FROM Schulden WHERE schuldner=? AND glaeubiger=? AND comment", (schuldner, glaeubiger))
             result = self.c.fetchone()
             if result:
                 return f"Schulden von {schuldner} zu {glaeubiger}: {result[0]}"
