@@ -142,9 +142,6 @@ class Dominascrp(commands.Cog):
             if (not(days) and not(startday) and not(endday)):
                 tabelle_new = self.filter_data_timespan(data=tabelle, start=None, end=None)
                 lentabelle_new = len(tabelle_new)
-                print(tabelle_new.items())
-                print("\n")
-                print(len(tabelle_new))
                 if lentabelle_new > 16:
                     tabelle_new = dict(itertools.islice(tabelle_new.items(), 16))
                 lenanzeige = lentabelle_new - len(tabelle_new)
