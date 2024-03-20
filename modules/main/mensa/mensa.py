@@ -1,3 +1,5 @@
+import asyncio
+import random
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
@@ -16,6 +18,19 @@ class Mensa(commands.Cog):
         self.cyclereset.start()
         self.logdir = os.getcwd() + "/logs"
         self.mensadelay = None
+        self.cycleI = 0
+        self.giflist = ["https://c.tenor.com/IHdlTRsmcS4AAAAC/tenor.gif",
+                        "https://i.giphy.com/3zhxq2ttgN6rEw8SDx.webp",
+                        "https://i.giphy.com/2X4e4KrOMz7gaXU1Z4.webp",
+                        "https://i.gifer.com/7iJR.gif",
+                        "https://cdnl.iconscout.com/lottie/premium/thumb/404-error-page-3959253-3299952.gif",
+                        "https://i.pinimg.com/originals/a8/12/1a/a8121abee959e18cbad25ad4046f76d8.gif",
+                        "https://cdn.dribbble.com/users/1022481/screenshots/3018253/404-snow.gif",
+                        "https://cdn.dribbble.com/users/2771385/screenshots/16267270/comp_2-min.gif",
+                        "https://i.pinimg.com/originals/bd/df/d6/bddfd6e4434f42662b009295c9bab86e.gif",
+                        "https://assets-v2.lottiefiles.com/a/23535dd0-117d-11ee-a59a-3bae0125838c/lZLD0w04Rr.gif",
+                        "https://cdn.dribbble.com/users/199291/screenshots/19686710/404_loading_gif.gif",
+                        "https://cdn.svgator.com/images/2022/01/404-page-design-animation.gif"]
 
     async def db_controller(self, ctxprefix, authormention, authorname, equal=None, arg=None):
         if ctxprefix == "my.":
@@ -157,6 +172,74 @@ class Mensa(commands.Cog):
                     file.write(f"[{current_time}]\n{e}\n\n")
                 await reaction.message.add_reaction('🟥')
 
+    @commands.command()
+    async def hrs(self, ctx, user:discord.Member):
+        a = random.randint(1, 101)
+        x = a //30
+        giff0 = ('''⬛️⬛️⬛⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️''')
+        giff1 = ('''⬛️⬛️​🟥⬛️⬛️
+⬛️⬛️​🟥⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️''')
+        giff2 = ('''⬛️⬛️​🟥🟥🟥
+⬛️⬛️​🟥🟥⬛️
+⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️''')
+        giff3 = ('''⬛️⬛️​🟥🟥🟥
+⬛️⬛️​🟥🟥🟥
+⬛️⬛️🟥🟥🟥
+⬛️⬛️⬛️⬛️⬛️
+⬛️⬛️⬛️⬛️⬛️''')
+        giff4 = ('''⬛️⬛️​🟥🟥🟥
+⬛️⬛️​🟥🟥🟥
+⬛️⬛️🟥🟥🟥
+⬛️⬛️⬛️🟥🟥
+⬛️⬛️⬛️⬛️🟥''')
+        giff5 = ('''⬛️⬛️​🟥🟥🟥
+⬛️⬛️​🟥🟥🟥
+⬛️⬛️🟥🟥🟥
+⬛️⬛️🟥🟥🟥
+⬛️⬛️🟥🟥🟥''')
+        giff6 = ('''⬛️⬛️​🟥🟥🟥
+⬛️⬛️​🟥🟥🟥
+⬛️⬛️🟥🟥🟥
+⬛️⬛️🟥🟥🟥
+⬛️⬛️🟥🟥🟥''')
+        giff7 = ('''⬛️⬛️​🟥🟥🟥
+⬛️⬛️​🟥🟥🟥
+⬛️⬛️🟥🟥🟥
+⬛️🟥🟥🟥🟥
+🟥🟥🟥🟥🟥''')
+        giff8 = ('''⬛️⬛️​🟥🟥🟥
+⬛️⬛️​🟥🟥🟥
+🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥''')
+        giff9 = ('''🟥⬛️​🟥🟥🟥
+🟥🟥​🟥🟥🟥
+🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥''')
+        giff10 = ('''🟥🟥🟥🟥🟥
+🟥🟥​🟥🟥🟥
+🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥
+🟥🟥🟥🟥🟥''')
+        
+        
+        liste = [giff0, giff1, giff2, giff3, giff4, giff5, giff6, giff7, giff8, giff9, giff10]
+        msg:discord.Message = await ctx.send(f"{user.mention} dein Hurensohnstatus:\n{liste[0]}")
+        for i in range(1, len(liste)):
+            await msg.edit(content=f"{user.mention} dein Hurensohnstatus:\n{liste[i]}")
+            await asyncio.sleep(2)
+
+
     @app_commands.command(name="mensa", description="Zeigt Essen an")
     async def mensa(self, interaction:discord.Interaction, pictures:str=None):
         base_url = "https://www.mensa-kl.de/api.php"
@@ -173,38 +256,55 @@ class Mensa(commands.Cog):
                     image_url = meal["image"]
                     icon = meal["icon"]
                     ausgabe = str(meal["loc"])
+                    if "1" in ausgabe or "2" in ausgabe:
+                        if "veg" in ausgabe:
+                            ausgabe = f"{ausgabe} Vegetarisch".replace("veg", "")
+                        ausgabe = f"Ausgabe {ausgabe}"
+                    if ausgabe.endswith("V+"):
+                        ausgabe = ausgabe[:len(ausgabe)-2] + " Vegan"
+                    if ausgabe.endswith("Vegan"):
+                        ausgabe = ausgabe[:len(ausgabe)-5]+" Vegan"
+                    if ausgabe.startswith("Atrium"):
+                        ausgabe = "Atrium "+ausgabe[6:]
+                    if ausgabe.startswith("Abend"):
+                        ausgabe = "Abend "+ausgabe[5:]
 
-                    embed = discord.Embed(title=f"Ausgabe {ausgabe}", description = f"**{title}** - {price}€\n", color=0x0080FF)
+                    if "v" in ausgabe.lower():
+                        ausgabe += "🌱"
+                        
+                    embed = discord.Embed(title=f"{ausgabe}", description = f"**{title}** - {price}€\n", color=0x0080FF)
 
                     if image_url and not(pictures):
                         embed.set_image(url=f"https://www.mensa-kl.de/mimg/{image_url}")
+                    elif not(image_url and pictures):
+                        embed.set_image(url=random.choice(self.giflist))
 
                     if icon and not(pictures):
                         embed.set_thumbnail(url=f"https://www.mensa-kl.de/img/{icon}.png")
                     embed.set_footer(text="Daten von Mensa-kl.de")
-                    ausgaben.append(embed)
-                    
-                global cycle_I 
-                cycle_I = 0
 
-                cycle1 = Button(label="Previous", style=discord.ButtonStyle.blurple)
-                cycle0 = Button(label="Next", style=discord.ButtonStyle.blurple)
-                view0 = View(timeout=0)\
+                    
+                    ausgaben.append(embed)
+                    ausgaben.append(discord.Embed(title=f"{ausgabe}", description = f"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", color=0x0080FF))
+
+                cycle1 = Button(label="⏩", style=discord.ButtonStyle.blurple)
+                cycle0 = Button(label="⏪", style=discord.ButtonStyle.blurple)
+                view0 = View(timeout=None)\
                             .add_item(cycle0)\
                             .add_item(cycle1)
                 
                 async def cycle1_callback(interaction:discord.Interaction):
-                
-                    if len(ausgaben) < cycle_I:
-                        cycle_I += 1
-                    else: cycle_I = 0
-                    embd = ausgaben[cycle_I]
+                    if len(ausgaben)-1 > self.cycleI:
+                        self.cycleI += 1
+                    else:
+                        self.cycleI = 0
+                    embd = ausgaben[self.cycleI]
                     await interaction.response.edit_message(embed=embd, view=view0)
                 async def cycle0_callback(interaction:discord.Interaction):
-                    if len(ausgaben) < cycle_I or cycle_I > 0:
-                        cycle_I -= 1
-                    else: cycle_I = len(ausgaben)-1
-                    embd = ausgaben[cycle_I]
+                    if len(ausgaben) < self.cycleI or self.cycleI > 0:
+                        self.cycleI -= 1
+                    else: self.cycleI = len(ausgaben)-1
+                    embd = ausgaben[self.cycleI]
                     await interaction.response.edit_message(embed=embd, view=view0)
                 
                 cycle1.callback=cycle1_callback

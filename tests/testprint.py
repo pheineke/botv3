@@ -1,3 +1,7 @@
-test = type(list())
+test = "Hallo"
+a = "G"
+var = f"{test:>5}g"
 
-print(test)
+print(var)
+for x in range(1,100):
+    print(x)
