@@ -5,7 +5,7 @@ from discord import app_commands
 from discord.ext import commands, tasks
 from discord.ui import Button, View
 
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import requests
 import os
@@ -17,7 +17,8 @@ class Mensa(commands.Cog):
         self.user_time_db = database.Manage_database("users.db")
         self.cyclereset.start()
         self.logdir = os.getcwd() + "/logs"
-        self.mensadelay = None
+        self.botstart = datetime.now()
+        self.mensadelay = datetime.now()
         self.cycleI = 0
         self.giflist = ["https://c.tenor.com/IHdlTRsmcS4AAAAC/tenor.gif",
                         "https://i.giphy.com/3zhxq2ttgN6rEw8SDx.webp",
@@ -172,210 +173,91 @@ class Mensa(commands.Cog):
                     file.write(f"[{current_time}]\n{e}\n\n")
                 await reaction.message.add_reaction('🟥')
 
-    @commands.command()
-    async def hrs(self, ctx, user:discord.Member):
-        a = random.randint(1, 101)
-        x = a //30
-        giff0 = ('''⬛️⬛️⬛⬛️⬛️
-⬛️⬛️⬛️⬛️⬛️
-⬛️⬛️⬛️⬛️⬛️
-⬛️⬛️⬛️⬛️⬛️
-⬛️⬛️⬛️⬛️⬛️''')
-        giff1 = ('''⬛️⬛️​🟥⬛️⬛️
-⬛️⬛️​🟥⬛️⬛️
-⬛️⬛️⬛️⬛️⬛️
-⬛️⬛️⬛️⬛️⬛️
-⬛️⬛️⬛️⬛️⬛️''')
-        giff2 = ('''⬛️⬛️​🟥🟥🟥
-⬛️⬛️​🟥🟥⬛️
-⬛️⬛️⬛️⬛️⬛️
-⬛️⬛️⬛️⬛️⬛️
-⬛️⬛️⬛️⬛️⬛️''')
-        giff3 = ('''⬛️⬛️​🟥🟥🟥
-⬛️⬛️​🟥🟥🟥
-⬛️⬛️🟥🟥🟥
-⬛️⬛️⬛️⬛️⬛️
-⬛️⬛️⬛️⬛️⬛️''')
-        giff4 = ('''⬛️⬛️​🟥🟥🟥
-⬛️⬛️​🟥🟥🟥
-⬛️⬛️🟥🟥🟥
-⬛️⬛️⬛️🟥🟥
-⬛️⬛️⬛️⬛️🟥''')
-        giff5 = ('''⬛️⬛️​🟥🟥🟥
-⬛️⬛️​🟥🟥🟥
-⬛️⬛️🟥🟥🟥
-⬛️⬛️🟥🟥🟥
-⬛️⬛️🟥🟥🟥''')
-        giff6 = ('''⬛️⬛️​🟥🟥🟥
-⬛️⬛️​🟥🟥🟥
-⬛️⬛️🟥🟥🟥
-⬛️⬛️🟥🟥🟥
-⬛️⬛️🟥🟥🟥''')
-        giff7 = ('''⬛️⬛️​🟥🟥🟥
-⬛️⬛️​🟥🟥🟥
-⬛️⬛️🟥🟥🟥
-⬛️🟥🟥🟥🟥
-🟥🟥🟥🟥🟥''')
-        giff8 = ('''⬛️⬛️​🟥🟥🟥
-⬛️⬛️​🟥🟥🟥
-🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥''')
-        giff9 = ('''🟥⬛️​🟥🟥🟥
-🟥🟥​🟥🟥🟥
-🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥''')
-        giff10 = ('''🟥🟥🟥🟥🟥
-🟥🟥​🟥🟥🟥
-🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥
-🟥🟥🟥🟥🟥''')
-        
-        
-        liste = [giff0, giff1, giff2, giff3, giff4, giff5, giff6, giff7, giff8, giff9, giff10]
-        msg:discord.Message = await ctx.send(f"{user.mention} dein Hurensohnstatus:\n{liste[0]}")
-        for i in range(1, len(liste)):
-            await msg.edit(content=f"{user.mention} dein Hurensohnstatus:\n{liste[i]}")
-            await asyncio.sleep(2)
-
 
     @app_commands.command(name="mensa", description="Zeigt Essen an")
     async def mensa(self, interaction:discord.Interaction, pictures:str=None):
-        base_url = "https://www.mensa-kl.de/api.php"
-        params = {"format": "json", "date": "0"}
-        try:
-            response = requests.get(f"{base_url}", params=params)
-            response.raise_for_status()
-            data = response.json()
-            if data:
-                ausgaben = []
-                for meal in data:
-                    title = meal["title_with_additives"]
-                    price = meal["price"]
-                    image_url = meal["image"]
-                    icon = meal["icon"]
-                    ausgabe = str(meal["loc"])
-                    if "1" in ausgabe or "2" in ausgabe:
-                        if "veg" in ausgabe:
-                            ausgabe = f"{ausgabe} Vegetarisch".replace("veg", "")
-                        ausgabe = f"Ausgabe {ausgabe}"
-                    if ausgabe.endswith("V+"):
-                        ausgabe = ausgabe[:len(ausgabe)-2] + " Vegan"
-                    if ausgabe.endswith("Vegan"):
-                        ausgabe = ausgabe[:len(ausgabe)-5]+" Vegan"
-                    if ausgabe.startswith("Atrium"):
-                        ausgabe = "Atrium "+ausgabe[6:]
-                    if ausgabe.startswith("Abend"):
-                        ausgabe = "Abend "+ausgabe[5:]
+        start_time = datetime.now()
+        time_diff =  start_time - self.mensadelay
+        botstart_time_diff = start_time - self.mensadelay
+        print(botstart_time_diff)
+        if time_diff >= timedelta(seconds=30) or botstart_time_diff <= timedelta(seconds=10):
+            self.mensadelay = datetime.now()
+            base_url = "https://www.mensa-kl.de/api.php"
+            params = {"format": "json", "date": "0"}
+            try:
+                response = requests.get(f"{base_url}", params=params)
+                response.raise_for_status()
+                data = response.json()
+                if data:
+                    ausgaben = []
+                    for meal in data:
+                        title = meal["title_with_additives"]
+                        price = str(meal["price"])
+                        image_url = meal["image"]
+                        icon = meal["icon"]
+                        ausgabe = str(meal["loc"])
+                        if "1" in ausgabe or "2" in ausgabe:
+                            if "veg" in ausgabe:
+                                ausgabe = f"{ausgabe} Vegetarisch".replace("veg", "")
+                            ausgabe = f"Ausgabe {ausgabe}"
+                        if ausgabe.endswith("V+"):
+                            ausgabe = ausgabe[:len(ausgabe)-2] + " Vegan"
+                        if ausgabe.endswith("Vegan"):
+                            ausgabe = ausgabe[:len(ausgabe)-5]+" Vegan"
+                        if ausgabe.startswith("Atrium"):
+                            ausgabe = "Atrium "+ausgabe[6:]
+                        if ausgabe.startswith("Abend"):
+                            ausgabe = "Abend "+ausgabe[5:]
 
-                    if "v" in ausgabe.lower():
-                        ausgabe += "🌱"
+                        if "v" in ausgabe.lower():
+                            ausgabe += "🌱"
+                    
+                        title = f"**{title}**"
+                        description0 = f"{title:200}\n\n🪙 **{price}**€\n"
+
+                        random_color = discord.Color(random.randint(0, 0xFFFFFF))
                         
-                    embed = discord.Embed(title=f"{ausgabe}", description = f"**{title}** - {price}€\n", color=0x0080FF)
+                        embed = discord.Embed(title=f"{ausgabe}",description = f"{description0}", color=random_color)
 
-                    if image_url and not(pictures):
-                        embed.set_image(url=f"https://www.mensa-kl.de/mimg/{image_url}")
-                    elif not(image_url and pictures):
-                        embed.set_image(url=random.choice(self.giflist))
-
-                    if icon and not(pictures):
-                        embed.set_thumbnail(url=f"https://www.mensa-kl.de/img/{icon}.png")
-                    embed.set_footer(text="Daten von Mensa-kl.de")
-
-                    
-                    ausgaben.append(embed)
-                    ausgaben.append(discord.Embed(title=f"{ausgabe}", description = f"FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF", color=0x0080FF))
-
-                cycle1 = Button(label="⏩", style=discord.ButtonStyle.blurple)
-                cycle0 = Button(label="⏪", style=discord.ButtonStyle.blurple)
-                view0 = View(timeout=None)\
-                            .add_item(cycle0)\
-                            .add_item(cycle1)
-                
-                async def cycle1_callback(interaction:discord.Interaction):
-                    if len(ausgaben)-1 > self.cycleI:
-                        self.cycleI += 1
-                    else:
-                        self.cycleI = 0
-                    embd = ausgaben[self.cycleI]
-                    await interaction.response.edit_message(embed=embd, view=view0)
-                async def cycle0_callback(interaction:discord.Interaction):
-                    if len(ausgaben) < self.cycleI or self.cycleI > 0:
-                        self.cycleI -= 1
-                    else: self.cycleI = len(ausgaben)-1
-                    embd = ausgaben[self.cycleI]
-                    await interaction.response.edit_message(embed=embd, view=view0)
-                
-                cycle1.callback=cycle1_callback
-                cycle0.callback=cycle0_callback
-
-                embd0 = ausgaben[0]
-                await interaction.response.send_message(embed=embd0, view=view0)
-        except:
-            await interaction.response.send_message("Well f")
-
-
-    '''@commands.cooldown(1, 20, commands.BucketType.user)
-    @commands.command(alias = "Mensa",brief="Zeigt zukünftige Mahlzeiten in der Mensa an")
-    async def mensa(self, ctx, pics = 0, date: str ="0"):
-        print(os.getcwd())
-        base_url = "https://www.mensa-kl.de/api.php"
-        params = {"format": "json", "date": date}
-
-        try:
-            response = requests.get(f"{base_url}", params=params)
-            response.raise_for_status()
-            data = response.json()
-
-            if data:
-                if pics == 0:
-                    if date == "all":
-                        titel = f"Alle nächsten Ausgaben"
-                    else:
-                        heute = data[0].get("date","Alle Tage")
-
-                        titel = f"Ausgabe am {heute}"
-                    
-                    embed = discord.Embed(title=titel, color=0x0080FF)  # Du kannst die Farbe anpassen
-                    for meal in data:
-                        title = meal.get("title", "N/A")
-                        price = meal.get("price", "N/A")
-                        image_url = meal.get("image", "")
-                        ausgabe = meal.get("loc", "")
-                        formatted_meal = f"**{title}** - {price}€"
-                        embed.add_field(name=f"Ausgabe {ausgabe}", value=formatted_meal, inline=False)
-                    embed.set_footer(text="Daten von Mensa-kl.de")
-                    await ctx.send(embed=embed)
-                elif date == "all":
-                    await ctx.send(f"Ich werde dir nicht alle Gerichte mit Bildern geben, das wären {len(data)} Nachrichten!\n Mach lieber +mensa 0 all")
-                else:
-                    for meal in data:
-                        title = meal.get("title_with_additives", "N/A")
-                        price = meal.get("price", "N/A")
-                        image_url = meal.get("image", "")
-                        icon = meal.get("icon", "")
-                        ausgabe = meal.get("loc", "Weiß nicht, welche Ausgabe")
-                        formatted_meal = f"**{title}** - {price}€"
-
-                        embed = discord.Embed(title=f"Ausgabe {ausgabe}", description = formatted_meal, color=0x0080FF)
-                        if image_url:
+                        if image_url and not(pictures):
                             embed.set_image(url=f"https://www.mensa-kl.de/mimg/{image_url}")
-                        if icon:
+                        elif not(image_url and pictures):
+                            embed.set_image(url=random.choice(self.giflist))
+
+                        if icon and not(pictures):
                             embed.set_thumbnail(url=f"https://www.mensa-kl.de/img/{icon}.png")
                         embed.set_footer(text="Daten von Mensa-kl.de")
-                        await ctx.send(embed=embed)
+                        ausgaben.append(embed)
 
-            else:
-                await ctx.send("Es wurden keine Mahlzeiten gefunden.")
+                    cycle1 = Button(label="⏩", style=discord.ButtonStyle.blurple)
+                    cycle0 = Button(label="⏪", style=discord.ButtonStyle.blurple)
+                    view0 = View(timeout=None)\
+                                .add_item(cycle0)\
+                                .add_item(cycle1)
+                    
+                    async def cycle1_callback(interaction:discord.Interaction):
+                        if len(ausgaben)-1 > self.cycleI:
+                            self.cycleI += 1
+                        else:
+                            self.cycleI = 0
+                        embd = ausgaben[self.cycleI]
+                        await interaction.response.edit_message(embed=embd, view=view0)
+                    async def cycle0_callback(interaction:discord.Interaction):
+                        if len(ausgaben) < self.cycleI or self.cycleI > 0:
+                            self.cycleI -= 1
+                        else: self.cycleI = len(ausgaben)-1
+                        embd = ausgaben[self.cycleI]
+                        await interaction.response.edit_message(embed=embd, view=view0)
+                    
+                    cycle1.callback=cycle1_callback
+                    cycle0.callback=cycle0_callback
 
-        except Exception as e:
-            current_date = datetime.now().strftime("%y-%m-%d")
-            current_time = datetime.now().strftime("%H:%M")
-            with open(f"{self.logdir}/{current_date}.log", "w") as file:
-                file.write(f"[{current_time}]\n{e}\n\n")
-            await ctx.message.add_reaction('🟥')'''
-
+                    embd0 = ausgaben[0]
+                    await interaction.response.send_message(embed=embd0, view=view0)
+            except:
+                await interaction.response.send_message("Well f", ephemeral=True)
+        else:
+            await interaction.response.send_message(f"Available in {round(60-time_diff.total_seconds(), 3)} sec",ephemeral=True)
 
     @tasks.loop(minutes=15.0)
     async def cyclereset(self):
