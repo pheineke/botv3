@@ -213,7 +213,7 @@ class Mensa(commands.Cog):
                             ausgabe += "🌱"
                     
                         title = f"**{title}**"
-                        description0 = f"{title:200}\n\n🪙 **{price}**€\n"
+                        description0 = f"{title}\n\n🪙 **{price}**€\n"
 
                         random_color = discord.Color(random.randint(0, 0xFFFFFF))
                         
