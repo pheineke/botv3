@@ -92,20 +92,28 @@ class Monster(commands.Cog):
 
 
     @commands.command()
-    async def monster(self, ctx):
+    async def monster(self, ctx, view=None):
         monster_data = self.get_monsters()
 
-        embeds = []
-        for drink_name, drink_data in monster_data.items():
+        if view:
             embed = discord.Embed(title=drink_name, color=0x00ff00)
             for key, value in drink_data.items():
-                if "Image" in key:
-                    embed.set_image(url=value)
-                else:
+                if "Image" not in key:
                     embed.add_field(name=key, value=value, inline=False)
-            embeds.append(embed)
-        
-        await ctx.send(embeds=embeds)
+
+            await ctx.send(embed=embed)
+        else:
+            embeds = []
+            for drink_name, drink_data in monster_data.items():
+                embed = discord.Embed(title=drink_name, color=0x00ff00)
+                for key, value in drink_data.items():
+                    if "Image" in key:
+                        embed.set_image(url=value)
+                    else:
+                        embed.add_field(name=key, value=value, inline=False)
+                embeds.append(embed)
+            
+            await ctx.send(embeds=embeds)
 
 
 async def setup(client):
