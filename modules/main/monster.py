@@ -105,7 +105,10 @@ class Monster(commands.Cog):
             await ctx.send(embed=embed)
         else:
             embeds = []
+            counter = 0
             for drink_name, drink_data in monster_data.items():
+                # if counter > 9:
+                #     await ctx.send(embeds=embeds)
                 embed = discord.Embed(title=drink_name, color=0x00ff00)
                 for key, value in drink_data.items():
                     if "Image" in key:
@@ -114,7 +117,7 @@ class Monster(commands.Cog):
                         embed.add_field(name=key, value=value, inline=False)
                 embeds.append(embed)
             
-            await ctx.send(embeds=embeds)
+            await ctx.send(embed=embeds)
 
 
 async def setup(client):
