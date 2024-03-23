@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 import requests, os, json
 from dotenv import load_dotenv
 
-class AiAudio(commands.Cog):
+class Monster(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
         self.cookies = self.get_cookies()
@@ -89,3 +89,7 @@ class AiAudio(commands.Cog):
             embeds.append(embed)
         
         await ctx.send(embeds=embeds)
+
+
+async def setup(client):
+    await client.add_cog(Monster(client))
