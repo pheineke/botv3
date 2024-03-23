@@ -35,8 +35,7 @@ class Monster(commands.Cog):
                 "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060517883607/energy-drink-pipeline-punch",
                 "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060517888510/energy-drink-juiced-mango-loco",
                 "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060335635228/energy-drink-original",
-                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060335635242/energy-drink-absolutely-zero-zuckerfrei",
-                ""]
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060335635242/energy-drink-absolutely-zero-zuckerfrei"]
         cookies = self.cookies
 
             # Führe eine GET-Anfrage auf die Webseite mit den gespeicherten Cookies durch
