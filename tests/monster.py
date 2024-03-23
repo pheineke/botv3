@@ -70,7 +70,7 @@ class AiAudio(commands.Cog):
 
 
     @commands.command()
-    async def drinks(self, ctx):
+    async def monster(self, ctx):
         monster_data = self.get_monsters()
 
         embeds = []
