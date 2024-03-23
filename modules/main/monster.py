@@ -96,10 +96,11 @@ class Monster(commands.Cog):
         monster_data = self.get_monsters()
 
         if view:
-            embed = discord.Embed(title=drink_name, color=0x00ff00)
-            for key, value in drink_data.items():
-                if "Image" not in key:
-                    embed.add_field(name=key, value=value, inline=False)
+            for drink_name, drink_data in monster_data.items():
+                embed = discord.Embed(title="Monster", color=0x00ff00)
+                for key, value in drink_data.items():
+                    if "Image" not in key:
+                        embed.add_field(name=drink_name, value=f"{key}\n{value}", inline=False)
 
             await ctx.send(embed=embed)
         else:
