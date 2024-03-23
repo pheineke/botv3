@@ -20,3 +20,4 @@ user_activities.db
 privacy_log.txt
 *.db
 musicgen-small/
+*.json
