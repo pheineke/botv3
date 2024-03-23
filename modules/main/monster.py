@@ -18,7 +18,25 @@ class Monster(commands.Cog):
         return cookies
 
     def get_monsters(self):
-        urls = ["https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060896625829/energy-drink-lewis-hamilton-zero", "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060751219095/energy-drink-watermelon"]
+        urls = ["https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060896625829/energy-drink-lewis-hamilton-zero",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060751219095/energy-drink-watermelon",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060947541153/energy-ultra-rosa-dose",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060751212249/energy-drink-ultra-fiesta",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060335635266/energy-drink-the-doctor",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060337500401/energy-drink-ultra-white",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060947541986/energy-aussie-style-lemonade-dose",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060639126897/energy-drink-ultra-paradise",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060947549555/energy-drink-zero-original",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060751212393/energydrink-monarch",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060337507608/energy-eistee-rehab-peach",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060751216520/energy-drink-nitro",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060896622859/khaotic-juiced",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060335635235/energy-drink-assault",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060517883607/energy-drink-pipeline-punch",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060517888510/energy-drink-juiced-mango-loco",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060335635228/energy-drink-original",
+                "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060335635242/energy-drink-absolutely-zero-zuckerfrei",
+                ""]
         cookies = self.cookies
 
             # Führe eine GET-Anfrage auf die Webseite mit den gespeicherten Cookies durch
@@ -36,7 +54,6 @@ class Monster(commands.Cog):
             responses.append(response_text)
             # with open(f"seitehtml{counter}.html", "w") as file:
             #     file.write(response_text)
-
 
         for url in responses:
             #response = requests.get(url, cookies=cookies)
