@@ -94,7 +94,7 @@ class Monster(commands.Cog):
     async def monster(self, ctx, view=None):
         monster_data = self.get_monsters()
 
-        if view:
+        if not view:
             embed = discord.Embed(title="Monster", color=0x00ff00)
             for drink_name, drink_data in monster_data.items():
                 for key, value in drink_data.items():
@@ -111,7 +111,7 @@ class Monster(commands.Cog):
                     if "Image" in key:
                         embed.set_image(url=value)
                     else:
-                        embed.add_field(name=key, value=value, inline=False)
+                        embed.add_field(name=key, value=value)
                 embeds.append(embed)
             
             await ctx.send(embeds=embeds)
