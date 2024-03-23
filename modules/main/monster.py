@@ -4,13 +4,18 @@ from discord.ext import commands, tasks
 from discord.ui import Button, View
 
 from bs4 import BeautifulSoup
-import requests, os
+import requests, os, json
 from dotenv import load_dotenv
 
 class AiAudio(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
-        self.cookies = os.getenv('cookies')
+        self.cookies = self.get_cookies()
+
+    def get_cookies(self):
+        cookie_file = open('cookies.json')
+        cookies = json.load(cookie_file)
+        return cookies
 
     def get_monsters(self):
         urls = ["https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060896625829/energy-drink-lewis-hamilton-zero", "https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060751219095/energy-drink-watermelon"]
@@ -29,8 +34,8 @@ class AiAudio(commands.Cog):
             counter +=1
 
             responses.append(response_text)
-            with open(f"seitehtml{counter}.html", "w") as file:
-                file.write(response_text)
+            # with open(f"seitehtml{counter}.html", "w") as file:
+            #     file.write(response_text)
 
 
         for url in responses:
