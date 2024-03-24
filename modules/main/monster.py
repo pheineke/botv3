@@ -56,7 +56,7 @@ class Monster(commands.Cog):
 
             # Produktname
             product_name = soup.find("h1", class_="product--title").get_text(strip=True)
-            product_info["Produktname"] = product_name
+            product_info["Produktname"] = product_name.split(",")[1]
 
             # Im Sortiment Information
             im_sortiment = soup.find("span", class_="delivery--text").get_text(strip=True)
