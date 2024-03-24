@@ -68,7 +68,16 @@ class Monster(commands.Cog):
 
             # Produktname
             product_name = soup.find("h1", class_="product--title").get_text(strip=True)
-            product_info["Produktname"] = product_name.split(",")[1]
+            if "Energy Drink, " in product_name:
+                product_name.replace("Energy Drink, ", "")
+            if "Energy " in product_name:
+                product_name.replace("Energy ", "")
+            if "Energy-Drink " in product_name:
+                product_name.replace("Energy-Drink ", "")
+            if "Energydrink " in product_name:
+                product_name.replace("Energydrink ", "")
+                
+            product_info["Produktname"] = product_name
 
             # Im Sortiment Information
             im_sortiment = soup.find("span", class_="delivery--text").get_text(strip=True)
