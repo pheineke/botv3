@@ -45,10 +45,22 @@ class Monster(commands.Cog):
 
         session = requests.session()
 
-        for url in responses:
+        counter = -1
+        for url in urls:
             response_text = session.get(url, cookies=cookies).text
-            html_content = response_text
+            counter +=1
 
+            responses.append(response_text)
+            # with open(f"seitehtml{counter}.html", "w") as file:
+            #     file.write(response_text)
+
+        for url in responses:
+            #response = requests.get(url, cookies=cookies)
+            #requests.delete(url)
+            #print(response.status_code)
+            html_content = url
+
+            
             # Parse the HTML
             soup = BeautifulSoup(html_content, 'html.parser')
 
@@ -73,8 +85,6 @@ class Monster(commands.Cog):
             webp_original_url = soup.find("span", class_="image--element")["data-img-webp-original"]
             product_info["Image-WEBP"] = webp_original_url
 
-            #product_info["original_url"] = url
-
             products[product_name] = product_info
 
         return products
@@ -89,7 +99,7 @@ class Monster(commands.Cog):
             for drink_name, drink_data in monster_data.items():
                 for key, value in drink_data.items():
                     if "Image" not in key:
-                        values = f"{key}: {value}\n"
+                        values = f"{key}:{value}\n"
                 embed.add_field(name=drink_name, value=values, inline=False)
 
             await ctx.send(embed=embed)
