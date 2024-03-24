@@ -73,7 +73,7 @@ class Monster(commands.Cog):
             webp_original_url = soup.find("span", class_="image--element")["data-img-webp-original"]
             product_info["Image-WEBP"] = webp_original_url
 
-            product_info["original_url"] = url
+            #product_info["original_url"] = url
 
             products[product_name] = product_info
 
