@@ -60,7 +60,7 @@ class Loader_prefix(commands.Cog):
         if interaction.user.id in self.bot.owner_ids:
             # Speichere den aktuellen Pfad
             current_path = os.getcwd() + "/"
-
+            print(os.path.dirname(os.path.abspath(__file__)))
             os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
             if os.popen('python3 --version').read() == "Python 3.6.8":
