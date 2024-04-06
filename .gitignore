@@ -21,3 +21,4 @@ privacy_log.txt
 *.db
 musicgen-small/
 *.json
+tests/emailtest.py
