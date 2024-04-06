@@ -12,14 +12,14 @@ class Website(commands.Cog):
     async def websitepull(self, interaction:discord.Interaction):
         if interaction.user.id in self.bot.owner_ids:
             # Speichere den aktuellen Pfad
-            os.chdir("$HOME/.wwww/")
+            os.chdir("/home/sih18pev/.wwww/")
             await interaction.response.send_message(f"```{os.popen('git pull').read()}```")
 
     @app_commands.command(name="websitereset", description="[WEBSITE] git reset .wwww")
     async def websitereset(self, interaction:discord.Interaction):
         if interaction.user.id in self.bot.owner_ids:
             # Speichere den aktuellen Pfad
-            os.chdir("$HOME/.wwww/")
+            os.chdir("/home/sih18pev/.wwww/")
             response = f"```{os.popen('git reset --hard').read()}```"
             response += f"```{os.popen('git pull').read()}```"
             await interaction.response.send_message(response)
