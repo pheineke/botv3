@@ -16,7 +16,7 @@ class Website(commands.Cog):
             await interaction.response.send_message(f"```{os.popen('git pull').read()}```")
 
     @app_commands.command(name="websitereset", description="[WEBSITE] git reset .wwww")
-    async def websitepull(self, interaction:discord.Interaction):
+    async def websitereset(self, interaction:discord.Interaction):
         if interaction.user.id in self.bot.owner_ids:
             # Speichere den aktuellen Pfad
             os.chdir("/home/dreamer/.wwww/")
