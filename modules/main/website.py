@@ -3,7 +3,8 @@ from discord import app_commands
 from discord.ext import commands, tasks
 from discord.ui import Button, View
 
-import os, sys
+import os, sys, json
+
 class Website(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -23,7 +24,36 @@ class Website(commands.Cog):
             response = f"```{os.popen('git reset --hard').read()}```"
             response += f"```{os.popen('git pull').read()}```"
             await interaction.response.send_message(response)
-            
+
+    @app_commands.command(name="websiteset", description="[WEBSITE] Set own website info")
+    async def websiteset(self, interaction:discord.Interaction, website:str):
+        key = interaction.user.id
+        value = website
+
+        try:
+            with open("websitedb.json", 'r') as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            data = {}
+
+        data[key] = value
+
+        with open("websitedb.json", 'w') as file:
+            json.dump(data, file, indent=4)
+
+        await interaction.response.send_message("Done")
+
+    @app_commands.command(name="website", description="[WEBSITE] Info")
+    async def website(self, interaction:discord.Interaction, user:discord.Member):
+        try:
+            with open("websitedb.json", 'r') as file:
+                data = json.load(file)
+                website = data.get(user.id)
+        except (FileNotFoundError, json.JSONDecodeError):
+            website = "No website saved"
+
+        await interaction.response.send_message(website)
+                
 
 async def setup(bot):
     await bot.add_cog(Website(bot))
