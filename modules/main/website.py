@@ -26,9 +26,9 @@ class Website(commands.Cog):
             await interaction.response.send_message(response)
 
     @app_commands.command(name="websiteset", description="[WEBSITE] Set own website info")
-    async def websiteset(self, interaction:discord.Interaction, website:str):
+    async def websiteset(self, interaction:discord.Interaction, rhrkusername:str):
         key = interaction.user.id
-        value = website
+        value = rhrkusername
 
         try:
             with open("websitedb.json", 'r') as file:
@@ -48,11 +48,14 @@ class Website(commands.Cog):
         try:
             with open("websitedb.json", 'r') as file:
                 data = json.load(file)
-                website = data.get(user.id)
+                username = data.get(user.id)
         except (FileNotFoundError, json.JSONDecodeError):
-            website = "No website saved"
-
-        await interaction.response.send_message(website)
+            username = None
+        
+        if username:
+            await interaction.response.send_message(f"https://www-user.rhrk.uni-kl.de/~{username}/index.html")
+        else:
+            await interaction.response.send_message("No website saved")
                 
 
 async def setup(bot):
