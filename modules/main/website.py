@@ -47,9 +47,7 @@ class Website(commands.Cog):
         try:
             with open("websitedb.json", 'r') as file:
                 data = json.load(file)
-                username = data.get(user.id)
-                print(username)
-                print(user.id)
+                username = data.get(str(user.id))
         except (FileNotFoundError, json.JSONDecodeError):
             username = None
         
