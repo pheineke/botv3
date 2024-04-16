@@ -29,7 +29,6 @@ class Website(commands.Cog):
     async def websiteset(self, interaction:discord.Interaction, rhrkusername:str):
         key = interaction.user.id
         value = rhrkusername
-
         try:
             with open("websitedb.json", 'r') as file:
                 data = json.load(file)
@@ -49,6 +48,8 @@ class Website(commands.Cog):
             with open("websitedb.json", 'r') as file:
                 data = json.load(file)
                 username = data.get(user.id)
+                print(username)
+                print(user.id)
         except (FileNotFoundError, json.JSONDecodeError):
             username = None
         
