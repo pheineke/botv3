@@ -76,7 +76,8 @@ class Loader_prefix(commands.Cog):
     async def gitpull(self, ctx):
             # Speichere den aktuellen Pfad
             current_path = os.getcwd() + "/"
-
+            if ".wwww" in current_path:
+                os.chdir("/home/sih18pev/pythonproj/botv3")
             print(current_path)
             os.chdir(current_path)
 
