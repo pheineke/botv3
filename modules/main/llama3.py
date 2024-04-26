@@ -23,7 +23,7 @@ class Llama3(commands.Cog):
         "text-generation",
         model=loaded_model,
         model_kwargs={"torch_dtype": torch.bfloat16},
-        device="cuda" if torch.cuda.is_available() else "cpu",
+        device="cuda",
         )
 
         output = pipeline(prompt)
