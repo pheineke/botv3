@@ -24,11 +24,25 @@ class Llama3(commands.Cog):
         print(response)
         output = response['message']['content']
 
-        def split_message(content):
+        def split_message_with_code(content):
             MAX_LENGTH = 2000
             chunks = []
+            code_block_started = False
 
             while len(content) > MAX_LENGTH:
+                # Finde das nächste Vorkommen von '```'
+                next_code_index = content.find('```')
+
+                if next_code_index != -1 and next_code_index < MAX_LENGTH:
+                    # Wenn '```' innerhalb des Limits gefunden wurde, füge einen neuen Chunk hinzu,
+                    # der bis zum nächsten '```' geht
+                    code_block_end_index = content.find('```', next_code_index + 3)
+                    if code_block_end_index != -1:
+                        chunks.append(content[:code_block_end_index + 3])
+                        content = content[code_block_end_index + 3:]
+                        code_block_started = False
+                        continue  # Springe zum nächsten Schleifendurchlauf
+
                 # Finde das nächste Leerzeichen vor dem MAX_LENGTH
                 last_space_index = content.rfind(' ', 0, MAX_LENGTH)
 
@@ -41,17 +55,12 @@ class Llama3(commands.Cog):
                     chunk = content[:last_space_index]
                     content = content[last_space_index + 1:]  # Überspringe das Leerzeichen
 
-                # Überprüfe, ob der nächste Block einen Code-Block enthält
-                next_code_index = content.find('```')
-                if next_code_index != -1 and next_code_index < MAX_LENGTH:
-                    # Wenn der nächste Block einen Code-Block enthält und innerhalb der Grenze liegt,
-                    # füge den Code-Block dem aktuellen Chunk hinzu
-                    code_block_end_index = content.find('```', next_code_index + 3)
-                    if code_block_end_index != -1:
-                        chunk += content[next_code_index:code_block_end_index + 3]
-                        content = content[code_block_end_index + 3:]
-
-                chunks.append(chunk)
+                # Wenn ein Codeblock begonnen hat, füge den aktuellen Chunk dem vorherigen hinzu
+                if code_block_started:
+                    chunks[-1] += chunk
+                else:
+                    chunks.append(chunk)
+                code_block_started = True
 
             # Füge den verbleibenden Teil hinzu (wenn er existiert)
             if content:
@@ -59,7 +68,7 @@ class Llama3(commands.Cog):
 
             return chunks
             
-        parts = split_message(output)
+        parts = split_message_with_code(output)
         for x in parts:
             if x != '': 
                 await interaction.followup.send(x)
