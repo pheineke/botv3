@@ -23,15 +23,20 @@ class Llama3(commands.Cog):
         ])
         print(response)
         output = response['message']['content']
-        with open("./response.txt", 'w') as file:
-            file.write(output)
+        
+        if len(output) > 2000:
+        # Find the last paragraph boundary within the first 2000 characters
+            split_index = output.rfind('\n', 0, 2000)
+        
+            if split_index == -1:
+                # If no paragraph boundary is found, split at 2000 characters
+                split_index = 2000
     
-        # Delete the content
         
 
 
-        await interaction.followup.send(file=discord.File("response.txt")) 
-        del output
+        await interaction.followup.send(output[split_index:]) 
+        await interaction.followup.send(output[:split_index])
 
 async def setup(client):
     await client.add_cog(Llama3(client))
