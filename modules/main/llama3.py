@@ -32,7 +32,8 @@ class Llama3(commands.Cog):
                 end = min(start + 2000, len(output))
             parts.append(output[start:end])
             start = end + 1
-        
+            
+        parts.remove('')
         print(parts)
         for x in parts:
             if x == '':
