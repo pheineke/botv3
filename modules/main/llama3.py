@@ -36,9 +36,8 @@ class Llama3(commands.Cog):
     
         
 
-
-        await interaction.followup.send(output[split_index:]) 
-        await interaction.followup.send(output[:split_index])
+        embed:discord.Embed = discord.Embed(description=output)
+        await interaction.followup.send(embed=embed)
 
 async def setup(client):
     await client.add_cog(Llama3(client))
