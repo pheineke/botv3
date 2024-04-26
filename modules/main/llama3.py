@@ -14,6 +14,7 @@ class Llama3(commands.Cog):
     @app_commands.command(name="llama3", description="Llama3 GPT")
     async def llama3(self, interaction:discord.Interaction, prompt:str):
         await interaction.response.send_message("Processing...")
+        message = await interaction.original_response()
 
         response = ollama.chat(model='llama3', messages=[
         {
@@ -72,8 +73,8 @@ class Llama3(commands.Cog):
         parts01 = [':white_larawait create_thread(*, name, auto_archive_duration=in-minutes)ge_square: :white_large_square: :white_large_square: '] + parts + [':white_large_square: :white_large_square: :white_large_square: ']
 
         for x in parts01:
-            if x != '': 
-                await interaction.followup.send(x)
+            if x != '':
+                await message.channel.send(x)
 
 async def setup(client):
     await client.add_cog(Llama3(client))
