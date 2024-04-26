@@ -33,6 +33,7 @@ class Llama3(commands.Cog):
             parts.append(output[start:end])
             start = end + 1
         
+        print(parts)
         for x in parts:
             await interaction.followup.send(x)
 
