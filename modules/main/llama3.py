@@ -23,6 +23,8 @@ class Llama3(commands.Cog):
         ])
         print(response)
         output = response['message']['content']
+
+        split_index = None
         
         if len(output) > 2000:
         # Find the last paragraph boundary within the first 2000 characters
