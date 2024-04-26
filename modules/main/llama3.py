@@ -24,7 +24,7 @@ class Llama3(commands.Cog):
         print(response)
         output = response['message']['content']
 
-        def split_message_with_code(content):
+        def split_message(content):
             MAX_LENGTH = 2000
             chunks = []
 
