@@ -36,8 +36,9 @@ class Llama3(commands.Cog):
         print(parts)
         for x in parts:
             if x == '':
-                x = '\n\n'
-            await interaction.followup.send(x)
+                pass
+            else:
+                await interaction.followup.send(x)
 
 async def setup(client):
     await client.add_cog(Llama3(client))
