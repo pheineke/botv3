@@ -4,7 +4,6 @@ from discord.ext import commands, tasks
 from discord.ui import Button, View
 
 import ollama
-import json
 
 class Llama3(commands.Cog):
     def __init__(self, bot) -> None:
@@ -17,28 +16,14 @@ class Llama3(commands.Cog):
         await interaction.response.send_message("Processing...")
         message = await interaction.original_response()
 
-        try:
-            with open("llama3.json", 'r') as file0:
-                file0 = json.load(file0)
-        except FileNotFoundError:
-            # Wenn die Datei nicht gefunden wird, eine leere Liste als gameStateContent setzen
-            self.gameStateContent = []
-        
-
-        def chat(self, content):
-            messagehistory = file0
-            messagehistory += [{'role': 'user', 'content': f"{content}"}]
-            response = ollama.chat(model=self.model, messages=messagehistory, stream=False)
-            messagehistory.append(response['message'])
-            answer = response['message']['content']
-
-            with open("llama3.json", 'w') as file0:
-                json.dump(messagehistory, file0, indent=1)
-
-            return answer
-
-        
-        output = chat(content=prompt)
+        response = ollama.chat(model='llama3', messages=[
+        {
+            'role': 'user',
+            'content': f'{prompt}',
+        },
+        ])
+        print(response)
+        output = response['message']['content']
 
         def split_message_with_code(content):
             MAX_LENGTH = 2000
