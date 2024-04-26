@@ -9,6 +9,7 @@ import torch
 class Llama3(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
+        self.modelpath = "/home/sih18pev/pythonproj/botv3/models/Meta-Llama-3-8B/consolidated.00.pth"
 
         
 
@@ -16,11 +17,13 @@ class Llama3(commands.Cog):
     async def llama3(self, interaction:discord.Interaction, prompt:str):
         await interaction.response.send_message("Processing...")
 
+        loaded_model = torch.load(self.modelpath)
+
         pipeline = transformers.pipeline(
         "text-generation",
-        model="meta-llama/Meta-Llama-3-8B-Instruct",
+        model=loaded_model,
         model_kwargs={"torch_dtype": torch.bfloat16},
-        device="cuda",
+        device="cuda" if torch.cuda.is_available() else "cpu",
         )
 
         output = pipeline(prompt)
@@ -29,3 +32,5 @@ class Llama3(commands.Cog):
 
 async def setup(client):
     await client.add_cog(Llama3(client))
+
+# https://llama.meta.com/llama-downloads/
