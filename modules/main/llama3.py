@@ -21,6 +21,7 @@ class Llama3(commands.Cog):
             'content': f'{prompt}',
         },
         ])
+        print(response)
         output = response['message']['content']
 
         await interaction.followup.send(output) 
