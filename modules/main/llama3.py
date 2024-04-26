@@ -70,7 +70,7 @@ class Llama3(commands.Cog):
             return chunks
             
         parts = split_message_with_code(output)
-        parts01 = [':white_larawait create_thread(*, name, auto_archive_duration=in-minutes)ge_square: :white_large_square: :white_large_square: '] + parts + [':white_large_square: :white_large_square: :white_large_square: ']
+        parts01 = [':white_large_square: :white_large_square: :white_large_square: '] + parts + [':white_large_square: :white_large_square: :white_large_square: ']
 
         for x in parts01:
             if x != '':
