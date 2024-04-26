@@ -69,7 +69,8 @@ class Llama3(commands.Cog):
             return chunks
             
         parts = split_message_with_code(output)
-        for x in parts:
+        parts01 = [':white_large_square: :white_large_square: :white_large_square: '] + parts + [':white_large_square: :white_large_square: :white_large_square: ']
+        for x in parts01:
             if x != '': 
                 await interaction.followup.send(x)
 
