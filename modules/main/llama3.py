@@ -23,8 +23,15 @@ class Llama3(commands.Cog):
         ])
         print(response)
         output = response['message']['content']
+        with open("./response.txt", 'w') as file:
+            file.write(output)
+    
+        # Delete the content
+        
 
-        await interaction.followup.send(output) 
+
+        await interaction.followup.send(file=discord.File("response.txt")) 
+        del output
 
 async def setup(client):
     await client.add_cog(Llama3(client))
