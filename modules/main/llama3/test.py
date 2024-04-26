@@ -4,6 +4,24 @@ from bs4 import BeautifulSoup
 import html_to_json
 import ollama
 
+def extract_content_specific_text(html_string):
+    # BeautifulSoup-Objekt erstellen
+    soup = BeautifulSoup(html_string, 'html.parser')
+    
+    # Tags, die normalerweise Content-spezifische Informationen enthalten
+    content_tags = ['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'span']
+    
+    # Extrahiere Text aus den Content-spezifischen Tags
+    content_texts = [tag.get_text(separator='|') for tag in soup.find_all(content_tags)]
+    for x in content_texts:
+        if x in [' ','  ','   ', '    ']:
+            content_texts.remove(x)
+
+    
+    # Kombiniere alle extrahierten Texte zu einem einzigen Text
+    content_text = ' '.join(content_texts)
+    
+    return content_text
 
 
 def searcher(query):
@@ -19,13 +37,13 @@ def searcher(query):
 
 
     # Beispielverwendung:
-    query = "Wetter kaiserslautern"
     num_results = 5
     search_results = google_search(query, num_results)
     for i, result in enumerate(search_results, start=1):
         response = requests.get(result, headers=headers)
-        output = html_to_json.convert(response.text)
-        data[result] = output
+
+        #output = html_to_json.convert(extract_content_specific_text(response.text))
+        data= extract_content_specific_text(response.text)
 
     return data
 
@@ -33,8 +51,8 @@ def searcher(query):
 def llama(prompt):
     response = ollama.chat(model='llama3', messages=[
             {
-                'role': 'system',
-                'content': f'{searcher(prompt)}',
+                'role': 'user',
+                'content': f'Use these Internet-Results to answer: {searcher(prompt)}, Respond in question language.',
                 'role': 'user',
                 'content': f'{prompt}'
             },
@@ -43,6 +61,6 @@ def llama(prompt):
     output = response['message']['content']
     print(output)
 
-llama("Wie ist das Wetter in kaiserslautern?")
+llama("Was für ein Tag ist heute?")
 
 
