@@ -9,7 +9,6 @@ import torch
 class Llama3(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
-        self.modelpath = "/home/sih18pev/pythonproj/botv3/models/Meta-Llama-3-8B/consolidated.00.pth"
 
         
 
@@ -17,7 +16,7 @@ class Llama3(commands.Cog):
     async def llama3(self, interaction:discord.Interaction, prompt:str):
         await interaction.response.send_message("Processing...")
 
-        loaded_model = torch.load(self.modelpath)
+        loaded_model = torch.load("./models/Meta-Llama-3-8B/consolidated.00.pth")
 
         pipeline = transformers.pipeline(
         "text-generation",
