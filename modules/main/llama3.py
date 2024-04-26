@@ -24,21 +24,34 @@ class Llama3(commands.Cog):
         print(response)
         output = response['message']['content']
 
-        parts = []
-        start = 0
-        while start < len(output):
-            end = output.find('\n', start, start + 2000)
-            if end == -1:
-                end = min(start + 2000, len(output))
-            parts.append(output[start:end])
-            start = end + 1
+        def split_message(content):
+            MAX_LENGTH = 2000
+            chunks = []
+
+            while len(content) > MAX_LENGTH:
+                # Finde das nächste Leerzeichen vor dem MAX_LENGTH
+                last_space_index = content.rfind(' ', 0, MAX_LENGTH)
+                
+                # Wenn kein Leerzeichen gefunden wurde, schneide einfach bei MAX_LENGTH ab
+                if last_space_index == -1:
+                    chunk = content[:MAX_LENGTH]
+                    content = content[MAX_LENGTH:]
+                else:
+                    # Andernfalls schneide bis zum letzten Leerzeichen ab
+                    chunk = content[:last_space_index]
+                    content = content[last_space_index + 1:]  # Überspringe das Leerzeichen
+                
+                chunks.append(chunk)
+
+            # Füge den verbleibenden Teil hinzu (wenn er existiert)
+            if content:
+                chunks.append(content)
+
+            return chunks
             
-        parts.remove('')
-        print(parts)
+        parts = split_message(output)
         for x in parts:
-            if x == '':
-                pass
-            else:
+            if x != '': 
                 await interaction.followup.send(x)
 
 async def setup(client):
