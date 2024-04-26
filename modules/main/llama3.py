@@ -24,20 +24,17 @@ class Llama3(commands.Cog):
         print(response)
         output = response['message']['content']
 
-        split_index = None
+        parts = []
+        start = 0
+        while start < len(output):
+            end = output.find('\n', start, start + 2000)
+            if end == -1:
+                end = min(start + 2000, len(output))
+            parts.append(output[start:end])
+            start = end + 1
         
-        if len(output) > 2000:
-        # Find the last paragraph boundary within the first 2000 characters
-            split_index = output.rfind('\n', 0, 2000)
-        
-            if split_index == -1:
-                # If no paragraph boundary is found, split at 2000 characters
-                split_index = 2000
-    
-        
-
-        embed:discord.Embed = discord.Embed(description=output)
-        await interaction.followup.send(embed=embed)
+        for x in parts:
+            await interaction.followup.send(x)
 
 async def setup(client):
     await client.add_cog(Llama3(client))
