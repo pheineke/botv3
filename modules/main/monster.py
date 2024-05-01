@@ -28,7 +28,7 @@ class Monster(commands.Cog):
         preis = None
         def speichere_preise():
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            data_to_save = {"timestamp": timestamp, "data": monsters}
+            data_to_save = {timestamp: monsters}
             with open("./lib/data/monster/monster_verlauf.json", 'w') as file:
                 json.dump(data_to_save, file, indent=4)
 
@@ -37,15 +37,13 @@ class Monster(commands.Cog):
         def pruefe_preisabweichung():
             with open("./lib/data/monster/monster_verlauf.json", 'r') as file:
                 data:dict = json.load(file)
-                data = data.keys()
+                keys = data.keys()
+                keylen = len(keys)
+                data0 = data[keys[keylen-2]]
+                data1 = data[keys[keylen-1]]
                 print(data)
-                preise = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data.items()]
-                preis = preise
-                if len(preise) < 2:
-                    return False  # Nicht genug Einträge für Vergleich vorhanden
-                for i in range(1, len(preise)):
-                    if preise[i] != preise[i-1]:
-                        return True
+                print(data0)
+                print(data1)
             return False
         
         
