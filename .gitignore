@@ -21,4 +21,5 @@ privacy_log.txt
 *.db
 musicgen-small/
 *.json
+!lib/data/monster/monster_verlauf.json
 tests/emailtest.py

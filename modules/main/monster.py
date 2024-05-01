@@ -142,9 +142,13 @@ class Monster(commands.Cog):
     @app_commands.command(name="monster_preisverlauf", description="Zeige Preisverlauf")
     async def monster_preisverlauf(self, interaction:discord.Interaction):
         with open("./lib/data/monster/monster_verlauf.json", 'r') as file:
-            data = json.load(file)
-            produkte = list(data.keys())
-            preise = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data.items()]
+            data:dict = json.load(file)
+            keys = list(data.keys())
+            keylen = len(keys)
+            data0 = data[keys[keylen-1]]
+            produkte = list(data0.keys())
+            preise = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data0.items()]
+
 
         plt.figure(figsize=(10, 6))
         plt.plot(produkte, preise, marker='o', linestyle='-')
