@@ -31,11 +31,14 @@ class Monster(commands.Cog):
             data_to_save = {"timestamp": timestamp, "data": monsters}
             with open("./lib/data/monster/monster_verlauf.json", 'w') as file:
                 json.dump(data_to_save, file, indent=4)
-        
+
+        speichere_preise()
+
         def pruefe_preisabweichung():
             with open("./lib/data/monster/monster_verlauf.json", 'r') as file:
                 data:dict = json.load(file)
                 data = data.values()
+                print(data)
                 preise = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data.items()]
                 preis = preise
                 if len(preise) < 2:
@@ -45,7 +48,7 @@ class Monster(commands.Cog):
                         return True
             return False
         
-        speichere_preise()
+        
 
         if pruefe_preisabweichung():
             response = ""
