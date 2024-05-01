@@ -40,10 +40,12 @@ class Monster(commands.Cog):
                 keys = list(data.keys())
                 keylen = len(keys)
                 data0 = data[keys[keylen-2]]
+                preise0 = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data0.items()]
                 data1 = data[keys[keylen-1]]
+                preise1 = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data1.items()]
                 print(data)
-                print(data0)
-                print(data1)
+                print(preise0)
+                print(preise1)
             return False
         
         
