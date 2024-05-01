@@ -37,7 +37,7 @@ class Monster(commands.Cog):
         def pruefe_preisabweichung():
             with open("./lib/data/monster/monster_verlauf.json", 'r') as file:
                 data:dict = json.load(file)
-                keys = data.keys()
+                keys = list(data.keys())
                 keylen = len(keys)
                 data0 = data[keys[keylen-2]]
                 data1 = data[keys[keylen-1]]
