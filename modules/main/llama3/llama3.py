@@ -15,7 +15,7 @@ class Llama3(commands.Cog):
     @app_commands.command(name="llama3", description="Llama3 GPT")
     @app_commands.describe(tomd="Falls prompt zu lang werden kann wird ein .md ausgegeben")
     @app_commands.choices(tomd=[
-        app_commands.Choice(name='tomd', value=True)
+        app_commands.Choice(name='tomd', value="True")
     ])
     async def llama3(self, interaction:discord.Interaction, prompt:str, tomd:app_commands.Choice[str]=None):
         await interaction.response.send_message("Processing...")

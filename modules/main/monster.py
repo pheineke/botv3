@@ -11,11 +11,17 @@ class Monster(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
         self.cookies = self.get_cookies()
+        self.check_activity_changes.start()
 
     def get_cookies(self):
         cookie_file = open('cookies.json')
         cookies = json.load(cookie_file)
         return cookies
+    
+    @tasks.loop(minutes=2)
+    async def check_activity_changes(self):
+        monsters = self.get_monsters()
+        print(monsters)
 
     def get_monsters(self):
         urls = ["https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060896625829/energy-drink-lewis-hamilton-zero",
@@ -99,8 +105,12 @@ class Monster(commands.Cog):
         return products
 
 
-    @commands.command()
-    async def monster(self, ctx, view=None):
+    @app_commands.command(name="monster", description="Zeige Monster Preise im Globus")
+    @app_commands.describe(view="Mit oder ohne Bilder")
+    @app_commands.choices(view=[
+        app_commands.Choice(name='view', value="Ja")
+    ])
+    async def monster(self, interaction:discord.Interaction, view:app_commands.Choice[str]=None):
         monster_data = self.get_monsters()
 
         if not view:
@@ -111,7 +121,7 @@ class Monster(commands.Cog):
                         values = f"{key}:{value}\n"
                 embed.add_field(name=drink_name, value=values, inline=False)
 
-            await ctx.send(embed=embed)
+            await interaction.response.send_message(embed=embed)
         else:
             embeds = []
             for drink_name, drink_data in monster_data.items():
@@ -123,7 +133,7 @@ class Monster(commands.Cog):
                         embed.add_field(name=key, value=value)
                 embeds.append(embed)
             
-            await ctx.send(embeds=embeds)
+            await interaction.response.send_message(embeds=embeds)
 
 
 async def setup(client):
