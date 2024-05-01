@@ -25,9 +25,9 @@ class Monster(commands.Cog):
         monsters:dict = self.get_monsters()
         channel = discord.utils.get(self.bot.get_all_channels(), id=1070443662695223297)
         preis = None
-        def speichere_preise(dict_data, datei_name):
+        def speichere_preise():
             with open("./lib/data/monster/monster_verlauf.json", 'w') as file:
-                json.dump(dict_data, file, indent=4)
+                json.dump(monsters, file, indent=4)
         
         def pruefe_preisabweichung():
             with open("./lib/data/monster/monster_verlauf.json", 'r') as file:
