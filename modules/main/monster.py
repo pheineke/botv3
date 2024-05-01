@@ -28,7 +28,8 @@ class Monster(commands.Cog):
         def speichere_preise():
             with open("./lib/data/monster/monster_verlauf.json", 'w') as file:
                 for produkt, daten in monsters.items():
-                    preis = daten.get('Preis', 'Preis nicht verfügbar')
+                    preis:str = daten.get('Preis', 0)
+                    preis.replace("\xa0€", "")
                     file.write(f"{produkt}: {float(preis)}\n")
         
         def pruefe_preisabweichung():
