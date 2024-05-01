@@ -43,9 +43,10 @@ class Monster(commands.Cog):
                 preise0 = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data0.items()]
                 data1 = data[keys[keylen-1]]
                 preise1 = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data1.items()]
-                print(data)
-                print(preise0)
-                print(preise1)
+                
+                for i in range(len(preise0)):
+                    if preise0[i] != preise1[i]:
+                        return True
             return False
         
         
