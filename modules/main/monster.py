@@ -34,7 +34,8 @@ class Monster(commands.Cog):
         
         def pruefe_preisabweichung():
             with open("./lib/data/monster/monster_verlauf.json", 'r') as file:
-                data = json.load(file)
+                data:dict = json.load(file)
+                data = data.values()
                 preise = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data.items()]
                 preis = preise
                 if len(preise) < 2:
