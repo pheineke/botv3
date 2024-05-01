@@ -6,6 +6,7 @@ from discord.ui import Button, View
 from bs4 import BeautifulSoup
 import requests, os, json
 from dotenv import load_dotenv
+import matplotlib.pyplot as plt
 
 class Monster(commands.Cog):
     def __init__(self, bot) -> None:
@@ -14,14 +15,42 @@ class Monster(commands.Cog):
         self.check_activity_changes.start()
 
     def get_cookies(self):
-        cookie_file = open('cookies.json')
+        cookie_file = open('./lib/data/monster/cookies.json')
         cookies = json.load(cookie_file)
         return cookies
     
+    
     @tasks.loop(minutes=2)
     async def check_activity_changes(self):
-        monsters = self.get_monsters()
-        print(monsters)
+        monsters:dict = self.get_monsters()
+        channel = discord.utils.get(self.bot.get_all_channels(), id=1070443662695223297)
+        preis = None
+        def speichere_preise():
+            with open("./lib/data/monster/monster_verlauf.json", 'w') as file:
+                for produkt, daten in monsters.items():
+                    preis = daten.get('Preis', 'Preis nicht verfügbar')
+                    file.write(f"{produkt}: {float(preis)}\n")
+        
+        def pruefe_preisabweichung():
+            with open("./lib/data/monster/monster_verlauf.json", 'r') as file:
+                data = json.load(file)
+                preise = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data.items()]
+                preis = preise
+                if len(preise) < 2:
+                    return False  # Nicht genug Einträge für Vergleich vorhanden
+                for i in range(1, len(preise)):
+                    if preise[i] != preise[i-1]:
+                        return True
+            return False
+        
+        speichere_preise()
+
+        if pruefe_preisabweichung():
+            response = ""
+            for x in preis:
+                response += x + "\n"
+            await channel.send(f"@R4GE Achtung Monster - Preisabweichung:\n ```{response}```")
+        
 
     def get_monsters(self):
         urls = ["https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060896625829/energy-drink-lewis-hamilton-zero",
@@ -104,6 +133,25 @@ class Monster(commands.Cog):
 
         return products
 
+    @app_commands.command(name="monster_preisverlauf", description="Zeige Preisverlauf")
+    async def monster_preisverlauf(self, interaction:discord.Interaction):
+        with open("./lib/data/monster/monster_verlauf.json", 'r') as file:
+            data = json.load(file)
+            produkte = list(data.keys())
+            preise = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data.items()]
+
+        plt.figure(figsize=(10, 6))
+        plt.plot(produkte, preise, marker='o', linestyle='-')
+        plt.title('Preisverlauf')
+        plt.xlabel('Produkt')
+        plt.ylabel('Preis (€)')
+        plt.xticks(rotation=90)
+        plt.grid(True)
+        plt.tight_layout()
+        plt.savefig("./lib/data/monster/verlauf.png", format='png')  # Speichert den Plot als PNG
+
+        await interaction.response.send_message(file=discord.File("./lib/data/monster/verlauf.png"))
+        os.remove("./lib/data/monster/verlauf.png")
 
     @app_commands.command(name="monster", description="Zeige Monster Preise im Globus")
     @app_commands.describe(view="Mit oder ohne Bilder")
