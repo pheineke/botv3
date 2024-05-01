@@ -1,3 +1,4 @@
+import datetime
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
@@ -20,14 +21,16 @@ class Monster(commands.Cog):
         return cookies
     
     
-    @tasks.loop(minutes=2)
+    @tasks.loop(hours=12)
     async def check_activity_changes(self):
         monsters:dict = self.get_monsters()
         channel = discord.utils.get(self.bot.get_all_channels(), id=1070443662695223297)
         preis = None
         def speichere_preise():
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            data_to_save = {"timestamp": timestamp, "data": monsters}
             with open("./lib/data/monster/monster_verlauf.json", 'w') as file:
-                json.dump(monsters, file, indent=4)
+                json.dump(data_to_save, file, indent=4)
         
         def pruefe_preisabweichung():
             with open("./lib/data/monster/monster_verlauf.json", 'r') as file:
