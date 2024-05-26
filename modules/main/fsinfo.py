@@ -131,13 +131,13 @@ class Fsinfo(commands.Cog):
         else:
             with open('./lib/data/lock/lock-log.json', 'r') as file:
                 data = json.load(file)
+                temp_file = tempfile.NamedTemporaryFile(delete=False, mode='w', suffix='.json')
                 if filter == 0:
                     filtered = self.filter_last_n_days(data=data, days=5)
+                    json.dump(filtered, temp_file)
                 elif filter == 1:
                     filtered = self.filter_last_n_days(data=data, days=14)
-                    
-                temp_file = tempfile.NamedTemporaryFile(delete=False, mode='w', suffix='.json')
-                json.dump(filtered, temp_file)
+                    json.dump(filtered, temp_file)
 
                 await interaction.response.send_message(content="Hier ist der Verlauf:", file=discord.File(temp_file))
                 temp_file.close()
