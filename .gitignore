@@ -22,4 +22,6 @@ privacy_log.txt
 musicgen-small/
 *.json
 !lib/data/monster/monster_verlauf.json
+!lib/data/lock/lock-log.json
+!lib/data/lock/lock-log.txt
 tests/emailtest.py
