@@ -123,7 +123,10 @@ class Monster(commands.Cog):
             product_info["Im Sortiment"] = im_sortiment
 
             # Regal Information
-            regal_info = soup.find("span", class_="product--shelfinfos-text").get_text(strip=True)
+            regalsoup = soup.find("span", class_="product--shelfinfos-text")
+            if regalsoup:
+                regal_info = regalsoup.get_text(strip=True)
+            else: regal_info = "No Info"
             product_info["Regal"] = regal_info
 
             # Preis Information
