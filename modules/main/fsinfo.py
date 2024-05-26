@@ -1,3 +1,4 @@
+import tempfile
 import discord
 from discord import app_commands
 from discord.ext import commands, tasks
@@ -6,7 +7,7 @@ from discord.ui import Button, View
 import requests, json
 import matplotlib.pyplot as plt
 import numpy as np
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 class Fsinfo(commands.Cog):
@@ -18,9 +19,25 @@ class Fsinfo(commands.Cog):
 
 
     def savestarttime(self):
+        day = str((datetime.now().strftime('%Y-%m-%d')))  
+        hour =str((datetime.now().strftime('%H:%M')))  
         #'a' Wichtig sonst überschreibt er die Datei
         with open('lock-log.txt', 'a') as file:
-            file.write(f"{str((datetime.now().strftime('%Y-%m-%d,%H:%M')))},BOTSTART\n")
+            file.write(f"{day},{hour},BOTSTART\n")
+        with open('./lib/data/lock/lock-log.json', 'a') as file:  
+            json.dump({day:{hour:"BOTSTART"}}, file, indent=4)
+
+    def filter_last_n_days(self, data, n_days):
+        current_date = datetime.now().date()
+        start_date = current_date - timedelta(days=n_days)
+
+        filtered_data = {}
+        for date_str, value_dict in data.items():
+            date_obj = datetime.strptime(date_str, '%Y-%m-%d').date()
+            if start_date <= date_obj <= current_date:
+                filtered_data[date_str] = value_dict
+
+        return filtered_data
 
     @tasks.loop(minutes=1.0)
     async def main(self):
@@ -30,8 +47,10 @@ class Fsinfo(commands.Cog):
         current_date = datetime.now().strftime('%Y-%m-%d')
         current_time = datetime.now().strftime('%H:%M')
         value = fslockjson["opendoor"]
-        with open('lock-log.txt', 'a') as file:
+        with open('./lib/data/lock/lock-log.txt', 'a') as file:
             file.write(f"{current_date},{current_time},{value}\n")
+        with open('./lib/data/lock/lock-log.json', 'a') as file:    
+            json.dump({current_date:{current_time:value}}, file, indent=4)
 
     @tasks.loop(minutes=5.0)
     async def cleandata(self):
@@ -76,6 +95,33 @@ class Fsinfo(commands.Cog):
                     file.write(f'{elem}')
 
         clean_data('lock-log.txt')
+
+    @app_commands.command(name="opendoor_log", description="[FSINFO] Zeigt pure opendoor log")
+    @app_commands.describe(filter="Nach Zeit filtern (kann weggelassen werden)")
+    @app_commands.choices(filter=[
+        app_commands.Choice(name='Last Five Days', value="0"),
+        app_commands.Choice(name='Last Week', value="1")
+    ])
+    async def get_opendoor_log(self,interaction:discord.Interaction, filter:app_commands.Choice[str]=None):
+        if not filter:
+            interaction.response.send_message(file=discord.File("./lib/data/lock/lock-log.json"))
+        else:
+            with open('./lib/data/lock/lock-log.json', 'r') as file:
+                data = json.load(file)
+                if filter == 0:
+                    filtered = self.filter_last_n_days(data=data, days=5)
+                elif filter == 1:
+                    filtered = self.filter_last_n_days(data=data, days=14)
+                    
+                temp_file = tempfile.NamedTemporaryFile(delete=False, mode='w', suffix='.json')
+                json.dump(filtered, temp_file)
+
+                interaction.response.send_message(content="Hier ist der Verlauf:", file=discord.File(temp_file))
+                temp_file.close()
+                    
+
+
+
 
     @app_commands.command(name="opendoor_graph", description="[FSINFO] Zeigt opendoor Graph")
     @app_commands.describe(datum0 = "Optional von - YYYY-MM-dd", datum1 = "Optional bis - YYYY-MM-dd")
