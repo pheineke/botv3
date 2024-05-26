@@ -1,60 +1,15 @@
-from datetime import datetime
-import discord
-from discord import app_commands
-from discord.ext import commands, tasks
-from discord.ui import Button, View
-
+import json
+import requests
 from bs4 import BeautifulSoup
-import requests, os, json
-from dotenv import load_dotenv
-import matplotlib.pyplot as plt
 
-class Monster(commands.Cog):
-    def __init__(self, bot) -> None:
-        self.bot = bot
+class MonsterTest():
+    def __init__(self) -> None:
         self.cookies = self.get_cookies()
-        self.check_activity_changes.start()
 
     def get_cookies(self):
-        cookie_file = open('./lib/data/monster/cookies.json')
-        cookies = json.load(cookie_file)
-        return cookies
-    
-    
-    @tasks.loop(hours=12.0)
-    async def check_activity_changes(self):
-        monsters:dict = self.get_monsters()
-        channel = discord.utils.get(self.bot.get_all_channels(), id=1070447029114908743)
-        preis = None
-        def speichere_preise():
-            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            data_to_save = {timestamp: monsters}
-            with open("./lib/data/monster/monster_verlauf.json", 'w') as file:
-                json.dump(data_to_save, file, indent=4)
-
-        speichere_preise()
-
-        def pruefe_preisabweichung():
-            with open("./lib/data/monster/monster_verlauf.json", 'r') as file:
-                data:dict = json.load(file)
-                keys = list(data.keys())
-                keylen = len(keys)
-                data0 = data[keys[keylen-2]]
-                preise0 = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data0.items()]
-                data1 = data[keys[keylen-1]]
-                preise1 = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data1.items()]
-                
-                for i in range(len(preise0)):
-                    if preise0[i] != preise1[i]:
-                        return True
-            return False
-
-        if pruefe_preisabweichung():
-            response = ""
-            for x in preis:
-                response += x + "\n"
-            await channel.send(f"Achtung Monster - Preisabweichung:\n ```{response}```")
-        
+            cookie_file = open('./lib/data/monster/cookies.json')
+            cookies = json.load(cookie_file)
+            return cookies
 
     def get_monsters(self):
         urls = ["https://www.globus.de/produkte/getraenke/soft-drinks/energy-sportgetraenke/5060896625829/energy-drink-lewis-hamilton-zero",
@@ -142,61 +97,6 @@ class Monster(commands.Cog):
             products[product_name] = product_info
 
         return products
-
-    @app_commands.command(name="monster_preisverlauf", description="Zeige Preisverlauf")
-    async def monster_preisverlauf(self, interaction:discord.Interaction):
-        with open("./lib/data/monster/monster_verlauf.json", 'r') as file:
-            data:dict = json.load(file)
-            keys = list(data.keys())
-            keylen = len(keys)
-            data0 = data[keys[keylen-1]]
-            produkte = list(data0.keys())
-            preise = [float(daten['Preis'].replace('€', '').strip().replace(',', '.')) for produkt, daten in data0.items()]
-
-
-        plt.figure(figsize=(10, 6))
-        plt.plot(produkte, preise, marker='o', linestyle='-')
-        plt.title('Preisverlauf')
-        plt.xlabel('Produkt')
-        plt.ylabel('Preis (€)')
-        plt.xticks(rotation=90)
-        plt.grid(True)
-        plt.tight_layout()
-        plt.savefig("./lib/data/monster/verlauf.png", format='png')  # Speichert den Plot als PNG
-
-        await interaction.response.send_message(file=discord.File("./lib/data/monster/verlauf.png"))
-        os.remove("./lib/data/monster/verlauf.png")
-
-    @app_commands.command(name="monster", description="Zeige Monster Preise im Globus")
-    @app_commands.describe(view="Mit oder ohne Bilder")
-    @app_commands.choices(view=[
-        app_commands.Choice(name='view', value="Ja")
-    ])
-    async def monster(self, interaction:discord.Interaction, view:app_commands.Choice[str]=None):
-        monster_data = self.get_monsters()
-
-        if not view:
-            embed = discord.Embed(title="Monster", color=0x00ff00)
-            for drink_name, drink_data in monster_data.items():
-                for key, value in drink_data.items():
-                    if "Image" not in key:
-                        values = f"{key}:{value}\n"
-                embed.add_field(name=drink_name, value=values, inline=False)
-
-            await interaction.response.send_message(embed=embed)
-        else:
-            embeds = []
-            for drink_name, drink_data in monster_data.items():
-                embed = discord.Embed(title=drink_name, color=0x00ff00)
-                for key, value in drink_data.items():
-                    if "Image" in key:
-                        embed.set_image(url=value)
-                    else:
-                        embed.add_field(name=key, value=value)
-                embeds.append(embed)
-            
-            await interaction.response.send_message(embeds=embeds)
-
-
-async def setup(client):
-    await client.add_cog(Monster(client))
+    
+m = MonsterTest()
+print(m.get_monsters())
