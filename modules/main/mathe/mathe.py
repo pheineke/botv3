@@ -11,13 +11,16 @@ import os
 class Mathe(commands.Cog):
     def __init__(self, bot) -> None:
         self.bot = bot
+        self.channel = self.bot.get_channel(1229812364677873754)
+        self.mathedownloader.start()
 
-    async def mathedownloader(self, ctx):
+    @tasks.loop(hours=12.0)
+    async def mathedownloader(self):
         # Base URL
         base_url = "https://agag-jboehm.math.rptu.de/~boehm/lehre/24_MfI_KSS/"
         start_url = base_url + "start.html"
         log_file_path = './lib/data/mathe/download_log.txt'
-
+        pdf_filename =""
         # Create a directory to save PDFs
         if not os.path.exists('./lib/data/mathe/pdfs'):
             os.makedirs('./lib/data/mathe/pdfs')
@@ -49,7 +52,7 @@ class Mathe(commands.Cog):
                     
                     # Save the PDF file
                     pdf_filename = os.path.join('./lib/data/mathe/pdfs', href)
-                    await ctx.send()
+
                     with open(pdf_filename, 'wb') as pdf_file:
                         pdf_file.write(pdf_response.content)
                     print(f'Downloaded {href}')
@@ -61,6 +64,7 @@ class Mathe(commands.Cog):
 
         # Update the log file with new downloads
         if new_downloads:
+            await self.channel.send(content="Neues Übungsblatt dropped",file=discord.File(pdf_filename))
             with open(log_file_path, 'a') as log_file:
                 for pdf in new_downloads:
                     log_file.write(pdf + '\n')
