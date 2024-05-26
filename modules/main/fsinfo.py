@@ -24,8 +24,7 @@ class Fsinfo(commands.Cog):
         #'a' Wichtig sonst überschreibt er die Datei
         with open('lock-log.txt', 'a') as file:
             file.write(f"{day},{hour},BOTSTART\n")
-        with open('./lib/data/lock/lock-log.json', 'a') as file:  
-            json.dump({day:{hour:"BOTSTART"}}, file, indent=4)
+        self.append_to_json_file(day, hour, 'BOTSTART')
 
     def filter_last_n_days(self, data, n_days):
         current_date = datetime.now().date()
@@ -49,12 +48,16 @@ class Fsinfo(commands.Cog):
         with open(file_path, 'w') as file:
             json.dump(data, file, indent=4)
 
-    def append_to_json_file(self, new_data):
-        # Lade bestehende Daten
+    def append_to_json_file(self,date_str, time_str, value):
+    # Lade bestehende Daten
         data = self.load_json_from_file('./lib/data/lock/lock-log.json')
         
-        # Aktualisiere die bestehenden Daten mit den neuen Daten
-        data.update(new_data)
+        # Wenn das Datum noch nicht existiert, füge es hinzu
+        if date_str not in data:
+            data[date_str] = {}
+        
+        # Füge den neuen Zeitstempel und Wert hinzu
+        data[date_str][time_str] = value
         
         # Speichere die aktualisierten Daten zurück in die Datei
         self.save_json_to_file(data, './lib/data/lock/lock-log.json')
@@ -70,7 +73,7 @@ class Fsinfo(commands.Cog):
         value = fslockjson["opendoor"]
         with open('./lib/data/lock/lock-log.txt', 'a') as file:
             file.write(f"{current_date},{current_time},{value}\n")
-        self.append_to_json_file({current_date:{current_time:value}})
+        self.append_to_json_file(current_date,current_time,value)
 
     @tasks.loop(minutes=5.0)
     async def cleandata(self):
