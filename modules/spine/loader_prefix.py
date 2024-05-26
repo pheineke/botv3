@@ -65,8 +65,8 @@ class Loader_prefix(commands.Cog):
             if os.popen('python3 --version').read() == "Python 3.6.8":
                 os.system('export PATH=~/.localpython/bin:$PATH')
 
-            response = f"```{os.popen('git stash').read()}\n{os.popen('git pull').read()}\n{os.popen('git stash pop').read()}```"
-            await interaction.response.send_message(f"```{os.popen('git pull').read()}```")
+            response = f"{os.popen('git stash').read()}\n{os.popen('git pull').read()}\n{os.popen('git stash pop').read()}"
+            await interaction.response.send_message(f"```{response}```")
 
             os.chdir(current_path)
 
