@@ -171,11 +171,12 @@ class Monster(commands.Cog):
     @app_commands.describe(view="Mit oder ohne Bilder")
     @app_commands.choices(view=[
         app_commands.Choice(name='view', value="Ja")
+        app_commands.Choice(name='view', value="Nein")
     ])
     async def monster(self, interaction:discord.Interaction, view:app_commands.Choice[str]=None):
         monster_data = self.get_monsters()
 
-        if not view:
+        if view == "Nein":
             embed = discord.Embed(title="Monster", color=0x00ff00)
             for drink_name, drink_data in monster_data.items():
                 for key, value in drink_data.items():
