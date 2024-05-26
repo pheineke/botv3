@@ -38,9 +38,30 @@ class Fsinfo(commands.Cog):
                 filtered_data[date_str] = value_dict
 
         return filtered_data
+    
+    def load_json_from_file(self,file_path):
+        with open(file_path, 'r') as file:
+            data = json.load(file)
+        return data
 
+    # Speichert JSON-Daten in eine Datei
+    def save_json_to_file(self,data, file_path):
+        with open(file_path, 'w') as file:
+            json.dump(data, file, indent=4)
+
+    def append_to_json_file(self, new_data):
+        # Lade bestehende Daten
+        data = self.load_json_from_file('./lib/data/lock/lock-log.json')
+        
+        # Aktualisiere die bestehenden Daten mit den neuen Daten
+        data.update(new_data)
+        
+        # Speichere die aktualisierten Daten zurück in die Datei
+        self.save_json_to_file(data, './lib/data/lock/lock-log.json')
+        
     @tasks.loop(minutes=1.0)
     async def main(self):
+
         fslocksite = requests.get("https://www.fachschaft.informatik.uni-kl.de/opendoor.json")
         fslocksite = fslocksite.content.decode('utf8').replace("'", '"')
         fslockjson = json.loads(fslocksite)
@@ -49,8 +70,7 @@ class Fsinfo(commands.Cog):
         value = fslockjson["opendoor"]
         with open('./lib/data/lock/lock-log.txt', 'a') as file:
             file.write(f"{current_date},{current_time},{value}\n")
-        with open('./lib/data/lock/lock-log.json', 'a') as file:    
-            json.dump({current_date:{current_time:value}}, file, indent=4)
+        self.append_to_json_file({current_date:{current_time:value}})
 
     @tasks.loop(minutes=5.0)
     async def cleandata(self):
