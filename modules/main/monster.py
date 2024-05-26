@@ -21,8 +21,9 @@ class Monster(commands.Cog):
         return cookies
     
     
-    @tasks.loop(hours=12)
+    @tasks.loop(hours=12.0)
     async def check_activity_changes(self):
+        usermention = self.bot.fetch_user(386254372646158338).mention
         monsters:dict = self.get_monsters()
         channel = discord.utils.get(self.bot.get_all_channels(), id=1070443662695223297)
         preis = None
@@ -48,14 +49,12 @@ class Monster(commands.Cog):
                     if preise0[i] != preise1[i]:
                         return True
             return False
-        
-        
 
         if pruefe_preisabweichung():
             response = ""
             for x in preis:
                 response += x + "\n"
-            await channel.send(f"@R4GE Achtung Monster - Preisabweichung:\n ```{response}```")
+            await channel.send(f"{usermention} Achtung Monster - Preisabweichung:\n ```{response}```")
         
 
     def get_monsters(self):
