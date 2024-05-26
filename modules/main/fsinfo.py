@@ -124,7 +124,7 @@ class Fsinfo(commands.Cog):
     ])
     async def get_opendoor_log(self,interaction:discord.Interaction, filter:app_commands.Choice[str]=None):
         if not filter:
-            interaction.response.send_message(file=discord.File("./lib/data/lock/lock-log.json"))
+            await interaction.response.send_message(file=discord.File("./lib/data/lock/lock-log.json"))
         else:
             with open('./lib/data/lock/lock-log.json', 'r') as file:
                 data = json.load(file)
@@ -136,7 +136,7 @@ class Fsinfo(commands.Cog):
                 temp_file = tempfile.NamedTemporaryFile(delete=False, mode='w', suffix='.json')
                 json.dump(filtered, temp_file)
 
-                interaction.response.send_message(content="Hier ist der Verlauf:", file=discord.File(temp_file))
+                await interaction.response.send_message(content="Hier ist der Verlauf:", file=discord.File(temp_file))
                 temp_file.close()
                     
 
