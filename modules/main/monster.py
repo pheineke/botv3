@@ -23,9 +23,8 @@ class Monster(commands.Cog):
     
     @tasks.loop(hours=12.0)
     async def check_activity_changes(self):
-        usermention = self.bot.fetch_user(386254372646158338).mention
         monsters:dict = self.get_monsters()
-        channel = discord.utils.get(self.bot.get_all_channels(), id=1070443662695223297)
+        channel = discord.utils.get(self.bot.get_all_channels(), id=1070447029114908743)
         preis = None
         def speichere_preise():
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -54,7 +53,7 @@ class Monster(commands.Cog):
             response = ""
             for x in preis:
                 response += x + "\n"
-            await channel.send(f"{usermention} Achtung Monster - Preisabweichung:\n ```{response}```")
+            await channel.send(f"Achtung Monster - Preisabweichung:\n ```{response}```")
         
 
     def get_monsters(self):
