@@ -54,6 +54,9 @@ class Monster(commands.Cog):
             for x in preis:
                 response += x + "\n"
             await channel.send(f"Achtung Monster - Preisabweichung:\n ```{response}```")
+        else:
+            channel_ = discord.utils.get(self.bot.get_all_channels(), id=1070443662695223297)
+            await channel_.send("Ich checke noch auf Monster...")
         
 
     def get_monsters(self):
