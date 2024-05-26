@@ -173,8 +173,8 @@ class Monster(commands.Cog):
     @app_commands.command(name="monster", description="Zeige Monster Preise im Globus")
     @app_commands.describe(view="Mit oder ohne Bilder")
     @app_commands.choices(view=[
-        app_commands.Choice(name='view', value="Ja")
-        app_commands.Choice(name='view', value="Nein")
+        app_commands.Choice(name='Ja', value="Ja"),
+        app_commands.Choice(name='Nein', value="Nein")
     ])
     async def monster(self, interaction:discord.Interaction, view:app_commands.Choice[str]=None):
         monster_data = self.get_monsters()
