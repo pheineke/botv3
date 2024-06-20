@@ -11,5 +11,6 @@ table2ascii
 tabulate
 flask
 python-telegram-bot
+python-dotenv
 transformers
 scipy
