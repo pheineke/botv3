@@ -13,4 +13,5 @@ flask
 python-telegram-bot
 python-dotenv
 transformers
+torch
 scipy
