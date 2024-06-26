@@ -15,5 +15,12 @@ flask
 python-telegram-bot
 python-dotenv
 transformers
-torch
 scipy
+json
+pprint
+sqlite3
+tempfile
+prettytable
+tabulate 
+itertools
+requests
