@@ -10,6 +10,7 @@ prettytable
 requests
 table2ascii
 tabulate
+torch
 flask
 python-telegram-bot
 python-dotenv
