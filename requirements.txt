@@ -1,4 +1,5 @@
 asyncio
+bs4
 datetime
 discord
 graphviz
