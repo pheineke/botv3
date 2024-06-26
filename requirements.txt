@@ -16,7 +16,6 @@ python-telegram-bot
 python-dotenv
 transformers
 scipy
-pprint
 sqlite3
 tempfile
 prettytable
