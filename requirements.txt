@@ -1,11 +1,8 @@
-asyncio
 bs4
-datetime
 discord
 graphviz
 matplotlib
 ollama
-pathlib
 prettytable
 requests
 table2ascii
@@ -16,7 +13,3 @@ python-telegram-bot
 python-dotenv
 transformers
 scipy
-prettytable
-tabulate 
-itertools
-requests
