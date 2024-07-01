@@ -42,6 +42,7 @@ class Mathe(commands.Cog):
         pdf_links = soup.find_all('a', href=True)
         new_downloads = []
 
+    
         for link in pdf_links:
             href = link['href']
             if href.startswith('blatt') and href.endswith('.pdf'):
@@ -64,7 +65,11 @@ class Mathe(commands.Cog):
 
         # Update the log file with new downloads
         if new_downloads:
-            await self.channel.send(content="Neues Übungsblatt dropped",file=discord.File(pdf_filename))
+            home_url = "https://agag-jboehm.math.rptu.de/~boehm/lehre/24_MfI_KSS/"
+            embed:discord.Embed = discord.Embed(title="Neues Übbungsblatt dropped")
+            embed.add_field(name="Website", url=home_url)
+            embed.add_field(name="Blatt im Browser", url=home_url+href)
+            await self.channel.send(embed=embed,file=discord.File(pdf_filename))
             with open(log_file_path, 'a') as log_file:
                 for pdf in new_downloads:
                     log_file.write(pdf + '\n')
