@@ -53,7 +53,7 @@ class Manage_database:
         if existing_user:
             cursor.execute("UPDATE user_times SET time_recorded=? WHERE user_id=?", (time_recorded, user_id))
         else:
-            cursor.execute("INSERT INTO user_times (user_id, time_recorded) VALUES (?, ?)", (user_id, time_recorded))
+            cursor.execute("INSERT INTO user_times (user_id, time_recorded, is_constant) VALUES (?, ?, ?)", (user_id, time_recorded, 0))
         self.conn.commit()
 
     def set_user_time_constant(self, username):

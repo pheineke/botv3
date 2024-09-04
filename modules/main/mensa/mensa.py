@@ -14,7 +14,7 @@ import modules.main.mensa.database as database
 class Mensa(commands.Cog):
     def __init__(self,bot) -> None:
         self.bot = bot
-        self.user_time_db = database.Manage_database("users.db")
+        self.user_time_db = database.Manage_database("lib/users.db")
         self.cyclereset.start()
         self.logdir = os.getcwd() + "/logs"
         self.botstart = datetime.now()
