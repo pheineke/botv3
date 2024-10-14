@@ -11,7 +11,7 @@ class Loader_prefix(commands.Cog):
         self.bot = bot
 
     @commands.is_owner()
-    @commands.command(brief="[LOADER_PREF]", aliases=["l"])
+    @commands.command(brief="Load a module", aliases=["l"])
     async def load(self, ctx, extension):
         try:
             await self.bot.load_extension(f"modules.{extension}")
@@ -21,7 +21,7 @@ class Loader_prefix(commands.Cog):
             await ctx.message.add_reaction('❌')
 
     @commands.is_owner()
-    @commands.command(brief="[LOADER_PREF]", aliases=["u"])
+    @commands.command(brief="Unload a module", aliases=["u"])
     async def unload(self, ctx, extension):
     #####unload side
         try:
@@ -40,14 +40,12 @@ class Loader_prefix(commands.Cog):
         
 
     @commands.is_owner()
-    @commands.command(brief="[LOADER_PREF]", aliases=["r"])
+    @commands.command(brief="Reload a module", aliases=["r"])
     async def reload(self, ctx, extension):
         await self.bot.unload_extension(f"modules.{extension}")
         await self.bot.load_extension(f"modules.{extension}")
 
-
-    '''Bot kann heruntergefahren werden.'''
-    @commands.command(brief="[LOADER_PREF]")
+    @commands.command(brief="Shutdown Bot")
     @commands.is_owner()
     async def shutdown(self, ctx):
         await ctx.send('Shutting down...')
@@ -55,7 +53,7 @@ class Loader_prefix(commands.Cog):
 
         await self.bot.close()
 
-    @app_commands.command(name="gitpull", description="[LOADER_PREF] Update bot")
+    @app_commands.command(name="gitpull", description="Update bot")
     async def gitpull_(self, interaction:discord.Interaction):
         if interaction.user.id in self.bot.owner_ids:
             # Speichere den aktuellen Pfad
@@ -75,7 +73,7 @@ class Loader_prefix(commands.Cog):
 
             os.execv(sys.executable, ['python3', 'main.py'])
 
-    @commands.command(brief="[LOADER_PREF] Update bot backup")
+    @commands.command(brief="Update bot backup")
     @commands.is_owner()
     async def gitpull(self, ctx):
             # Speichere den aktuellen Pfad
@@ -91,7 +89,7 @@ class Loader_prefix(commands.Cog):
 
             os.execv(sys.executable, ['python3', 'main.py'])
 
-    @commands.command(brief="[LOADER_PREF]")
+    @commands.command(brief="")
     @commands.is_owner()
     async def modulespull(self,ctx):
         # Speichere den aktuellen Pfad
@@ -106,8 +104,7 @@ class Loader_prefix(commands.Cog):
         for module in os.listdir("./modules/main/"):
             print(module)
 
-
-    @commands.command(brief="[LOADER_PREF]", aliases=["f"])
+    @commands.command(brief="Show modules", aliases=["f"])
     async def freeze(self, ctx):
         loaded_cogs = [cog for cog in self.bot.cogs.keys()]
         if loaded_cogs:
@@ -115,7 +112,7 @@ class Loader_prefix(commands.Cog):
         else:
             await ctx.send('No cogs loaded.')
 
-    @commands.command(brief="[LOADER_PREF]") 
+    @commands.command(brief="")
     async def sync(self, ctx):
         synced = await self.bot.tree.sync()
         x = f"Synced {len(synced)} command(s)."

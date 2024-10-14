@@ -8,7 +8,7 @@ import random
 import os
 import graphviz
 
-class DIRA(commands.Cog):
+class Dira(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -17,7 +17,7 @@ class DIRA(commands.Cog):
     # Beispielaufruf
     
 
-    @app_commands.command(name="boolgen", description="[DIRA] Bool Formula Generator. Add + for '∧','∨' and ++ for '∧','∨','→','↔','⊕','⊼','⊽'")
+    @app_commands.command(name="boolgen", description="Bool Formula Generator. Add + for '∧','∨' and ++ for '∧','∨','→','↔','⊕','⊼','⊽'")
     async def boolgen(self, interaction:discord.Interaction, extends:str=None):
         variables = ['A', 'B', 'C', 'D','E']
         operators = ['∧','∨','→','↔']
@@ -69,7 +69,7 @@ class DIRA(commands.Cog):
 
         return finallist, base
 
-    @app_commands.command(name="automatagen", description="[DIRA] Generiert deterministische Automaten")
+    @app_commands.command(name="automatagen", description="Generiert deterministische Automaten")
     async def automatagen(self,interaction:discord.Interaction):
         filename = "custom_bdd.png"
 
@@ -108,13 +108,13 @@ class DIRA(commands.Cog):
 
         
 
-    @app_commands.command(name="radixgen", description="[DIRA] generiert Radixzahl")
+    @app_commands.command(name="radixgen", description="generiert Radixzahl")
     @app_commands.describe(base="Radix-Basis für zwei Zahlen", length="Länge der Radix-Stellen")
     async def radixgen(self, interaction:discord.Interaction, base:str=None, length:str=None):
         finallist, base = self.radixgen0(base, length)
         await interaction.response.send(f"<{finallist}>{base}")
 
-    @app_commands.command(name="radixcalcgen", description="[DIRA] generiert Radixaufgabe")
+    @app_commands.command(name="radixcalcgen", description="generiert Radixaufgabe")
     @app_commands.describe(base="Radix-Basis für zwei Zahlen", length="Länge der Radix-Stellen", operator="+ - * / whatever")
     async def radixcalcgen(self, interaction:discord.Interaction, base:str=None, length:str=None, operator:str=None):
         radix0, base = self.radixgen0(base, length)
@@ -123,7 +123,7 @@ class DIRA(commands.Cog):
         await interaction.response.send(f"<{radix0}>{base} {zeichen} <{radix1}>{base}".replace("'",""))
 
 
-    @commands.command(name="addradixgen", description="[DIRA] generiert Radix-Additionsaufgabe")
+    @commands.command(name="addradixgen", description="generiert Radix-Additionsaufgabe")
     @app_commands.describe(base="Radix-Basis für zwei Zahlen", length="Länge der Radix-Stellen")
     async def addradixgen(self, interaction:discord.Interaction, base:str=None, length:str=None):
         radix0, base = self.radixgen0(base, length)
@@ -132,4 +132,4 @@ class DIRA(commands.Cog):
 
 
 async def setup(bot):
-    await bot.add_cog(DIRA(bot))
+    await bot.add_cog(Dira(bot))

@@ -13,7 +13,7 @@ from tabulate import tabulate
 import itertools 
 
 
-class Dominascrp(commands.Cog):
+class Domina_Scraper(commands.Cog):
     def __init__(self, bot:commands.Bot) -> None:
         self.bot = bot
         load_dotenv()
@@ -190,5 +190,5 @@ class Dominascrp(commands.Cog):
             #await ctx.send("Wrong Apart. Format")
 
 async def setup(bot):
-    await bot.add_cog(Dominascrp(bot))
+    await bot.add_cog(Domina_Scraper(bot))
 

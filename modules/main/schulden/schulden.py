@@ -12,7 +12,7 @@ class Schulden(commands.Cog):
          self.schulden_db = schuldendb.Schuldenverwaltung()
          self.schulden_dir = os.getcwd()
 
-    @app_commands.command(name="allschulden", description="[SCHULDEN] Zeige alle Schulden von allen Usern")
+    @app_commands.command(name="allschulden", description="Zeige alle Schulden von allen Usern")
     async def allschulden(self,interaction:discord.Interaction):
         if interaction.message.author.id in self.bot.owner_ids:
             self.schulden_db.aktualisieren()
@@ -26,7 +26,7 @@ class Schulden(commands.Cog):
                     returntext += f"{schuldner:14}| > -------- > | {gläubiger:14}| {betrag}\n"
                 await interaction.response.send_message(f"```{returntext}```")
 
-    @app_commands.command(name="getschulden", description="[SCHULDEN] Zeige Schuldenverhältnisse von dir an")
+    @app_commands.command(name="getschulden", description="Zeige Schuldenverhältnisse von dir an")
     async def getschulden(self, interaction:discord.Interaction):
         self.schulden_db.aktualisieren()
         user0 = interaction.user.name
@@ -38,7 +38,7 @@ class Schulden(commands.Cog):
 
         await interaction.response.send_message(f"```Eigene Schulden an:\n{eigene_schulden}\nFremd Schulden von:\n{fremd_schulden}```", ephemeral=True)
 
-    @app_commands.command(name="addschulden", description="[SCHULDEN] .addschulden @Schuldner Betrag")
+    @app_commands.command(name="addschulden", description=".addschulden @Schuldner Betrag")
     @app_commands.describe(user1 = "An wen gehen die Schulden?", betrag="Wie viel Schulden? XX.XX", comment="Kommentar max 100 Zeichen")
     async def addschulden(self, interaction:discord.Interaction, user1:discord.Member, betrag:str, comment:str=None):
         message_author = interaction.user
@@ -128,7 +128,7 @@ class Schulden(commands.Cog):
         self.schulden_db.aktualisieren()
         #return f"Alter Betrag: {betrag0} Neuer Betrag: {betrag1}"
 
-    @app_commands.command(name="getschuldenlog", description="[SCHULDEN] Einsicht in Datenbank. Ausgabe der kompletten Transaction-History")
+    @app_commands.command(name="getschuldenlog", description="Einsicht in Datenbank. Ausgabe der kompletten Transaction-History")
     async def getschuldenlog(self, interaction:discord.Interaction):
         bt:commands.Bot = self.bot
 

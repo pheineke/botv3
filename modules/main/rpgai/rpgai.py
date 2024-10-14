@@ -93,7 +93,7 @@ class RPGLoader(commands.Cog):
         self.load_usernames()
         #subprocess.run("./../AI/ollama-linux-amd64 serve", shell=True, capture_output=True, check=True)
 
-    @commands.command(brief="[RPGAI]")
+    @commands.command(brief="List all saved game states")
     async def listgames(self, ctx):
         directory_path = self.path + "/modules/main/rpgai/gameStates/"
         try:
@@ -106,7 +106,7 @@ class RPGLoader(commands.Cog):
         except Exception as e:
             await self.channel.send(f"Fehler beim Auflisten der Dateien: {e}")
 
-    @commands.command(brief="[RPGAI]")
+    @commands.command(brief="Get the saved game state as json")
     async def downloadgame(self, ctx, gameStateName):
         file_path = f'{self.path}/modules/main/rpgai/gameStates/{gameStateName}.txt'
         try:
@@ -115,7 +115,7 @@ class RPGLoader(commands.Cog):
         except Exception as e:
             await self.channel.send("Error: ", e)
 
-    @commands.command(brief="[RPGAI]")
+    @commands.command(brief="Load a saved game state")
     async def loadgame(self, ctx, gameStateName=None):
         
         try:
@@ -137,7 +137,7 @@ class RPGLoader(commands.Cog):
 
 
 
-    @commands.command(brief="[RPGAI]")
+    @commands.command(brief="Save a current game")
     async def savegame(self, ctx, gameStateName):
         game = self.game
         game.loadGame(gameStateName)
@@ -152,7 +152,7 @@ class RPGLoader(commands.Cog):
             # Falls die Datei nicht gefunden wird, leeres Dictionary initialisieren
             self.users = {}
 
-    @commands.command(brief="[RPGAI] Alle Commands erklärt")
+    @commands.command(brief="RPG Tutorial")
     async def tutorial(self, ctx):
         await self.channel.send('''
 Hi du hast das Tutorial aufgerufen!\n

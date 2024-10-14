@@ -120,7 +120,7 @@ class Fsinfo(commands.Cog):
 
         clean_data('lock-log.txt')
 
-    @app_commands.command(name="opendoor_log", description="[FSINFO] Zeigt pure opendoor log")
+    @app_commands.command(name="opendoor_log", description="Zeigt pure opendoor log")
     @app_commands.describe(filter="Nach Zeit filtern (kann weggelassen werden)")
     @app_commands.choices(filter=[
         app_commands.Choice(name='Last Five Days', value="0"),
@@ -150,7 +150,7 @@ class Fsinfo(commands.Cog):
 
 
 
-    @app_commands.command(name="opendoor_graph", description="[FSINFO] Zeigt opendoor Graph")
+    @app_commands.command(name="opendoor_graph", description="Zeigt opendoor Graph")
     @app_commands.describe(datum0 = "Optional von - YYYY-MM-dd", datum1 = "Optional bis - YYYY-MM-dd")
     async def get_diagram(self, interaction:discord.Interaction, datum0: str=None, datum1:str=None):
         #datum0 = "2024-02-26"
