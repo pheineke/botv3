@@ -23,7 +23,7 @@ class Fsinfo(commands.Cog):
         self.cleandata.start()
 
     def check_if_file(self):
-        print("checkiffile")
+        #print("checkiffile")
         if not os.path.exists(self.filepath):
             with open(self.filepath, 'w') as file:
                 test = {}
@@ -36,11 +36,11 @@ class Fsinfo(commands.Cog):
         with open(self.filepath, 'r') as file:
             data : dict = json.load(file)
             if day in data:
-                print("start0")
+                #print("start0")
                 data[day][hour] = "start"
-                print(data)
+                #print(data)
             else:
-                print("start1")
+                #print("start1")
                 data[day] = {}
                 data[day][hour] = "start"
 
@@ -63,16 +63,16 @@ class Fsinfo(commands.Cog):
     @tasks.loop(minutes=1.0)
     async def main(self):
         fslocksite = requests.get("https://www.fachschaft.informatik.uni-kl.de/opendoor.json")
-        print(fslocksite)
+        #print(fslocksite)
         fslocksite = fslocksite.content.decode('utf8').replace("'", '"')
         fslockjson = json.loads(fslocksite)
 
-        print(fslockjson, type(fslockjson))
+        #print(fslockjson, type(fslockjson))
 
         current_date = str(datetime.now().strftime('%Y-%m-%d'))
         current_time = str(datetime.now().strftime('%H:%M:%S'))
         value = bool(fslockjson['opendoor'])
-        print(value, type(value))
+        #print(value, type(value))
         with open(self.filepath, 'r') as file:
             data = json.load(file)
             if current_date in data:
@@ -192,7 +192,7 @@ class Fsinfo(commands.Cog):
 
             plot_dates = [str(x[0]) for x in filtered_entries]
             plot_values = [x[1] for x in filtered_entries]
-            print(f"{plot_dates} {plot_values}")
+            #print(f"{plot_dates} {plot_values}")
             # Erstellen des Diagramms
             plt.figure(figsize=(20, 3))
             #plt.plot(plot_dates, plot_values, marker='o', linestyle='-', color='b')
