@@ -83,7 +83,6 @@ class Help(commands.Cog):
                             commandbrief = str(command.description) or "Keine Kurzbeschreibung verfügbar"
                         else:
                             commandbrief = (str(command.brief)) or "Keine Kurzbeschreibung verfügbar"
-                            
                         
                         command_dict = add_command(
                             command_name=str(command.name),
@@ -98,10 +97,6 @@ class Help(commands.Cog):
         
 
         sorted_command_info = dict(sorted(info.items()))
-
-        f = open("command_data", 'w')
-        f.write(json.dumps(info, indent=3))
-        f.close()
 
         button0 = Button(label="fsin.fo",url="https://www.fachschaft.informatik.uni-kl.de")
         button1 = Button(label="olat",url="https://olat.vcrp.de/dmz/")
