@@ -14,14 +14,15 @@ from datetime import datetime, timedelta
 class Fsinfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.filepath = './lib/data/lock/lock-log.json'
         self.check_if_file()
         self.main.start()
         self.cleandata.start()
         self.savestarttime()
 
-    def check_if_file():
-        if not os.path.exists('./lib/data/lock/lock-log.json'):
-            file = open('./lib/data/lock/lock-log.json', 'w')
+    def check_if_file(self):
+        if not os.path.exists(self.filepath):
+            file = open(self.filepath, 'w')
             file.write({})
             file.close()
 
@@ -29,14 +30,14 @@ class Fsinfo(commands.Cog):
         day = str((datetime.now().strftime('%Y-%m-%d')))  
         hour =str((datetime.now().strftime('%H:%M')))  
         #'a' Wichtig sonst überschreibt er die Datei
-        with open('./lib/data/lock/lock-log.json', 'r') as file:
+        with open(self.filepath, 'r') as file:
             data : dict = json.load(file)
             data[day] = { hour : "start" }
 
-        with open('./lib/data/lock/lock-log.json', 'w') as file:
+        with open(self.filepath, 'w') as file:
             json.dump(data, file, indent=4)
 
-    def filter_last_n_days(self, data, n_days):
+    def filter_last_n_days(self, data: dict, n_days: int):
         current_date = datetime.now().date()
         start_date = current_date - timedelta(days=n_days)
 
@@ -47,30 +48,62 @@ class Fsinfo(commands.Cog):
                 filtered_data[date_str] = value_dict
 
         return filtered_data
-    
         
     @tasks.loop(minutes=1.0)
     async def main(self):
-
         fslocksite = requests.get("https://www.fachschaft.informatik.uni-kl.de/opendoor.json")
         fslocksite = fslocksite.content.decode('utf8').replace("'", '"')
         fslockjson = json.loads(fslocksite)
         current_date = datetime.now().strftime('%Y-%m-%d')
         current_time = datetime.now().strftime('%H:%M')
         value = fslockjson["opendoor"]
-        with open('./lib/data/lock/lock-log.txt', 'a') as file:
-            file.write(f"{current_date},{current_time},{value}\n")
-        self.append_to_json_file(current_date,current_time,value)
+        with open(self.filepath, 'a') as file:
+            data = json.load(file)
+            data[current_date][current_time] = value
 
     @tasks.loop(minutes=5.0)
     async def cleandata(self):
-        with open('./lib/data/lock/lock-log.json', 'r') as file:
+        with open(self.filepath, 'r') as file:
             data : dict = json.load(file)
-        
+
+        data_ = {}
+
         for key in data.keys():
-            hour_data : list = data.get(key)
-            for value in hour_data:
-                pass
+            data_[key] = {}
+
+            hour_data : dict = data.get(key)
+            hour_data_items : list = list(hour_data.items())
+            hour_data_items_len = len(hour_data_items)
+            keys : list = list(hour_data.keys())
+            #keys_len = len(keys)
+
+            i = 0
+            while i < hour_data_items_len:
+                key0, value0 = hour_data_items[i]
+                if i == 0:
+                    #print("First")
+                    #Save first data value
+                    data_[key][key0] = value0
+                
+                elif i == hour_data_items_len-1:
+                    #print("Last")
+                    #Save first data value
+                    data_[key][key0] = value0
+
+                else:
+                    #Else save the two values if they change
+                    key1, value1 = hour_data_items[i+1]
+
+                    if value0 != value1:
+                        data_[key][key0] = value0
+                        data_[key][key1] = value1
+                        
+                #input(">") Debug
+                i += 1
+
+        with open(self.filepath, 'w') as file:
+            file.write(json.dumps(data_, indent=4))
+            file.close()
 
     @app_commands.command(name="opendoor_log", description="Zeigt pure opendoor log")
     @app_commands.describe(filter="Optional filter timestamps")
@@ -82,7 +115,7 @@ class Fsinfo(commands.Cog):
         if not filter:
             await interaction.response.send_message(file=discord.File("./lib/data/lock/lock-log.json"))
         else:
-            with open('./lib/data/lock/lock-log.json', 'r') as file:
+            with open(self.filepath, 'r') as file:
                 data = json.load(file)
 
                 fd, path = tempfile.mkstemp()
