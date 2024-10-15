@@ -16,9 +16,9 @@ class Mensa(commands.Cog):
         self.bot = bot
         self.timetable_path = "./lib/data/timetables/"
 
-    @app_commands.command(name="stundenplan", description="Zeigt den Stundenplan eines Users an, sofern er einen hochgeladen hat.")
-    @app_commands.describe(user_selection="Ein User von diesem Server.")
-    async def stundenplan(self, interaction: discord.Interaction, user_selection : discord.Member):
+    @app_commands.command(name="timetable", description="Shows timetable of user if uploaded")
+    @app_commands.describe(user_selection="User from this server")
+    async def timetable(self, interaction: discord.Interaction, user_selection : discord.Member):
         user_selection_id : int = user_selection.id
 
         try:
@@ -38,16 +38,12 @@ class Mensa(commands.Cog):
             await interaction.response.send_message(f"An error occurred: {str(e)}", ephemeral=True)
 
         
-    @app_commands.command(name="set_stundenplan", description="Here you can upload your personal time schedule for this semester")
-    async def set_stundenplan(self, interaction: discord.Interaction, file: discord.Attachment):
+    @app_commands.command(name="my_timetable", description="Upload your personal time schedule for this semester here")
+    async def my_timetable(self, interaction: discord.Interaction, file: discord.Attachment):
         user_id : int = interaction.user.id
         
         # Fetch the message
-        channel_id = interaction.channel.id
-        channel = self.get_channel(channel_id)
-
-        message_id = interaction.message.id
-        message = await channel.fetch_message(message_id)
+        #original_message = await interaction.original_response()
 
         try: 
             if file:
@@ -55,11 +51,11 @@ class Mensa(commands.Cog):
                 if not file.content_type.startswith("image/png"):
                     await interaction.response.send_message("The attachment is not a PNG file.", ephemeral=True)
                 else:
-                    await file.save(f"timetable_{user_id}")
+                    await file.save(f"./lib/data/timetables/timetable_{user_id}.png")
 
-                    await message.add_reaction("✅")
-        except:
-            await message.add_reaction("❌")
+                    await interaction.response.send_message("Done.", ephemeral=True)
+        except Exception as e:
+            await interaction.response.send_message(f"Error. {e}", ephemeral=True)
 
 async def setup(bot):
     await bot.add_cog(Mensa(bot))
