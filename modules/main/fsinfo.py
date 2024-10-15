@@ -16,26 +16,37 @@ class Fsinfo(commands.Cog):
         self.bot = bot
         self.filepath = './lib/data/lock/lock-log.json'
         self.check_if_file()
-        self.main.start()
-        self.cleandata.start()
+
         self.savestarttime()
 
+        self.main.start()
+        self.cleandata.start()
+
     def check_if_file(self):
+        print("checkiffile")
         if not os.path.exists(self.filepath):
-            file = open(self.filepath, 'w')
-            file.write({})
-            file.close()
+            with open(self.filepath, 'w') as file:
+                test = {}
+                file.write(json.dumps(test, indent=4))
 
     def savestarttime(self):
-        day = str((datetime.now().strftime('%Y-%m-%d')))  
-        hour =str((datetime.now().strftime('%H:%M')))  
-        #'a' Wichtig sonst überschreibt er die Datei
+        day  = str((datetime.now().strftime('%Y-%m-%d')))
+        hour = str((datetime.now().strftime('%H:%M'))) + ":00" 
+        data : dict = {}
         with open(self.filepath, 'r') as file:
             data : dict = json.load(file)
-            data[day] = { hour : "start" }
+            if day in data:
+                print("start0")
+                data[day][hour] = "start"
+                print(data)
+            else:
+                print("start1")
+                data[day] = {}
+                data[day][hour] = "start"
 
         with open(self.filepath, 'w') as file:
-            json.dump(data, file, indent=4)
+            file.write(json.dumps(data, indent=4))
+
 
     def filter_last_n_days(self, data: dict, n_days: int):
         current_date = datetime.now().date()
@@ -52,14 +63,27 @@ class Fsinfo(commands.Cog):
     @tasks.loop(minutes=1.0)
     async def main(self):
         fslocksite = requests.get("https://www.fachschaft.informatik.uni-kl.de/opendoor.json")
+        print(fslocksite)
         fslocksite = fslocksite.content.decode('utf8').replace("'", '"')
         fslockjson = json.loads(fslocksite)
-        current_date = datetime.now().strftime('%Y-%m-%d')
-        current_time = datetime.now().strftime('%H:%M')
-        value = fslockjson["opendoor"]
-        with open(self.filepath, 'a') as file:
+
+        print(fslockjson, type(fslockjson))
+
+        current_date = str(datetime.now().strftime('%Y-%m-%d'))
+        current_time = str(datetime.now().strftime('%H:%M:%S'))
+        value = bool(fslockjson['opendoor'])
+        print(value, type(value))
+        with open(self.filepath, 'r') as file:
             data = json.load(file)
-            data[current_date][current_time] = value
+            if current_date in data:
+                data[current_date][current_time] = value
+            else:
+                data[current_date] = {}
+                data[current_date][current_time] = value
+
+        with open(self.filepath, 'w') as file:
+            file.write(json.dumps(data, indent=4))
+
 
     @tasks.loop(minutes=5.0)
     async def cleandata(self):
