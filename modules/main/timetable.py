@@ -23,7 +23,7 @@ class Timetable(commands.Cog):
 
         try:
             # Specify the path to your file
-            file_path = self.timetable_path + f"{user_selection_id}" + ".png"
+            file_path = self.timetable_path + f"timetable_{user_selection_id}" + ".png"
 
             # Create a File object
             file = discord.File(file_path, filename="timetable.png")
@@ -34,8 +34,11 @@ class Timetable(commands.Cog):
                 ephemeral = True  # This makes the message only visible to the user who triggered the command
             )
 
-        except Exception as e:
-            await interaction.response.send_message(f"An error occurred: {str(e)}", ephemeral=True)
+        except FileNotFoundError as e:
+            await interaction.response.send_message(f"User timetable doesnt exist", ephemeral=True)
+        except Exception as e:  
+            await interaction.response.send_message(f"Error {e}", ephemeral=True)
+
 
         
     @app_commands.command(name="my_timetable", description="Upload your personal time schedule for this semester here")
