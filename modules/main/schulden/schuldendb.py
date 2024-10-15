@@ -4,7 +4,7 @@ import sqlite3
 import time
 
 class Schuldenverwaltung:
-    def __init__(self, db_name='schulden.db'):
+    def __init__(self, db_name='./lib/data/db/schulden.db'):
         self.conn = sqlite3.connect(db_name)
         self.c = self.conn.cursor()
         self.create_table()
