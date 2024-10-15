@@ -52,10 +52,10 @@ class Timetable(commands.Cog):
                     await interaction.response.send_message("The attachment is not a PNG file.", ephemeral=True)
                 else:
                     await file.save(f"./lib/data/timetables/timetable_{user_id}.png")
-
+                    
                     await interaction.response.send_message("Done.", ephemeral=True)
         except Exception as e:
             await interaction.response.send_message(f"Error. {e}", ephemeral=True)
 
 async def setup(bot):
-    await bot.add_cog(Mensa(bot))
+    await bot.add_cog(Timetable(bot))
