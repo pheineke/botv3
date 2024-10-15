@@ -29,6 +29,7 @@ while true; do
         echo "Änderungen gefunden, ziehe Updates..."
         stop_bot
         git pull
+        chmod +x start.sh
         start_bot
     fi
 done
