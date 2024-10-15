@@ -217,7 +217,7 @@
          {
             "command": "set_stundenplan",
             "class": "Mensa",
-            "description": "Hier kannst du deinen Stundenplan als Bild hochladen."
+            "description": "Here you can upload your personal time schedule for this semester"
          }
       ]
    },

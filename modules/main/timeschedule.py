@@ -38,10 +38,9 @@ class Mensa(commands.Cog):
             await interaction.response.send_message(f"An error occurred: {str(e)}", ephemeral=True)
 
         
-    @app_commands.command(name="set_stundenplan", description="Hier kannst du deinen Stundenplan als Bild hochladen.")
-    async def set_stundenplan(self, interaction: discord.Interaction):
+    @app_commands.command(name="set_stundenplan", description="Here you can upload your personal time schedule for this semester")
+    async def set_stundenplan(self, interaction: discord.Interaction, file: discord.Attachment):
         user_id : int = interaction.user.id
-        attachments = interaction.message.attachments
         
         # Fetch the message
         channel_id = interaction.channel.id
@@ -51,13 +50,12 @@ class Mensa(commands.Cog):
         message = await channel.fetch_message(message_id)
 
         try: 
-            if (attachments) and (len(attachments) == 1):
-                attachment = attachments[0]
+            if file:
 
-                if not attachment.content_type.startswith("image/png"):
+                if not file.content_type.startswith("image/png"):
                     await interaction.response.send_message("The attachment is not a PNG file.", ephemeral=True)
                 else:
-                    await attachment.save(f"timetable_{user_id}")
+                    await file.save(f"timetable_{user_id}")
 
                     await message.add_reaction("✅")
         except:

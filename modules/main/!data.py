@@ -12,12 +12,12 @@ class Data(commands.Cog):
         self.bot = bot
         self.allowed_users = []
 
-        self.db_path = 'user_activities.db'
+        self.db_path = './lib/data/db/user_activities.db'
 
         self.conn = sqlite3.connect(self.db_path)
         self.c = self.conn.cursor()
         
-        self.create_empty_text_file("privacy_log.txt")
+        self.create_empty_text_file("./lib/data/privacy_log.txt")
 
         self.get_allowed_users()
         # Tabelle für Benutzeraktivitäten erstellen

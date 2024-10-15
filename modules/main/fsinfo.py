@@ -14,18 +14,27 @@ from datetime import datetime, timedelta
 class Fsinfo(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.check_if_file()
         self.main.start()
         self.cleandata.start()
         self.savestarttime()
 
+    def check_if_file():
+        if not os.path.exists('./lib/data/lock/lock-log.json'):
+            file = open('./lib/data/lock/lock-log.json', 'w')
+            file.write({})
+            file.close()
 
     def savestarttime(self):
         day = str((datetime.now().strftime('%Y-%m-%d')))  
         hour =str((datetime.now().strftime('%H:%M')))  
         #'a' Wichtig sonst überschreibt er die Datei
-        with open('lock-log.txt', 'a') as file:
-            file.write(f"{day},{hour},BOTSTART\n")
-        self.append_to_json_file(day, hour, 'BOTSTART')
+        with open('./lib/data/lock/lock-log.json', 'r') as file:
+            data : dict = json.load(file)
+            data[day] = { hour : "start" }
+
+        with open('./lib/data/lock/lock-log.json', 'w') as file:
+            json.dump(data, file, indent=4)
 
     def filter_last_n_days(self, data, n_days):
         current_date = datetime.now().date()
@@ -39,29 +48,6 @@ class Fsinfo(commands.Cog):
 
         return filtered_data
     
-    def load_json_from_file(self,file_path):
-        with open(file_path, 'r') as file:
-            data = json.load(file)
-        return data
-
-    # Speichert JSON-Daten in eine Datei
-    def save_json_to_file(self,data, file_path):
-        with open(file_path, 'w') as file:
-            json.dump(data, file, indent=4)
-
-    def append_to_json_file(self,date_str, time_str, value):
-    # Lade bestehende Daten
-        data = self.load_json_from_file('./lib/data/lock/lock-log.json')
-        
-        # Wenn das Datum noch nicht existiert, füge es hinzu
-        if date_str not in data:
-            data[date_str] = {}
-        
-        # Füge den neuen Zeitstempel und Wert hinzu
-        data[date_str][time_str] = value
-        
-        # Speichere die aktualisierten Daten zurück in die Datei
-        self.save_json_to_file(data, './lib/data/lock/lock-log.json')
         
     @tasks.loop(minutes=1.0)
     async def main(self):
@@ -78,50 +64,16 @@ class Fsinfo(commands.Cog):
 
     @tasks.loop(minutes=5.0)
     async def cleandata(self):
-        def clean_data(file_path):
-            with open(file_path, 'r') as file:
-                lines = file.readlines()
-
-            cleaned_lines = []
-            clean0 = []
-            for line in lines:
-                lineval = line.strip().split(',')[2]
-                cleaned_lines.append(lineval)
-                
-            def find_equal_intervals(lst):
-                equal_intervals = []
-                start_index = 0
-                current_element = None
-                
-                for i, element in enumerate(lst):
-                    if element != current_element:
-                        if i > start_index:
-                            equal_intervals.append((start_index, i - 1, current_element))
-                        start_index = i
-                        current_element = element
-
-                # Füge das letzte Intervall hinzu, falls es gleich ist
-                if lst and lst[-1] == current_element:
-                    equal_intervals.append((start_index, len(lst) - 1, current_element))
-
-                return equal_intervals
-            intervals = find_equal_intervals(cleaned_lines)
-
-            for index0, index1, val in intervals:
-                if index0 != index1:
-                    clean0.append(lines[index0])
-                    clean0.append(lines[index1])
-                else:
-                    clean0.append(lines[index0])
-
-            with open(file_path, 'w') as file:
-                for elem in clean0:
-                    file.write(f'{elem}')
-
-        clean_data('lock-log.txt')
+        with open('./lib/data/lock/lock-log.json', 'r') as file:
+            data : dict = json.load(file)
+        
+        for key in data.keys():
+            hour_data : list = data.get(key)
+            for value in hour_data:
+                pass
 
     @app_commands.command(name="opendoor_log", description="Zeigt pure opendoor log")
-    @app_commands.describe(filter="Nach Zeit filtern (kann weggelassen werden)")
+    @app_commands.describe(filter="Optional filter timestamps")
     @app_commands.choices(filter=[
         app_commands.Choice(name='Last Five Days', value="0"),
         app_commands.Choice(name='Last Week', value="1")
@@ -150,8 +102,8 @@ class Fsinfo(commands.Cog):
 
 
 
-    @app_commands.command(name="opendoor_graph", description="Zeigt opendoor Graph")
-    @app_commands.describe(datum0 = "Optional von - YYYY-MM-dd", datum1 = "Optional bis - YYYY-MM-dd")
+    @app_commands.command(name="opendoor_graph", description="Shows opendoor Graph")
+    @app_commands.describe(datum0 = "Optional from-date - YYYY-MM-dd", datum1 = "Optional end-date - YYYY-MM-dd")
     async def get_diagram(self, interaction:discord.Interaction, datum0: str=None, datum1:str=None):
         #datum0 = "2024-02-26"
         #datum1 = "2024-02-26"
