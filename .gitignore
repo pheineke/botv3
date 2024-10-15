@@ -16,5 +16,6 @@ modules/main/aihelper/models/alpaca/pytorch_model.bin
 privacy_log.txt
 musicgen-small/
 
+lib/data/timetables/*.png
 !lib/data/monster/monster_verlauf.json
 tests/emailtest.py
