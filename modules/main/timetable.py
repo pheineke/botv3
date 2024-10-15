@@ -11,7 +11,7 @@ import requests
 import os
 import modules.main.mensa.database as database
 
-class Mensa(commands.Cog):
+class Timetable(commands.Cog):
     def __init__(self,bot) -> None:
         self.bot = bot
         self.timetable_path = "./lib/data/timetables/"
