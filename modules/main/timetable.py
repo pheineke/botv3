@@ -56,7 +56,7 @@ class Timetable(commands.Cog):
                 else:
                     await file.save(f"./lib/data/timetables/timetable_{user_id}.png")
                     
-                    await interaction.response.send_message("Done.", ephemeral=True)
+                    await interaction.response.send_message("Timetable uploaded.", ephemeral=True)
         except Exception as e:
             await interaction.response.send_message(f"Error. {e}", ephemeral=True)
 
