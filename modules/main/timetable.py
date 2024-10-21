@@ -17,7 +17,7 @@ class Timetable(commands.Cog):
     def __init__(self,bot) -> None:
         self.bot = bot
         self.timetable_path = "./lib/data/timetables/"
-        self.file_types = ['png', 'jpg', 'jpeg']
+        self.file_types = ['png', 'jpg', 'jpeg', 'webp']
 
     @app_commands.command(name="timetables", description="See all Users who have uploaded their timetables")
     async def timetables(self, interaction: discord.Interaction):
