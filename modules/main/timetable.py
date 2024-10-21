@@ -29,7 +29,7 @@ class Timetable(commands.Cog):
                         a = filepath.removeprefix('./lib/data/timetables/')
                         b = a.removeprefix("timetable_")
                         c = b.removesuffix(".png")
-                        user : discord.User = await self.bot.get_user(int(c))
+                        user = self.bot.get_user(int(c))
                         message += f"{user.name} - {user.mention}\n"
 
                 elif os.path.isdir(filepath):
