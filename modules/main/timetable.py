@@ -9,12 +9,15 @@ from datetime import datetime, timedelta
 
 import requests
 import os
+from pathlib import Path
+
 import modules.main.mensa.database as database
 
 class Timetable(commands.Cog):
     def __init__(self,bot) -> None:
         self.bot = bot
         self.timetable_path = "./lib/data/timetables/"
+        self.file_types = ['png', 'jpg', 'jpeg']
 
     @app_commands.command(name="timetables", description="See all Users who have uploaded their timetables")
     async def timetables(self, interaction: discord.Interaction):
@@ -28,7 +31,9 @@ class Timetable(commands.Cog):
                     if "timetable_" in filepath:
                         a = filepath.removeprefix('./lib/data/timetables/')
                         b = a.removeprefix("timetable_")
-                        c = b.removesuffix(".png")
+                        for type_ in self.file_types:
+                            if type_ in b:
+                                c = b.removesuffix(f".{type_}")
                         user = self.bot.get_user(int(c))
                         message += f"{user.name} - {user.mention}\n"
 
@@ -53,17 +58,16 @@ class Timetable(commands.Cog):
         user_selection_id : int = user_selection.id
 
         try:
-            # Specify the path to your file
-            file_path = self.timetable_path + f"timetable_{user_selection_id}" + ".png"
+                found_files = list(Path(self.timetable_path).glob(f"timetable_{user_selection_id}.*"))
 
-            # Create a File object
-            file = discord.File(file_path, filename="timetable.png")
+                # Create a File object
+                file = discord.File(found_files[0])
 
-            # Send the message with the attachment
-            await interaction.response.send_message(
-                file = file,
-                ephemeral = True  # This makes the message only visible to the user who triggered the command
-            )
+                # Send the message with the attachment
+                await interaction.response.send_message(
+                    file = file,
+                    ephemeral = True  # This makes the message only visible to the user who triggered the command
+                )
 
         except FileNotFoundError as e:
             await interaction.response.send_message(f"User timetable doesnt exist", ephemeral=True)
@@ -81,9 +85,8 @@ class Timetable(commands.Cog):
 
         try: 
             if file:
-
-                if not file.content_type.startswith("image/png"):
-                    await interaction.response.send_message("The attachment is not a PNG file.", ephemeral=True)
+                if not any(file.content_type.startswith(f"image/{prefix}") for prefix in self.file_types):
+                    await interaction.response.send_message("The attachment is not a valid picture file-format.", ephemeral=True)
                 else:
                     await file.save(f"./lib/data/timetables/timetable_{user_id}.png")
                     
