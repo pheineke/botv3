@@ -26,9 +26,10 @@ class Timetable(commands.Cog):
                 if os.path.isfile(filepath):
                     print(f'File: {filepath}')
                     if "timetable_" in filepath:
-                        a = filepath.removeprefix("timetable_")
-                        b = a.removesuffix(".png")
-                        user : discord.User = await self.bot.get_user(int(b))
+                        a = filepath.removeprefix('./lib/data/timetables/')
+                        b = a.removeprefix("timetable_")
+                        c = b.removesuffix(".png")
+                        user : discord.User = await self.bot.get_user(int(c))
                         message += f"{user.name} - {user.mention}\n"
 
                 elif os.path.isdir(filepath):
