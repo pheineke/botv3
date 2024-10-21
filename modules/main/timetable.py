@@ -18,7 +18,8 @@ class Timetable(commands.Cog):
 
     @app_commands.command(name="timetables", description="See all Users who have uploaded their timetables")
     async def timetables(self, interaction: discord.Interaction):
-        users : list = []
+        message = ""
+
         try:
             for filename in os.listdir(self.timetable_path):
                 filepath = os.path.join(self.timetable_path, filename)
@@ -27,12 +28,12 @@ class Timetable(commands.Cog):
                     if "timetable_" in filepath:
                         a = filepath.removeprefix("timetable_")
                         b = a.removesuffix(".png")
-                        users.append(b)
+                        user : discord.User = await self.bot.get_user(int(b))
+                        message += f"{user.name} - {user.mention}\n"
+
                 elif os.path.isdir(filepath):
                     pass
                     #print(f'Directory: {filepath}')
-
-            message = ""
 
             # Send the message with the attachment
             await interaction.response.send_message(
