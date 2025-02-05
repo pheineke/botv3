@@ -13,3 +13,5 @@ python-telegram-bot
 python-dotenv
 transformers
 scipy
+google-generativeai
+google-genai
