@@ -73,6 +73,7 @@ class Gemini(commands.Cog):
 
         await interaction.response.send_message(response.text)
 
+    @app_commands.command(name="imagen_gemini", description="Generate image")
     async def imagen(self, interaction:discord.Interaction, text:str=None, image_num:int=1):
         client = genai.Client(
             api_key=self.GEMINI_API_KEY
